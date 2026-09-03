@@ -21,23 +21,23 @@ export default function Target({ settings }) {
         e.preventDefault();
         post(route("settings.target.update"), {
             preserveScroll: true,
-            onSuccess: () => toast.success("Target berhasil disimpan"),
-            onError: () => toast.error("Gagal menyimpan target"),
+            onSuccess: () => toast.success("Target saved successfully"),
+            onError: () => toast.error("Failed to save target"),
         });
     };
 
     return (
         <>
-            <Head title="Target Penjualan" />
+            <Head title="Sales Target" />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                        Target Penjualan
+                        Sales Target
                     </h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Atur target penjualan bulanan untuk bisnis Anda
+                        Set your monthly sales target
                     </p>
                 </div>
 
@@ -53,7 +53,7 @@ export default function Target({ settings }) {
                             </div>
                             <div className="flex-1">
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                    Target Penjualan Bulanan
+                                    Monthly Sales Target
                                 </label>
                                 <div className="relative">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
@@ -96,7 +96,7 @@ export default function Target({ settings }) {
                                 className="flex items-center gap-2"
                             >
                                 <IconDeviceFloppy size={18} />
-                                {processing ? "Menyimpan..." : "Simpan Target"}
+                                {processing ? "Saving..." : "Save Target"}
                             </Button>
                         </div>
                     </form>
@@ -105,9 +105,7 @@ export default function Target({ settings }) {
                 {/* Info */}
                 <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-900">
                     <p className="text-sm text-primary-700 dark:text-primary-300">
-                        <strong>Tip:</strong> Target penjualan akan ditampilkan
-                        di Dashboard sebagai progress bar untuk memantau
-                        pencapaian bulanan Anda.
+                        <strong>Tip:</strong> Your sales target will appear on the Dashboard as a progress bar to track monthly achievement.
                     </p>
                 </div>
             </div>

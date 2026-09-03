@@ -80,6 +80,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Stock transfer list, creation, and detail workflows now use English visible text.
 - Stock transfer statuses, confirmation actions, routes, submitted fields, and warehouse/product data were unchanged.
 
+### Purchase orders
+
+- Purchase order list, creation, and detail workflows now use English visible text.
+- Purchase order statuses, routes, submitted fields, receiving actions, payable links, and calculations were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -90,7 +95,7 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate purchasing, receivables, and payables pages.
+1. Translate receivables and payables pages.
 2. Translate CRM, loyalty, promotions, and dine-in pages.
 3. Translate reports and settings pages.
 4. Translate backend flash messages and API responses carefully.
@@ -110,4 +115,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Purchasing, receivables, and payables pages. Keep this slice limited to those screens, then build and test before continuing to CRM and loyalty.
+Receivables and payables pages. Keep this slice limited to those screens, then build and test before continuing to CRM and loyalty.

@@ -7,7 +7,7 @@ const formatDate = (v) => v ? new Date(v).toLocaleString("id-ID", { dateStyle: "
 
 const statusBadge = (status) => {
     const styles = { paid: "bg-emerald-100 text-emerald-700", pending: "bg-amber-100 text-amber-700", unpaid: "bg-rose-100 text-rose-700", pending_approval: "bg-slate-100 text-slate-700" };
-    const labels = { paid: "Lunas", pending: "Menunggu", unpaid: "Belum Lunas", pending_approval: "Menunggu Approval" };
+    const labels = { paid: "Paid", pending: "Pending", unpaid: "Unpaid", pending_approval: "Awaiting Approval" };
     return <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${styles[status] || "bg-slate-100 text-slate-600"}`}>{labels[status] || status}</span>;
 };
 
@@ -30,7 +30,7 @@ export default function TransactionDetail({ transaction, token }) {
                         </div>
 
                         <div className="border-t border-slate-100 pt-4">
-                            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Item</p>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Items</p>
                             {transaction.details.map((item, i) => (
                                 <div key={i} className="flex justify-between py-1.5 text-sm">
                                     <span className="text-slate-700">{item.product_title} x{item.qty}</span>
@@ -41,9 +41,9 @@ export default function TransactionDetail({ transaction, token }) {
 
                         <div className="border-t border-slate-100 pt-4 space-y-1.5 text-sm">
                             <div className="flex justify-between text-slate-500"><span>Subtotal</span><span>{formatPrice(transaction.grand_total + transaction.discount - (transaction.shipping_cost || 0) - (transaction.tax_total || 0))}</span></div>
-                            {transaction.discount > 0 && <div className="flex justify-between text-slate-500"><span>Diskon</span><span>-{formatPrice(transaction.discount)}</span></div>}
-                            {transaction.tax_total > 0 && <div className="flex justify-between text-slate-500"><span>PPN</span><span>{formatPrice(transaction.tax_total)}</span></div>}
-                            {transaction.shipping_cost > 0 && <div className="flex justify-between text-slate-500"><span>Ongkir</span><span>{formatPrice(transaction.shipping_cost)}</span></div>}
+                            {transaction.discount > 0 && <div className="flex justify-between text-slate-500"><span>Discount</span><span>-{formatPrice(transaction.discount)}</span></div>}
+                            {transaction.tax_total > 0 && <div className="flex justify-between text-slate-500"><span>VAT</span><span>{formatPrice(transaction.tax_total)}</span></div>}
+                            {transaction.shipping_cost > 0 && <div className="flex justify-between text-slate-500"><span>Shipping</span><span>{formatPrice(transaction.shipping_cost)}</span></div>}
                             <div className="flex justify-between font-bold text-lg pt-2 border-t border-slate-200">
                                 <span>Total</span>
                                 <span className="text-primary-600">{formatPrice(transaction.grand_total)}</span>
@@ -52,16 +52,16 @@ export default function TransactionDetail({ transaction, token }) {
 
                         {transaction.payment_method === "cash" && transaction.cash > 0 && (
                             <div className="border-t border-slate-100 pt-4 space-y-1.5 text-sm">
-                                <div className="flex justify-between text-slate-500"><span>Tunai</span><span>{formatPrice(transaction.cash)}</span></div>
-                                {transaction.change > 0 && <div className="flex justify-between text-slate-500"><span>Kembali</span><span>{formatPrice(transaction.change)}</span></div>}
+                                <div className="flex justify-between text-slate-500"><span>Cash</span><span>{formatPrice(transaction.cash)}</span></div>
+                                {transaction.change > 0 && <div className="flex justify-between text-slate-500"><span>Change</span><span>{formatPrice(transaction.change)}</span></div>}
                             </div>
                         )}
 
                         {transaction.receivable && transaction.receivable.status !== "paid" && (
                             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
-                                <p className="text-sm font-semibold text-amber-800">Sisa Pembayaran</p>
+                                <p className="text-sm font-semibold text-amber-800">Remaining Balance</p>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-amber-700">Jatuh tempo: {formatDate(transaction.receivable.due_date)}</span>
+                                    <span className="text-amber-700">Due date: {formatDate(transaction.receivable.due_date)}</span>
                                     <span className="font-bold text-amber-900">{formatPrice(transaction.receivable.remaining)}</span>
                                 </div>
                                 <a
@@ -78,14 +78,14 @@ export default function TransactionDetail({ transaction, token }) {
                                         form.submit();
                                     }}
                                 >
-                                    Bayar Sekarang
+                                    Pay Now
                                 </a>
                             </div>
                         )}
                     </div>
 
                     <div className="px-6 py-4 border-t border-slate-100 text-center text-xs text-slate-400">
-                        Terima kasih telah berbelanja
+                        Thank you for shopping
                     </div>
                 </div>
             </div>

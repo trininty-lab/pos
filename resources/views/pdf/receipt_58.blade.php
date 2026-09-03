@@ -4,7 +4,7 @@
     $formatPrice = fn($v) => 'Rp ' . number_format($v ?? 0, 0, ',', '.');
 @endphp
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <style>
@@ -20,7 +20,7 @@
     <div class="center section" style="margin-top:0;">
         <div class="bold" style="margin-bottom:2px;">{{ $store['name'] }}</div>
         @if($store['address'])<div>{{ $store['address'] }}</div>@endif
-        @if($store['phone'])<div>Telp: {{ $store['phone'] }}</div>@endif
+        @if($store['phone'])<div>Phone: {{ $store['phone'] }}</div>@endif
         @if($store['email'])<div>Email: {{ $store['email'] }}</div>@endif
         @if($store['website'])<div>{{ $store['website'] }}</div>@endif
     </div>
@@ -33,16 +33,16 @@
             <span>{{ $transaction->invoice }}</span>
         </div>
         <div style="display:flex; justify-content:space-between;">
-            <span>Tgl:</span>
+            <span>Date:</span>
             <span>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y H:i') }}</span>
         </div>
         <div style="display:flex; justify-content:space-between;">
-            <span>Kasir:</span>
+            <span>Cashier:</span>
             <span>{{ $transaction->cashier->name ?? '-' }}</span>
         </div>
         <div style="display:flex; justify-content:space-between;">
             <span>Customer:</span>
-            <span>{{ $transaction->customer->name ?? 'Umum' }}</span>
+            <span>{{ $transaction->customer->name ?? 'General' }}</span>
         </div>
     </div>
 
@@ -55,7 +55,7 @@
                 $total = $item->price;
                 $unit = $item->unit_price ?: ($qty ? $total / $qty : $total);
             @endphp
-            <div style="font-weight:600;">{{ $item->product->title ?? 'Produk' }}</div>
+            <div style="font-weight:600;">{{ $item->product->title ?? 'Product' }}</div>
             @if($item->discount_total > 0 && ($item->pricing_group_label || $item->pricing_rule_name))
                 <div style="display:flex; justify-content:space-between; font-size:9px; color:#64748b;">
                     <span>Promo: {{ $item->pricing_group_label ?: $item->pricing_rule_name }}</span>
@@ -83,7 +83,7 @@
         $taxRate = $transaction->tax_rate ?? 0;
         $cash = $transaction->cash ?? 0;
         $change = $transaction->change ?? 0;
-        $paymentMethod = strtoupper($transaction->payment_method ?? 'TUNAI');
+        $paymentMethod = strtoupper($transaction->payment_method ?? 'CASH');
     @endphp
 
     <div class="section">
@@ -111,19 +111,19 @@
         @endif
         @if($loyaltyDiscount > 0)
             <div style="display:flex; justify-content:space-between;">
-                <span>Redeem Poin</span>
+                <span>Redeem Points</span>
                 <span>-{{ $formatPrice($loyaltyDiscount) }}</span>
             </div>
         @endif
         @if($shipping > 0)
             <div style="display:flex; justify-content:space-between;">
-                <span>Ongkir</span>
+                <span>Shipping</span>
                 <span>{{ $formatPrice($shipping) }}</span>
             </div>
         @endif
         @if($taxTotal > 0)
             <div style="display:flex; justify-content:space-between;">
-                <span>PPN {{ number_format($taxRate, 0) }}%</span>
+                <span>VAT {{ number_format($taxRate, 0) }}%</span>
                 <span>{{ $formatPrice($taxTotal) }}</span>
             </div>
         @endif
@@ -137,12 +137,12 @@
 
     <div class="section">
         <div style="display:flex; justify-content:space-between;">
-            <span>Bayar ({{ $paymentMethod }})</span>
+            <span>Paid ({{ $paymentMethod }})</span>
             <span>{{ $formatPrice($cash) }}</span>
         </div>
         @if($change > 0)
             <div style="display:flex; justify-content:space-between; font-weight:700;">
-                <span>Kembali</span>
+                <span>Change</span>
                 <span>{{ $formatPrice($change) }}</span>
             </div>
         @endif
@@ -155,7 +155,7 @@
             <img src="{{ $barcode }}" alt="barcode">
         </div>
         <div style="font-size:10px;">{{ $transaction->invoice }}</div>
-        <div>Terima kasih!</div>
+        <div>Thank you!</div>
     </div>
 </body>
 </html>

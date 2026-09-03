@@ -16,7 +16,7 @@ export default function CustomerSelect({
     customers = [],
     selected,
     onSelect,
-    placeholder = "Pilih pelanggan...",
+    placeholder = "Select a customer...",
     error,
     label,
     onCustomerAdded,
@@ -160,7 +160,7 @@ export default function CustomerSelect({
                                     ) : null}
                                     <p className="text-[11px] text-primary-500 dark:text-primary-300 truncate">
                                         {selected.is_loyalty_member
-                                            ? `${selected.loyalty_tier} • ${selected.loyalty_points || 0} poin`
+                                            ? `${selected.loyalty_tier} • ${selected.loyalty_points || 0} points`
                                             : "Non-member"}
                                     </p>
                                 </>

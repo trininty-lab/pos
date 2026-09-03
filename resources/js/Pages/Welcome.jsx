@@ -24,61 +24,61 @@ const GALLERY_URL = `${GITHUB_URL}/blob/main/docs/screenshots.md`;
 
 const stats = [
     { value: "200+", label: "GitHub Stars" },
-    { value: "44+", label: "Fitur Lengkap" },
-    { value: "MIT", label: "100% Gratis" },
-    { value: "8", label: "Modul Terintegrasi" },
+    { value: "44+", label: "Complete Features" },
+    { value: "MIT", label: "100% Free" },
+    { value: "8", label: "Integrated Modules" },
 ];
 
 const features = [
     {
         icon: IconShoppingCart,
-        title: "POS Cepat & Mudah",
-        desc: "Cari produk via barcode atau keyboard, scan pakai kamera (PWA), cart hold/resume, dan checkout dalam hitungan detik.",
+        title: "Fast & Easy POS",
+        desc: "Search products by barcode or keyboard, scan with camera (PWA), manage cart hold/resume, and complete checkout in seconds.",
     },
     {
         icon: IconWallet,
         title: "Multi-Payment",
-        desc: "Tunai, transfer bank, QRIS (Midtrans), Xendit, hingga pay later (piutang) — semua dalam satu kasir.",
+        desc: "Cash, bank transfer, QRIS (Midtrans), Xendit, and pay later — all in one cashier system.",
     },
     {
         icon: IconBuildingWarehouse,
         title: "Multi-Warehouse",
-        desc: "Stok terpisah per gudang/cabang, transfer antar gudang, stock opname, dan tracking batch/expiry (FEFO).",
+        desc: "Separate stock per warehouse/store, inventory transfer, stock opname, and batch/expiry tracking (FEFO).",
     },
     {
         icon: IconReceiptTax,
-        title: "PPN & Pajak",
-        desc: "Dukungan PPN 11% (exclusive/inclusive), data NPWP pelanggan, dan laporan pajak yang rapi.",
+        title: "VAT & Tax",
+        desc: "Support for 11% VAT (exclusive/inclusive), NPWP customer data, and tidy tax reporting.",
     },
     {
         icon: IconChartBar,
-        title: "Laporan & Insight",
-        desc: "Laporan penjualan, profit & margin, performa per kasir, jam sibuk, dan repeat customer.",
+        title: "Reports & Insights",
+        desc: "Sales reports, profit & margin analysis, cashier performance, peak hours, and repeat customer insights.",
     },
     {
         icon: IconReportMoney,
-        title: "Piutang & Hutang",
-        desc: "Kelola piutang pelanggan & hutang supplier dengan aging analysis dan partial payment.",
+        title: "Receivables & Payables",
+        desc: "Manage customer receivables and supplier payables with aging analysis and partial payment support.",
     },
     {
         icon: IconUsers,
         title: "CRM & Loyalty",
-        desc: "Member tiers, poin loyalty, voucher, segmentasi pelanggan otomatis, dan campaign marketing.",
+        desc: "Member tiers, loyalty points, vouchers, automated customer segmentation, and campaign marketing.",
     },
     {
         icon: IconBrandWhatsapp,
         title: "WhatsApp Gateway",
-        desc: "Kirim struk, reminder piutang, dan promo otomatis ke pelanggan via WhatsApp (whatsapp-web.js).",
+        desc: "Send receipts, debt reminders, and automated promos to customers via WhatsApp (whatsapp-web.js).",
     },
     {
         icon: IconShieldLock,
         title: "RBAC & Audit Log",
-        desc: "Kontrol akses per role (admin/kasir), persetujuan diskon, dan jejak audit before/after setiap perubahan.",
+        desc: "Role-based access control, discount approvals, and before/after audit history for every change.",
     },
     {
         icon: IconCloudOff,
         title: "Offline Mode",
-        desc: "Tetap bisa jualan saat internet mati — transaksi masuk antrean dan tersinkron otomatis saat online.",
+        desc: "Keep selling even when the internet is down — transactions queue locally and sync automatically when online.",
     },
 ];
 
@@ -101,24 +101,24 @@ const screenshots = [
 
 const faqs = [
     {
-        q: "Apakah Dikasir benar-benar gratis?",
-        a: "Ya. Dikasir dirilis di bawah lisensi MIT — bebas digunakan, dimodifikasi, dan didistribusikan, termasuk untuk kepentingan komersial. Tidak ada biaya lisensi atau langganan.",
+        q: "Is Dikasir really free?",
+        a: "Yes. Dikasir is released under the MIT license — free to use, modify, and distribute, including for commercial purposes. No license or subscription fees apply.",
     },
     {
-        q: "Bisakah dipakai untuk bisnis multi-cabang?",
-        a: "Bisa. Dikasir mendukung multi-warehouse dengan stok terpisah per gudang/cabang, transfer stok antar gudang, dan laporan per gudang.",
+        q: "Can it be used for multi-branch businesses?",
+        a: "Yes. Dikasir supports multi-warehouse inventory with separate stock per location, inter-warehouse transfers, and location-based reporting.",
     },
     {
-        q: "Bagaimana kalau internet di toko mati?",
-        a: "Dikasir punya offline mode: transaksi tetap bisa diproses dan masuk antrean lokal, lalu tersinkron otomatis saat koneksi kembali.",
+        q: "What if the internet goes down at the store?",
+        a: "Dikasir includes offline mode: transactions can still be processed locally and automatically sync once the connection is restored.",
     },
     {
-        q: "Apa saja yang dibutuhkan untuk instalasi?",
-        a: "PHP 8.3+, MySQL, Composer, dan Node.js 20+. Semua panduan lengkap ada di dokumentasi getting-started.",
+        q: "What do I need to install it?",
+        a: "PHP 8.3+, MySQL, Composer, and Node.js 20+. Full setup instructions are available in the getting-started documentation.",
     },
     {
-        q: "Bagaimana cara berkontribusi?",
-        a: "Fork repository, buat branch dari development (feature/nama-fitur), lalu buat Pull Request ke development. Pastikan php artisan test lulus sebelum submit.",
+        q: "How can I contribute?",
+        a: "Fork the repository, create a branch from development (feature/feature-name), and open a pull request to development. Please make sure php artisan test passes before submitting.",
     },
 ];
 
@@ -130,16 +130,15 @@ php artisan key:generate
 php artisan migrate --seed
 php artisan storage:link
 
-# Jalankan dev server (2 terminal)
+# Run the dev server (2 terminals)
 npm run dev
 php artisan serve`;
 
 export default function Welcome() {
     return (
         <PublicLayout>
-            <Head title="Dikasir — Sistem Kasir Open Source untuk UMKM" />
+            <Head title="Dikasir — Modern Open Source POS System for SMEs" />
 
-            {/* ============ HERO ============ */}
             <section className="pt-28 pb-16 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center max-w-4xl mx-auto">
@@ -149,16 +148,14 @@ export default function Welcome() {
                         </div>
 
                         <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight">
-                            Sistem Kasir Modern
+                            Modern Cashier System
                             <span className="block mt-2 bg-gradient-to-r from-primary-500 to-primary-600 bg-clip-text text-transparent">
-                                Gratis &amp; Open Source
+                                Free &amp; Open Source
                             </span>
                         </h1>
 
                         <p className="mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            Dikasir adalah aplikasi point of sale lengkap untuk warung, toko, dan
-                            UMKM Indonesia — multi-warehouse, PPN, loyalty &amp; CRM, WhatsApp
-                            gateway, hingga offline mode. Self-hosted, data 100% milik Anda.
+                            Dikasir is a complete point-of-sale application for stores, shops, and Indonesian SMEs — multi-warehouse, VAT, loyalty &amp; CRM, WhatsApp gateway, and offline mode. Self-hosted, with 100% ownership of your data.
                         </p>
 
                         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -169,7 +166,7 @@ export default function Welcome() {
                                 className="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl hover:from-primary-600 hover:to-primary-700 shadow-xl shadow-primary-500/30 transition-all flex items-center justify-center gap-2"
                             >
                                 <IconStar size={20} />
-                                Star di GitHub
+                                Star on GitHub
                                 <IconArrowRight size={18} />
                             </a>
                             <Link
@@ -177,12 +174,11 @@ export default function Welcome() {
                                 className="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-primary-300 dark:hover:border-primary-700 transition-all flex items-center justify-center gap-2"
                             >
                                 <IconDeviceMobile size={20} />
-                                Coba Demo
+                                Try Demo
                             </Link>
                         </div>
                     </div>
 
-                    {/* App preview */}
                     <div className="mt-16 relative">
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none h-32 bottom-0 top-auto" />
                         <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl bg-white dark:bg-slate-900">
@@ -198,7 +194,7 @@ export default function Welcome() {
                             </div>
                             <img
                                 src="/media/revamp-pos.png"
-                                alt="Preview POS Dikasir"
+                                alt="Dikasir POS preview"
                                 className="w-full"
                                 loading="lazy"
                             />
@@ -207,7 +203,6 @@ export default function Welcome() {
                 </div>
             </section>
 
-            {/* ============ STATS ============ */}
             <section className="py-12 px-6 border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
                 <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
                     {stats.map((stat) => (
@@ -223,16 +218,14 @@ export default function Welcome() {
                 </div>
             </section>
 
-            {/* ============ SCREENSHOTS ============ */}
             <section id="screenshot" className="py-20 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-14">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Tampilan Aplikasi
+                            App Overview
                         </h2>
                         <p className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            Dari kasir harian hingga laporan manajemen — semua dalam satu aplikasi
-                            yang rapi dan cepat.
+                            From daily cashier operations to management reporting — everything lives in one clean, fast application.
                         </p>
                     </div>
 
@@ -264,23 +257,21 @@ export default function Welcome() {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 transition-colors"
                         >
-                            Lihat galeri lengkap (33 screenshot)
+                            View the full gallery (33 screenshots)
                             <IconArrowRight size={16} />
                         </a>
                     </div>
                 </div>
             </section>
 
-            {/* ============ FEATURES ============ */}
             <section id="fitur" className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Fitur Lengkap untuk Bisnis Nyata
+                            Complete Features for Real Businesses
                         </h2>
                         <p className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            44+ modul terintegrasi — dari transaksi harian sampai analitik
-                            lanjutan, dirancang untuk kebutuhan UMKM Indonesia.
+                            44+ integrated modules — from daily transactions to advanced analytics, designed for modern retail operations.
                         </p>
                     </div>
 
@@ -308,21 +299,20 @@ export default function Welcome() {
                             href="/fitur"
                             className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-950/40 transition-colors"
                         >
-                            Jelajahi semua fitur
+                            Explore all features
                             <IconArrowRight size={16} />
                         </Link>
                     </div>
                 </div>
             </section>
 
-            {/* ============ TECH STACK ============ */}
             <section className="py-16 px-6">
                 <div className="max-w-4xl mx-auto text-center">
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-                        Tech Stack Modern
+                        Modern Tech Stack
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-10">
-                        Dibangun dengan teknologi yang teruji, cepat, dan mudah dikembangkan
+                        Built with proven, fast, and easy-to-develop technologies.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         {techStack.map((tech) => (
@@ -340,16 +330,14 @@ export default function Welcome() {
                 </div>
             </section>
 
-            {/* ============ INSTALLATION ============ */}
             <section id="instalasi" className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Instalasi dalam Hitungan Menit
+                            Installation in Minutes
                         </h2>
                         <p className="mt-4 text-slate-600 dark:text-slate-400">
-                            Clone, install, dan kasir Anda langsung jalan. Data contoh sudah
-                            termasuk.
+                            Clone, install, and your cashier system is ready. Demo data is included.
                         </p>
                     </div>
 
@@ -370,23 +358,21 @@ export default function Welcome() {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 transition-colors"
                         >
-                            Baca dokumentasi lengkap
+                            Read the full documentation
                             <IconArrowRight size={16} />
                         </a>
                     </div>
                 </div>
             </section>
 
-            {/* ============ DEMO ============ */}
             <section className="py-16 px-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="rounded-2xl border border-primary-200 dark:border-primary-900 bg-primary-50/50 dark:bg-primary-950/30 p-8 text-center">
                         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
-                            Ingin Coba Langsung?
+                            Want to Try It Right Away?
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400 mb-6">
-                            Demo berisi data contoh lengkap — produk, transaksi, dan laporan.
-                            Gunakan akun demo berikut:
+                            The demo contains complete example data — products, transactions, and reports. Use the demo accounts below:
                         </p>
                         <div className="grid sm:grid-cols-2 gap-4 mb-8 text-left">
                             <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
@@ -402,7 +388,7 @@ export default function Welcome() {
                             </div>
                             <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
                                 <div className="text-xs font-semibold text-primary-600 dark:text-primary-400 mb-2 uppercase tracking-wide">
-                                    Kasir
+                                    Cashier
                                 </div>
                                 <div className="font-mono text-sm text-slate-700 dark:text-slate-300">
                                     cashier@gmail.com
@@ -416,19 +402,18 @@ export default function Welcome() {
                             href="/login"
                             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-2xl hover:from-primary-600 hover:to-primary-700 shadow-lg shadow-primary-500/25 transition-all"
                         >
-                            Buka Demo
+                            Open Demo
                             <IconArrowRight size={18} />
                         </Link>
                     </div>
                 </div>
             </section>
 
-            {/* ============ FAQ ============ */}
             <section id="faq" className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
                 <div className="max-w-3xl mx-auto">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Pertanyaan Umum
+                            Frequently Asked Questions
                         </h2>
                     </div>
                     <div className="space-y-4">
@@ -454,16 +439,14 @@ export default function Welcome() {
                 </div>
             </section>
 
-            {/* ============ CTA ============ */}
             <section className="py-20 px-6">
                 <div className="max-w-4xl mx-auto">
                     <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-3xl p-12 text-center text-white">
                         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            Siap Kelola Bisnis dengan Dikasir?
+                            Ready to Manage Your Business with Dikasir?
                         </h2>
                         <p className="text-lg opacity-90 mb-8 max-w-xl mx-auto">
-                            Gratis selamanya, open source, dan data sepenuhnya milik Anda.
-                            Mulai dengan satu klik di GitHub.
+                            Free forever, open source, and your data stays fully yours. Start with a single click on GitHub.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a
@@ -473,13 +456,13 @@ export default function Welcome() {
                                 className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 font-semibold rounded-2xl hover:bg-slate-50 transition-colors"
                             >
                                 <IconBrandGithub size={20} />
-                                Star di GitHub
+                                Star on GitHub
                             </a>
                             <Link
                                 href="/login"
                                 className="inline-flex items-center gap-2 px-8 py-4 border border-white/40 text-white font-semibold rounded-2xl hover:bg-white/10 transition-colors"
                             >
-                                Coba Demo
+                                Try Demo
                                 <IconArrowRight size={18} />
                             </Link>
                         </div>

@@ -76,7 +76,7 @@ class PurchaseOrderController extends Controller
 
         return redirect()
             ->route('purchase-orders.show', $order)
-            ->with('success', __('messages.purchase_orders.created'));
+            ->with('success', 'Purchase order created successfully.');
     }
 
     public function show(PurchaseOrder $purchaseOrder)
@@ -100,26 +100,26 @@ class PurchaseOrderController extends Controller
     public function placeOrder(Request $request, PurchaseOrder $purchaseOrder)
     {
         if ($purchaseOrder->status !== 'draft') {
-            return back()->with('error', __('messages.purchase_orders.only_draft'));
+            return back()->with('error', 'Only purchase orders with Draft status can be placed.');
         }
 
         $this->purchaseOrderService->placeOrder($purchaseOrder);
 
         return redirect()
             ->route('purchase-orders.show', $purchaseOrder)
-            ->with('success', __('messages.purchase_orders.placed'));
+            ->with('success', 'Purchase order placed successfully.');
     }
 
     public function cancel(Request $request, PurchaseOrder $purchaseOrder)
     {
         if (! in_array($purchaseOrder->status, ['draft', 'ordered', 'partial_received'])) {
-            return back()->with('error', __('messages.purchase_orders.cannot_cancel'));
+            return back()->with('error', 'This purchase order cannot be cancelled.');
         }
 
         $this->purchaseOrderService->cancelOrder($purchaseOrder);
 
         return redirect()
             ->route('purchase-orders.index')
-            ->with('success', __('messages.purchase_orders.cancelled'));
+            ->with('success', 'Purchase order cancelled.');
     }
 }

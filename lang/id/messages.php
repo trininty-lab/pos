@@ -167,12 +167,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'purchase_orders' => [
-        'created' => 'Purchase Order berhasil dibuat.',
-        'placed' => 'Purchase Order berhasil di-order.',
-        'cancelled' => 'Purchase Order berhasil dibatalkan.',
-        'not_found' => 'Purchase Order tidak ditemukan.',
-        'cannot_cancel' => 'PO tidak dapat dibatalkan pada status ini.',
-        'only_draft' => 'Hanya Purchase Order dengan status Draft yang dapat ditempatkan.',
+        'created' => 'Purchase Order created successfully.',
+        'placed' => 'Purchase Order placed successfully.',
+        'cancelled' => 'Purchase Order cancelled successfully.',
+        'not_found' => 'Purchase Order not found.',
+        'cannot_cancel' => 'PO cannot be cancelled in this status.',
+        'only_draft' => 'Only Purchase Orders with Draft status can be placed.',
     ],
 
     /*
@@ -181,10 +181,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'goods_receivings' => [
-        'created' => 'Penerimaan barang berhasil dicatat.',
-        'not_found' => 'Penerimaan barang tidak ditemukan.',
-        'item_not_found' => 'Item tidak ditemukan dalam purchase order.',
-        'exceeds_remaining' => 'Jumlah barang yang diterima melebihi sisa stok untuk item :product_id.',
+        'created' => 'Goods receiving recorded successfully.',
+        'not_found' => 'Goods receiving not found.',
+        'item_not_found' => 'Item not found in the purchase order.',
+        'exceeds_remaining' => 'Received quantity exceeds the remaining quantity for item :product_id.',
     ],
 
     /*

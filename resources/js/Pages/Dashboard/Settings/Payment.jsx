@@ -202,7 +202,7 @@ export default function Payment({
                                 }
                                 disabled={!canUpdatePaymentSettings}
                             />
-                            {data.midtrans_enabled ? "Aktif" : "Nonaktif"}
+                                    {data.midtrans_enabled ? "Active" : "Inactive"}
                         </label>
                     </div>
                     <div
@@ -292,7 +292,7 @@ export default function Payment({
                                 }
                                 disabled={!canUpdatePaymentSettings}
                             />
-                            {data.xendit_enabled ? "Aktif" : "Nonaktif"}
+                                    {data.xendit_enabled ? "Active" : "Inactive"}
                         </label>
                     </div>
                     <div

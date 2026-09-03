@@ -181,7 +181,7 @@ export default function Store({ settings }) {
                                 value={data.store_nib}
                                 errors={errors.store_nib}
                                 onChange={(e) => setData("store_nib", e.target.value)}
-                                placeholder="Nomor Induk Berusaha"
+                                placeholder="Business Identification Number"
                             />
                         </div>
                         <div className="mt-4">

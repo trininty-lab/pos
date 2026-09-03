@@ -138,6 +138,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Price list management, price-list items, sales target, and WhatsApp connection/settings screens now use English visible text.
 - Price updates, target values, WhatsApp connection polling, test messages, routes, and configuration behavior were unchanged.
 
+### Remaining settings forms
+
+- Bank account create/edit form and remaining payment/store settings labels now use English visible text.
+- Multipart submission, method spoofing, permissions, credentials, and settings behavior were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -148,11 +153,10 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate remaining settings forms and edge text.
-2. Translate backend flash messages and API responses carefully.
-3. Translate PDF and document labels.
-4. Review date, number, and currency formatting separately from text translation.
-5. Run a final Indonesian-text scan and full validation.
+1. Translate backend flash messages and API responses carefully.
+2. Translate PDF and document labels.
+3. Review date, number, and currency formatting separately from text translation.
+4. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 

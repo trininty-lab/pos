@@ -170,7 +170,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
 
     const summaryCards = [
         {
-            title: "Pendapatan Bersih",
+            title: "Net Revenue",
             value: formatCurrency(safeSummary.revenue_total),
             description: "Total setelah diskon",
             icon: <IconReceipt2 />,
@@ -203,7 +203,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
 
     return (
         <>
-            <Head title="Laporan Penjualan" />
+            <Head title="Sales Report" />
 
             <div className="space-y-6">
                 {/* Header */}
@@ -214,10 +214,10 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                                 size={28}
                                 className="text-primary-500"
                             />
-                            Laporan Penjualan
+                            Sales Report
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Analisis dan ringkasan penjualan
+                            Sales analysis and summary
                         </p>
                     </div>
                     <button
@@ -250,7 +250,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Tanggal Mulai
+                                        Start Date
                                     </label>
                                     <input
                                         type="date"
@@ -266,7 +266,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Tanggal Akhir
+                                        End Date
                                     </label>
                                     <input
                                         type="date"
@@ -306,11 +306,11 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                                     searchable
                                 />
                                 <InputSelect
-                                    label="Pelanggan"
+                                    label="Customer"
                                     data={customers}
                                     selected={selectedCustomer}
                                     setSelected={handleSelectCustomer}
-                                    placeholder="Semua pelanggan"
+                                    placeholder="All customers"
                                     searchable
                                 />
                             </div>

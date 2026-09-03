@@ -142,7 +142,7 @@ const ProfitReport = ({
         {
             title: "Margin Kotor",
             value: `${stats.margin}%`,
-            description: "Profit vs penjualan",
+            description: "Profit versus sales",
             icon: <IconPercentage />,
             gradient: "from-warning-500 to-warning-600",
         },
@@ -157,7 +157,7 @@ const ProfitReport = ({
 
     return (
         <>
-            <Head title="Laporan Keuntungan" />
+            <Head title="Profit Report" />
 
             <div className="space-y-6">
                 {/* Header */}
@@ -165,7 +165,7 @@ const ProfitReport = ({
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             <IconCoin size={28} className="text-success-500" />
-                            Laporan Keuntungan
+                            Profit Report
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             Analisis profit dan margin
@@ -201,7 +201,7 @@ const ProfitReport = ({
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Tanggal Mulai
+                                        Start Date
                                     </label>
                                     <input
                                         type="date"
@@ -217,7 +217,7 @@ const ProfitReport = ({
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Tanggal Akhir
+                                        End Date
                                     </label>
                                     <input
                                         type="date"
@@ -263,7 +263,7 @@ const ProfitReport = ({
                                     searchable
                                 />
                                 <InputSelect
-                                    label="Pelanggan"
+                                    label="Customer"
                                     data={customers}
                                     selected={selectedCustomer}
                                     setSelected={(v) => {
@@ -273,7 +273,7 @@ const ProfitReport = ({
                                             v ? String(v.id) : ""
                                         );
                                     }}
-                                    placeholder="Semua pelanggan"
+                                    placeholder="All customers"
                                     searchable
                                 />
                             </div>

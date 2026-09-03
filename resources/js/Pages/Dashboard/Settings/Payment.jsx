@@ -64,7 +64,7 @@ export default function Payment({
         if (source.managed_by_environment) {
             return (
                 <p className="text-xs text-amber-600 dark:text-amber-400">
-                    Secret dikelola oleh environment dan tidak bisa diubah dari dashboard.
+                    The secret is managed by the environment and cannot be changed from the dashboard.
                 </p>
             );
         }
@@ -72,7 +72,7 @@ export default function Payment({
         if (source.configured) {
             return (
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Tersimpan: <span className="font-medium">{source.masked}</span>. {keepMessage}
+                    Saved: <span className="font-medium">{source.masked}</span>. {keepMessage}
                 </p>
             );
         }
@@ -82,15 +82,15 @@ export default function Payment({
 
     return (
         <>
-            <Head title="Pengaturan Payment" />
+            <Head title="Payment Settings" />
 
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <IconCreditCard size={28} className="text-primary-500" />
-                    Pengaturan Payment Gateway
+                    Payment Gateway Settings
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Konfigurasi metode pembayaran dan gateway
+                    Configure payment methods and gateways
                 </p>
             </div>
 
@@ -99,11 +99,10 @@ export default function Payment({
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
                     <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
                         <IconCash size={18} />
-                        Gateway Default
+                        Default Gateway
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                        Gateway pembayaran default yang digunakan kasir saat
-                        membuka halaman transaksi.
+                        The default payment gateway used by the cashier when opening the transaction page.
                     </p>
                     {!canUpdatePaymentSettings && (
                         <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-300">
@@ -112,7 +111,7 @@ export default function Payment({
                     )}
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Pilih Gateway
+                            Select Gateway
                         </label>
                         <select
                             value={data.default_gateway}
@@ -165,19 +164,17 @@ export default function Payment({
                                 }
                                 disabled={!canUpdatePaymentSettings}
                             />
-                            {data.bank_transfer_enabled ? "Aktif" : "Nonaktif"}
+                            {data.bank_transfer_enabled ? "Active" : "Inactive"}
                         </label>
                     </div>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                        Pembayaran manual via transfer bank. Kasir akan
-                        memasukkan transaksi dengan status pending, kemudian
-                        admin mengkonfirmasi setelah dana diterima.
+                        Manual payment via bank transfer. The cashier records the transaction as pending, then an admin confirms it after the funds are received.
                     </p>
                         <a
                             href={route("settings.bank-accounts.index")}
                         className="inline-flex items-center gap-2 text-sm text-primary-500 hover:text-primary-600 font-medium"
                     >
-                        Kelola Rekening Bank →
+                        Manage Bank Accounts →
                     </a>
                 </div>
 
@@ -268,7 +265,7 @@ export default function Payment({
                                 disabled={!canUpdatePaymentSettings}
                             />
                             <span className="text-sm text-slate-600 dark:text-slate-400">
-                                Mode Produksi
+                                Production Mode
                             </span>
                         </label>
                     </div>
@@ -374,7 +371,7 @@ export default function Payment({
                                 disabled={!canUpdatePaymentSettings}
                             />
                             <span className="text-sm text-slate-600 dark:text-slate-400">
-                                Mode Produksi
+                                Production Mode
                             </span>
                         </label>
                     </div>
@@ -463,7 +460,7 @@ export default function Payment({
                         className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-medium transition-colors disabled:opacity-50"
                     >
                         <IconDeviceFloppy size={18} />
-                        {processing ? "Menyimpan..." : "Simpan Konfigurasi"}
+                        {processing ? "Saving..." : "Save Configuration"}
                     </button>
                 </div>
             </form>

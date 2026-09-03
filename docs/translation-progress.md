@@ -122,6 +122,12 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Dine-in area CRUD and dine-in order processing screens now use English visible text.
 - Area and order routes, permissions, status values, payment options, prompts, and data behavior were unchanged.
 
+### Reports and payment settings
+
+- Sales report, profit report, and advanced insights visible labels, filters, summaries, tables, and empty states now use English text.
+- Payment gateway settings headings, helper text, gateway labels, and save controls now use English text.
+- Report calculations, chart data, filters, payment fields, credentials, routes, and configuration behavior were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -132,7 +138,7 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate reports and settings pages.
+1. Translate remaining settings pages.
 2. Translate backend flash messages and API responses carefully.
 3. Translate PDF and document labels.
 4. Review date, number, and currency formatting separately from text translation.
@@ -150,4 +156,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Reports and settings pages. Keep each feature as a separate checkpoint, then build and test before final backend/PDF review.
+Remaining settings pages. Keep each feature as a separate checkpoint, then build and test before final backend/PDF review.

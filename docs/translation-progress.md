@@ -65,6 +65,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Warehouse settings now use English visible text, including form labels, type names, confirmation, and empty state.
 - Warehouse routes, permissions, data fields, and form behavior were unchanged.
 
+### Stock mutations
+
+- Stock mutation filters, table headings, description, and empty state now use English visible text.
+- Stock mutation types, filters, routes, data fields, and date formatting were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -75,7 +80,7 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate stock mutations, stock opname, and stock transfers.
+1. Translate stock opname and stock transfers.
 2. Translate purchasing, receivables, and payables pages.
 3. Translate CRM, loyalty, promotions, and dine-in pages.
 4. Translate reports and settings pages.
@@ -96,4 +101,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Stock mutations, stock opname, and stock transfers. Keep this slice limited to those screens, then build and test before continuing to purchasing.
+Stock opname and stock transfers. Keep this slice limited to those screens, then build and test before continuing to purchasing.

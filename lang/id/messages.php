@@ -7,13 +7,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'auth' => [
-        'login' => 'Berhasil masuk.',
-        'logout' => 'Berhasil keluar.',
-        'failed' => 'Email atau password salah.',
-        'throttle' => 'Terlalu banyak percobaan masuk. Silakan coba lagi dalam :seconds detik.',
-        'password_reset_link_sent' => 'Link reset password telah dikirim ke email Anda.',
-        'reset' => 'Password Anda telah direset.',
-        'confirm_password' => 'Password yang Anda masukkan salah.',
+        'login' => 'Login successful.',
+        'logout' => 'Logout successful.',
+        'failed' => 'These credentials do not match our records.',
+        'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+        'password_reset_link_sent' => 'A password reset link has been sent to your email.',
+        'reset' => 'Your password has been reset.',
+        'confirm_password' => 'The password you entered is incorrect.',
     ],
 
     /*
@@ -22,14 +22,14 @@ return [
     |--------------------------------------------------------------------------
     */
     'general' => [
-        'created' => 'Data berhasil dibuat.',
-        'updated' => 'Data berhasil diperbarui.',
-        'deleted' => 'Data berhasil dihapus.',
-        'saved' => 'Data berhasil disimpan.',
-        'error' => 'Terjadi kesalahan. Silakan coba lagi.',
-        'not_found' => 'Data tidak ditemukan.',
-        'required' => 'Field ini wajib diisi.',
-        'success' => 'Operasi berhasil.',
+        'created' => 'Data created successfully.',
+        'updated' => 'Data updated successfully.',
+        'deleted' => 'Data deleted successfully.',
+        'saved' => 'Data saved successfully.',
+        'error' => 'An error occurred. Please try again.',
+        'not_found' => 'Data not found.',
+        'required' => 'This field is required.',
+        'success' => 'Operation successful.',
     ],
 
     /*
@@ -38,16 +38,16 @@ return [
     |--------------------------------------------------------------------------
     */
     'products' => [
-        'created' => 'Produk baru berhasil ditambahkan.',
-        'updated' => 'Data produk berhasil diperbarui.',
-        'deleted' => 'Produk berhasil dihapus.',
-        'not_found' => 'Produk tidak ditemukan.',
-        'import_success' => 'Import produk berhasil. :count produk diimpor.',
-        'import_error' => 'Gagal import produk. Silakan periksa format file.',
-        'export_success' => 'Export produk berhasil.',
-        'barcode_generated' => 'Barcode berhasil di-generate.',
-        'stock_insufficient' => 'Stok tidak mencukupi.',
-        'min_stock_reached' => 'Stok minimum tercapai.',
+        'created' => 'Product added successfully.',
+        'updated' => 'Product data updated successfully.',
+        'deleted' => 'Product deleted successfully.',
+        'not_found' => 'Product not found.',
+        'import_success' => 'Product import successful. :count products imported.',
+        'import_error' => 'Product import failed. Please check the file format.',
+        'export_success' => 'Product export successful.',
+        'barcode_generated' => 'Barcode generated successfully.',
+        'stock_insufficient' => 'Insufficient stock.',
+        'min_stock_reached' => 'Minimum stock reached.',
     ],
 
     /*
@@ -56,11 +56,11 @@ return [
     |--------------------------------------------------------------------------
     */
     'categories' => [
-        'created' => 'Kategori berhasil ditambahkan.',
-        'updated' => 'Kategori berhasil diperbarui.',
-        'deleted' => 'Kategori berhasil dihapus.',
-        'not_found' => 'Kategori tidak ditemukan.',
-        'has_products' => 'Kategori tidak dapat dihapus karena masih memiliki produk.',
+        'created' => 'Category added successfully.',
+        'updated' => 'Category updated successfully.',
+        'deleted' => 'Category deleted successfully.',
+        'not_found' => 'Category not found.',
+        'has_products' => 'Category cannot be deleted because it still has products.',
     ],
 
     /*
@@ -69,14 +69,14 @@ return [
     |--------------------------------------------------------------------------
     */
     'customers' => [
-        'created' => 'Pelanggan berhasil ditambahkan.',
-        'updated' => 'Data pelanggan berhasil diperbarui.',
-        'deleted' => 'Pelanggan berhasil dihapus.',
-        'not_found' => 'Pelanggan tidak ditemukan.',
-        'import_success' => 'Import pelanggan berhasil.',
-        'import_error' => 'Gagal import pelanggan.',
-        'segments_synced' => 'Segment manual pelanggan berhasil diperbarui.',
-        'upgraded_to_member' => 'Pelanggan berhasil ditingkatkan menjadi member.',
+        'created' => 'Customer added successfully.',
+        'updated' => 'Customer data updated successfully.',
+        'deleted' => 'Customer deleted successfully.',
+        'not_found' => 'Customer not found.',
+        'import_success' => 'Customer import successful.',
+        'import_error' => 'Customer import failed.',
+        'segments_synced' => 'Customer manual segments updated successfully.',
+        'upgraded_to_member' => 'Customer upgraded to member successfully.',
     ],
 
     /*
@@ -85,10 +85,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'suppliers' => [
-        'created' => 'Supplier berhasil ditambahkan.',
-        'updated' => 'Data supplier berhasil diperbarui.',
-        'deleted' => 'Supplier berhasil dihapus.',
-        'not_found' => 'Supplier tidak ditemukan.',
+        'created' => 'Supplier added successfully.',
+        'updated' => 'Supplier data updated successfully.',
+        'deleted' => 'Supplier deleted successfully.',
+        'not_found' => 'Supplier not found.',
     ],
 
     /*
@@ -97,21 +97,21 @@ return [
     |--------------------------------------------------------------------------
     */
     'transactions' => [
-        'created' => 'Transaksi berhasil disimpan.',
-        'product_added' => 'Produk berhasil ditambahkan.',
-        'product_not_found' => 'Produk tidak ditemukan.',
-        'stock_insufficient' => 'Stok tidak mencukupi.',
-        'cart_empty' => 'Keranjang kosong.',
-        'hold_success' => 'Transaksi ditahan: :label',
-        'resume_success' => 'Transaksi dilanjutkan.',
-        'hold_cleared' => 'Transaksi ditahan berhasil dihapus.',
-        'hold_not_found' => 'Transaksi ditahan tidak ditemukan.',
-        'active_cart_exists' => 'Selesaikan atau tahan transaksi aktif terlebih dahulu.',
-        'pending_approval' => 'Transaksi menunggu approval supervisor.',
-        'payment_confirmed' => 'Pembayaran berhasil dikonfirmasi.',
-        'already_paid' => 'Transaksi sudah dibayar.',
-        'share_success' => 'Transaksi berhasil dishare.',
-        'print_success' => 'Struk siap dicetak.',
+        'created' => 'Transaction saved successfully.',
+        'product_added' => 'Product added successfully.',
+        'product_not_found' => 'Product not found.',
+        'stock_insufficient' => 'Insufficient stock.',
+        'cart_empty' => 'Cart is empty.',
+        'hold_success' => 'Transaction held: :label',
+        'resume_success' => 'Transaction resumed.',
+        'hold_cleared' => 'Held transaction cleared successfully.',
+        'hold_not_found' => 'Held transaction not found.',
+        'active_cart_exists' => 'Please complete or hold the active transaction first.',
+        'pending_approval' => 'Transaction is pending supervisor approval.',
+        'payment_confirmed' => 'Payment confirmed successfully.',
+        'already_paid' => 'Transaction has already been paid.',
+        'share_success' => 'Transaction shared successfully.',
+        'print_success' => 'Receipt is ready to print.',
     ],
 
     /*
@@ -120,12 +120,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'sales_returns' => [
-        'created' => 'Retur penjualan berhasil dibuat.',
-        'updated' => 'Retur penjualan berhasil diperbarui.',
-        'completed' => 'Retur penjualan berhasil diselesaikan.',
-        'not_found' => 'Retur tidak ditemukan.',
-        'qty_exceeded' => 'Jumlah retur melebihi jumlah pembelian.',
-        'already_completed' => 'Retur sudah selesai diproses.',
+        'created' => 'Sales return created successfully.',
+        'updated' => 'Sales return updated successfully.',
+        'completed' => 'Sales return completed successfully.',
+        'not_found' => 'Return not found.',
+        'qty_exceeded' => 'Returned quantity exceeds the purchased quantity.',
+        'already_completed' => 'Return has already been processed.',
     ],
 
     /*
@@ -134,14 +134,14 @@ return [
     |--------------------------------------------------------------------------
     */
     'cashier_shifts' => [
-        'opened' => 'Shift kasir berhasil dibuka.',
-        'closed' => 'Shift kasir berhasil ditutup.',
-        'force_closed' => 'Shift kasir dipaksa ditutup.',
-        'not_found' => 'Shift tidak ditemukan.',
-        'already_open' => 'Anda sudah memiliki shift yang aktif.',
-        'already_closed' => 'Shift sudah ditutup.',
-        'no_active_shift' => 'Tidak ada shift aktif. Buka shift terlebih dahulu.',
-        'has_held_carts' => 'Masih ada transaksi ditahan. Selesaikan terlebih dahulu.',
+        'opened' => 'Cashier shift opened successfully.',
+        'closed' => 'Cashier shift closed successfully.',
+        'force_closed' => 'Cashier shift was force-closed.',
+        'not_found' => 'Shift not found.',
+        'already_open' => 'You already have an active shift.',
+        'already_closed' => 'Shift is already closed.',
+        'no_active_shift' => 'There is no active shift. Open a shift first.',
+        'has_held_carts' => 'There are still held transactions. Please finish them first.',
     ],
 
     /*
@@ -150,15 +150,15 @@ return [
     |--------------------------------------------------------------------------
     */
     'stock' => [
-        'opname_created' => 'Stock opname berhasil dibuat.',
-        'opname_finalized' => 'Stock opname berhasil di-finalisasi.',
-        'opname_updated' => 'Item stock opname berhasil diperbarui.',
-        'transfer_created' => 'Transfer stok berhasil dibuat.',
-        'transfer_sent' => 'Transfer stok berhasil dikirim.',
-        'transfer_received' => 'Transfer stok berhasil diterima.',
-        'transfer_cancelled' => 'Transfer stok berhasil dibatalkan.',
-        'mutation_logged' => 'Mutasi stok berhasil dicatat.',
-        'insufficient_stock' => 'Stok tidak mencukupi untuk operasi ini.',
+        'opname_created' => 'Stock opname created successfully.',
+        'opname_finalized' => 'Stock opname finalized successfully.',
+        'opname_updated' => 'Stock opname item updated successfully.',
+        'transfer_created' => 'Stock transfer created successfully.',
+        'transfer_sent' => 'Stock transfer sent successfully.',
+        'transfer_received' => 'Stock transfer received successfully.',
+        'transfer_cancelled' => 'Stock transfer cancelled successfully.',
+        'mutation_logged' => 'Stock mutation recorded successfully.',
+        'insufficient_stock' => 'Insufficient stock for this operation.',
     ],
 
     /*
@@ -167,12 +167,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'purchase_orders' => [
-        'created' => 'Purchase Order created successfully.',
-        'placed' => 'Purchase Order placed successfully.',
-        'cancelled' => 'Purchase Order cancelled successfully.',
-        'not_found' => 'Purchase Order not found.',
-        'cannot_cancel' => 'PO cannot be cancelled in this status.',
-        'only_draft' => 'Only Purchase Orders with Draft status can be placed.',
+        'created' => 'Purchase order created successfully.',
+        'placed' => 'Purchase order placed successfully.',
+        'cancelled' => 'Purchase order cancelled successfully.',
+        'not_found' => 'Purchase order not found.',
+        'cannot_cancel' => 'This purchase order cannot be cancelled in its current status.',
+        'only_draft' => 'Only purchase orders with Draft status can be placed.',
     ],
 
     /*
@@ -193,10 +193,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'supplier_returns' => [
-        'created' => 'Retur supplier berhasil dibuat.',
-        'completed' => 'Retur supplier berhasil diselesaikan.',
-        'cancelled' => 'Retur supplier berhasil dibatalkan.',
-        'not_found' => 'Retur supplier tidak ditemukan.',
+        'created' => 'Supplier return created successfully.',
+        'completed' => 'Supplier return completed successfully.',
+        'cancelled' => 'Supplier return cancelled successfully.',
+        'not_found' => 'Supplier return not found.',
     ],
 
     /*
@@ -205,11 +205,11 @@ return [
     |--------------------------------------------------------------------------
     */
     'receivables' => [
-        'payment_recorded' => 'Pembayaran piutang berhasil dicatat.',
-        'partial_payment' => 'Pembayaran sebagian berhasil.',
-        'fully_paid' => 'Piutang lunas.',
-        'not_found' => 'Piutang tidak ditemukan.',
-        'collection_note_updated' => 'Catatan penagihan berhasil diperbarui.',
+        'payment_recorded' => 'Receivable payment recorded successfully.',
+        'partial_payment' => 'Partial payment successful.',
+        'fully_paid' => 'Receivable fully paid.',
+        'not_found' => 'Receivable not found.',
+        'collection_note_updated' => 'Collection note updated successfully.',
     ],
 
     /*
@@ -218,9 +218,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'payables' => [
-        'created' => 'Hutang supplier berhasil dicatat.',
-        'payment_recorded' => 'Pembayaran hutang berhasil dicatat.',
-        'not_found' => 'Hutang tidak ditemukan.',
+        'created' => 'Supplier payable recorded successfully.',
+        'payment_recorded' => 'Payable payment recorded successfully.',
+        'not_found' => 'Payable not found.',
     ],
 
     /*
@@ -229,10 +229,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'pricing_rules' => [
-        'created' => 'Aturan harga berhasil dibuat.',
-        'updated' => 'Aturan harga berhasil diperbarui.',
-        'deleted' => 'Aturan harga berhasil dihapus.',
-        'not_found' => 'Aturan harga tidak ditemukan.',
+        'created' => 'Pricing rule created successfully.',
+        'updated' => 'Pricing rule updated successfully.',
+        'deleted' => 'Pricing rule deleted successfully.',
+        'not_found' => 'Pricing rule not found.',
     ],
 
     /*
@@ -241,12 +241,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'price_lists' => [
-        'created' => 'Price list berhasil dibuat.',
-        'updated' => 'Price list berhasil diperbarui.',
-        'deleted' => 'Price list berhasil dihapus.',
-        'not_found' => 'Price list tidak ditemukan.',
-        'item_added' => 'Item price list berhasil ditambahkan.',
-        'item_removed' => 'Item price list berhasil dihapus.',
+        'created' => 'Price list created successfully.',
+        'updated' => 'Price list updated successfully.',
+        'deleted' => 'Price list deleted successfully.',
+        'not_found' => 'Price list not found.',
+        'item_added' => 'Price list item added successfully.',
+        'item_removed' => 'Price list item removed successfully.',
     ],
 
     /*
@@ -255,13 +255,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'vouchers' => [
-        'created' => 'Voucher berhasil dibuat.',
-        'updated' => 'Voucher berhasil diperbarui.',
-        'deleted' => 'Voucher berhasil dihapus.',
-        'redeemed' => 'Voucher berhasil digunakan.',
-        'not_found' => 'Voucher tidak ditemukan.',
-        'expired' => 'Voucher sudah kadaluarsa.',
-        'already_used' => 'Voucher sudah digunakan.',
+        'created' => 'Voucher created successfully.',
+        'updated' => 'Voucher updated successfully.',
+        'deleted' => 'Voucher deleted successfully.',
+        'redeemed' => 'Voucher redeemed successfully.',
+        'not_found' => 'Voucher not found.',
+        'expired' => 'Voucher has expired.',
+        'already_used' => 'Voucher has already been used.',
     ],
 
     /*
@@ -270,12 +270,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'segments' => [
-        'created' => 'Segment berhasil dibuat.',
-        'updated' => 'Segment berhasil diperbarui.',
-        'deleted' => 'Segment berhasil dihapus.',
-        'member_added' => 'Customer berhasil ditambahkan ke segment.',
-        'member_removed' => 'Customer berhasil dihapus dari segment.',
-        'not_found' => 'Segment tidak ditemukan.',
+        'created' => 'Segment created successfully.',
+        'updated' => 'Segment updated successfully.',
+        'deleted' => 'Segment deleted successfully.',
+        'member_added' => 'Customer added to segment successfully.',
+        'member_removed' => 'Customer removed from segment successfully.',
+        'not_found' => 'Segment not found.',
     ],
 
     /*
@@ -284,15 +284,15 @@ return [
     |--------------------------------------------------------------------------
     */
     'campaigns' => [
-        'created' => 'Campaign berhasil dibuat.',
-        'updated' => 'Campaign berhasil diperbarui.',
-        'deleted' => 'Campaign berhasil dihapus.',
-        'processed' => 'Campaign sedang diproses.',
-        'cancelled' => 'Campaign berhasil dibatalkan.',
-        'mark_sent' => 'Log campaign berhasil ditandai terkirim.',
-        'skip' => 'Log campaign berhasil dilewati.',
-        'not_found' => 'Campaign tidak ditemukan.',
-        'process_failed' => 'Gagal memproses campaign.',
+        'created' => 'Campaign created successfully.',
+        'updated' => 'Campaign updated successfully.',
+        'deleted' => 'Campaign deleted successfully.',
+        'processed' => 'Campaign is being processed.',
+        'cancelled' => 'Campaign cancelled successfully.',
+        'mark_sent' => 'Campaign log marked as sent successfully.',
+        'skip' => 'Campaign log skipped successfully.',
+        'not_found' => 'Campaign not found.',
+        'process_failed' => 'Campaign processing failed.',
     ],
 
     /*
@@ -301,9 +301,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'discount_approvals' => [
-        'approved' => 'Diskon berhasil di-approve.',
-        'denied' => 'Diskon berhasil ditolak.',
-        'not_found' => 'Request tidak ditemukan.',
+        'approved' => 'Discount approved successfully.',
+        'denied' => 'Discount rejected successfully.',
+        'not_found' => 'Request not found.',
     ],
 
     /*
@@ -312,12 +312,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'bank_accounts' => [
-        'created' => 'Rekening bank berhasil ditambahkan.',
-        'updated' => 'Rekening bank berhasil diperbarui.',
-        'deleted' => 'Rekening bank berhasil dihapus.',
-        'toggled' => 'Status rekening berhasil diperbarui.',
-        'order_updated' => 'Urutan rekening berhasil diperbarui.',
-        'not_found' => 'Rekening bank tidak ditemukan.',
+        'created' => 'Bank account added successfully.',
+        'updated' => 'Bank account updated successfully.',
+        'deleted' => 'Bank account deleted successfully.',
+        'toggled' => 'Bank account status updated successfully.',
+        'order_updated' => 'Bank account order updated successfully.',
+        'not_found' => 'Bank account not found.',
     ],
 
     /*
@@ -326,11 +326,11 @@ return [
     |--------------------------------------------------------------------------
     */
     'warehouses' => [
-        'created' => 'Gudang berhasil ditambahkan.',
-        'updated' => 'Gudang berhasil diperbarui.',
-        'deleted' => 'Gudang berhasil dihapus.',
-        'not_found' => 'Gudang tidak ditemukan.',
-        'has_transactions' => 'Gudang tidak dapat dihapus karena sudah memiliki transaksi.',
+        'created' => 'Warehouse added successfully.',
+        'updated' => 'Warehouse updated successfully.',
+        'deleted' => 'Warehouse deleted successfully.',
+        'not_found' => 'Warehouse not found.',
+        'has_transactions' => 'Warehouse cannot be deleted because it already has transactions.',
     ],
 
     /*
@@ -339,12 +339,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'settings' => [
-        'saved' => 'Pengaturan berhasil disimpan.',
-        'payment_updated' => 'Pengaturan payment berhasil diperbarui.',
-        'store_updated' => 'Profil toko berhasil diperbarui.',
-        'printer_updated' => 'Pengaturan printer berhasil disimpan.',
-        'loyalty_updated' => 'Pengaturan loyalty berhasil disimpan.',
-        'target_updated' => 'Target penjualan berhasil diperbarui.',
+        'saved' => 'Settings saved successfully.',
+        'payment_updated' => 'Payment settings updated successfully.',
+        'store_updated' => 'Store profile updated successfully.',
+        'printer_updated' => 'Printer settings saved successfully.',
+        'loyalty_updated' => 'Loyalty settings saved successfully.',
+        'target_updated' => 'Sales target updated successfully.',
     ],
 
     /*
@@ -353,13 +353,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'whatsapp' => [
-        'test_sent' => 'Pesan test berhasil dikirim.',
-        'test_failed' => 'Gagal mengirim pesan test.',
-        'connected' => 'WhatsApp berhasil terhubung.',
-        'disconnected' => 'WhatsApp berhasil disconnected.',
-        'qr_generated' => 'QR code berhasil di-generate.',
-        'start_failed' => 'Gagal memulai WhatsApp service.',
-        'not_connected' => 'WhatsApp belum terhubung.',
+        'test_sent' => 'Test message sent successfully.',
+        'test_failed' => 'Failed to send test message.',
+        'connected' => 'WhatsApp connected successfully.',
+        'disconnected' => 'WhatsApp disconnected successfully.',
+        'qr_generated' => 'QR code generated successfully.',
+        'start_failed' => 'Failed to start WhatsApp service.',
+        'not_connected' => 'WhatsApp is not connected yet.',
     ],
 
     /*
@@ -368,20 +368,20 @@ return [
     |--------------------------------------------------------------------------
     */
     'users' => [
-        'created' => 'User berhasil dibuat.',
-        'updated' => 'User berhasil diperbarui.',
-        'deleted' => 'User berhasil dihapus.',
-        'password_changed' => 'Password berhasil diubah.',
-        'not_found' => 'User tidak ditemukan.',
-        'cannot_delete_self' => 'Anda tidak dapat menghapus akun sendiri.',
+        'created' => 'User created successfully.',
+        'updated' => 'User updated successfully.',
+        'deleted' => 'User deleted successfully.',
+        'password_changed' => 'Password changed successfully.',
+        'not_found' => 'User not found.',
+        'cannot_delete_self' => 'You cannot delete your own account.',
     ],
 
     'roles' => [
-        'created' => 'Role berhasil dibuat.',
-        'updated' => 'Role berhasil diperbarui.',
-        'deleted' => 'Role berhasil dihapus.',
-        'not_found' => 'Role tidak ditemukan.',
-        'cannot_delete_system' => 'Role sistem tidak dapat dihapus.',
+        'created' => 'Role created successfully.',
+        'updated' => 'Role updated successfully.',
+        'deleted' => 'Role deleted successfully.',
+        'not_found' => 'Role not found.',
+        'cannot_delete_system' => 'System role cannot be deleted.',
     ],
 
     /*
@@ -390,7 +390,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'audit_logs' => [
-        'access_denied' => 'Anda tidak memiliki izin untuk melihat audit log.',
+        'access_denied' => 'You do not have permission to view audit logs.',
     ],
 
     /*
@@ -399,8 +399,8 @@ return [
     |--------------------------------------------------------------------------
     */
     'language' => [
-        'changed' => 'Bahasa berhasil diubah.',
-        'not_found' => 'Bahasa tidak ditemukan.',
+        'changed' => 'Language changed successfully.',
+        'not_found' => 'Language not found.',
     ],
 
     /*
@@ -409,15 +409,15 @@ return [
     |--------------------------------------------------------------------------
     */
     'validation' => [
-        'required' => 'Field :attribute wajib diisi.',
-        'email' => 'Format email tidak valid.',
-        'min' => 'Field :attribute minimal :min karakter.',
-        'max' => 'Field :attribute maksimal :max karakter.',
-        'numeric' => 'Field :attribute harus berupa angka.',
-        'unique' => 'Field :attribute sudah digunakan.',
-        'exists' => 'Field :attribute tidak ditemukan.',
-        'date' => 'Format tanggal tidak valid.',
-        'integer' => 'Field :attribute harus berupa bilangan bulat.',
-        'positive' => 'Field :attribute harus bernilai positif.',
+        'required' => 'The :attribute field is required.',
+        'email' => 'The email format is invalid.',
+        'min' => 'The :attribute field must be at least :min characters.',
+        'max' => 'The :attribute field may not be greater than :max characters.',
+        'numeric' => 'The :attribute field must be numeric.',
+        'unique' => 'The :attribute has already been taken.',
+        'exists' => 'The selected :attribute is invalid.',
+        'date' => 'The :attribute is not a valid date.',
+        'integer' => 'The :attribute field must be an integer.',
+        'positive' => 'The :attribute field must be positive.',
     ],
 ];

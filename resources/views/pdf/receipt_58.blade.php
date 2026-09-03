@@ -41,7 +41,7 @@
             <span>{{ $transaction->cashier->name ?? '-' }}</span>
         </div>
         <div style="display:flex; justify-content:space-between;">
-            <span>Pelanggan:</span>
+            <span>Customer:</span>
             <span>{{ $transaction->customer->name ?? 'Umum' }}</span>
         </div>
     </div>
@@ -99,7 +99,7 @@
         @endif
         @if($discount > 0)
             <div style="display:flex; justify-content:space-between;">
-                <span>Diskon Manual</span>
+                <span>Manual Discount</span>
                 <span>-{{ $formatPrice($discount) }}</span>
             </div>
         @endif

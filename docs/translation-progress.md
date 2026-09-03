@@ -143,6 +143,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Bank account create/edit form and remaining payment/store settings labels now use English visible text.
 - Multipart submission, method spoofing, permissions, credentials, and settings behavior were unchanged.
 
+### PDF and document labels
+
+- Invoice, receivable, payable, and 58mm receipt templates now use English static labels.
+- PDF calculations, document data, formatting, and receipt behavior were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -154,9 +159,8 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 ## Remaining Work
 
 1. Translate backend flash messages and API responses carefully.
-2. Translate PDF and document labels.
-3. Review date, number, and currency formatting separately from text translation.
-4. Run a final Indonesian-text scan and full validation.
+2. Review date, number, and currency formatting separately from text translation.
+3. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 

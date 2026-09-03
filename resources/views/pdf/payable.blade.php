@@ -52,7 +52,7 @@
             <div class="doc">
                 <div class="badge">Hutang</div>
                 <div class="doc-number">{{ $payable->document_number }}</div>
-                <div class="muted">Jatuh tempo: {{ $payable->due_date ?? '-' }}</div>
+                <div class="muted">Due date: {{ $payable->due_date ?? '-' }}</div>
             </div>
         </div>
 
@@ -81,13 +81,13 @@
         </div>
 
         <div class="section">
-            <div class="section-title">Riwayat Pembayaran</div>
+            <div class="section-title">Payment History</div>
             <table>
                 <thead>
                     <tr>
-                        <th style="width:35%;">Tanggal</th>
+                        <th style="width:35%;">Date</th>
                         <th style="width:35%;">Metode</th>
-                        <th style="text-align:right;">Jumlah</th>
+                        <th style="text-align:right;">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,7 +98,7 @@
                         <td style="text-align:right;">{{ number_format($pay->amount,0,',','.') }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="3" style="color:#94a3b8; text-align:center;">Belum ada pembayaran</td></tr>
+                    <tr><td colspan="3" style="color:#94a3b8; text-align:center;">No payments yet</td></tr>
                 @endforelse
                 </tbody>
             </table>

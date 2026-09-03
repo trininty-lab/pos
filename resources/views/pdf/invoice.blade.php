@@ -198,7 +198,7 @@
     <table style="width:100%; margin-top:12px; table-layout:fixed;">
         <tr>
             <td style="width:50%; vertical-align:top; font-size:13px;">
-                <div style="color:#64748b;font-weight:600;">Pelanggan</div>
+                <div style="color:#64748b;font-weight:600;">Customer</div>
                 <div style="font-weight:700; margin-top:2px;">{{ $transaction->customer->name ?? 'Umum' }}</div>
                 @if ($transaction->customer?->no_telp)
                     <div style="color:#475569; margin-top:2px;">{{ $transaction->customer->no_telp }}</div>
@@ -223,7 +223,7 @@
                     <div><strong>Status:</strong> {{ $transaction->payment_status }}</div>
                     <div><strong>Metode:</strong> {{ $transaction->payment_method }}</div>
                     @if ($transaction->receivable && $transaction->receivable->due_date)
-                        <div><strong>Jatuh tempo:</strong> {{ $transaction->receivable->due_date }}</div>
+                        <div><strong>Due date:</strong> {{ $transaction->receivable->due_date }}</div>
                     @endif
                 </div>
             </td>
@@ -235,7 +235,7 @@
             <tr>
                 <th class="produk">Nama Produk</th>
                 <th class="qty">Qty</th>
-                <th class="right">Harga</th>
+                <th class="right">Price</th>
                 <th class="right">Subtotal</th>
             </tr>
         </thead>
@@ -293,7 +293,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="color:#475569;">Diskon Manual</td>
+                        <td style="color:#475569;">Manual Discount</td>
                         <td class="right" style="font-weight:600;">
                             - {{ number_format($discount, 0, ',', '.') }}
                         </td>

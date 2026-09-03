@@ -54,6 +54,12 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Category CRUD behavior, routes, permissions, and upload handling were unchanged.
 - Category pages compile successfully with the rest of the frontend.
 
+### Customers and suppliers
+
+- Customer list, create, edit, and detail screens now use English visible text.
+- Supplier management labels, confirmation, empty state, and form actions now use English visible text.
+- Customer and supplier routes, permissions, payloads, and server-provided data were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -64,15 +70,14 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate master data pages: customers and suppliers.
-2. Translate inventory and warehouse pages.
-3. Translate purchasing, receivables, and payables pages.
-4. Translate CRM, loyalty, promotions, and dine-in pages.
-5. Translate reports and settings pages.
-6. Translate backend flash messages and API responses carefully.
-7. Translate PDF and document labels.
-8. Review date, number, and currency formatting separately from text translation.
-9. Run a final Indonesian-text scan and full validation.
+1. Translate inventory and warehouse pages.
+2. Translate purchasing, receivables, and payables pages.
+3. Translate CRM, loyalty, promotions, and dine-in pages.
+4. Translate reports and settings pages.
+5. Translate backend flash messages and API responses carefully.
+6. Translate PDF and document labels.
+7. Review date, number, and currency formatting separately from text translation.
+8. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 
@@ -86,4 +91,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Master data pages: customers and suppliers. Keep this slice limited to those CRUD screens, then build and test before continuing to inventory.
+Inventory and warehouse pages. Keep this slice limited to those screens, then build and test before continuing to purchasing.

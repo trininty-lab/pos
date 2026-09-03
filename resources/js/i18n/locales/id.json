@@ -121,7 +121,13 @@
             "submit": "Daftar Sekarang",
             "submitting": "Memproses...",
             "hasAccount": "Sudah punya akun?",
-            "loginHere": "Masuk disini"
+            "loginHere": "Masuk disini",
+            "description": "Daftarkan bisnis Anda sekarang",
+            "namePlaceholder": "Nama Anda",
+            "passwordPlaceholder": "Minimal 8 karakter",
+            "heroTitle": "Bergabung Bersama Kami",
+            "heroDescription": "Mulai kelola bisnis Anda dengan sistem Point of Sale yang modern, cepat, dan mudah digunakan.",
+            "features": ["Gratis untuk memulai", "Setup dalam 5 menit", "Dukungan penuh"]
         },
         "forgotPassword": {
             "title": "Lupa Password",
@@ -130,7 +136,37 @@
             "submit": "Kirim Link Reset",
             "submitting": "Mengirim...",
             "back": "Kembali",
-            "sentMessage": "Link reset password telah dikirim ke email Anda"
+            "sentMessage": "Link reset password telah dikirim ke email Anda",
+            "description": "Masukkan email Anda untuk menerima link reset password.",
+            "heroTitle": "Pemulihan Akun Aman",
+            "heroDescription": "Link reset password membantu memulihkan akses akun tanpa membuka jalur bypass ke dashboard."
+        },
+        "resetPassword": {
+            "title": "Reset Password",
+            "confirmPassword": "Konfirmasi Password",
+            "submit": "Reset Password"
+        },
+        "confirmPassword": {
+            "title": "Konfirmasi Password",
+            "sensitiveAction": "aksi sensitif",
+            "description": "Untuk melanjutkan {{action}}, masukkan kembali password akun Anda.",
+            "placeholder": "Masukkan password Anda",
+            "processing": "Memverifikasi...",
+            "continue": "Lanjutkan",
+            "heroTitle": "Proteksi Aksi Admin",
+            "heroDescription": "Konfirmasi password ulang membantu menahan aksi sensitif saat sesi admin sudah lama aktif."
+        },
+        "verifyEmail": {
+            "title": "Verifikasi Email Anda",
+            "description": "Sebelum masuk ke dashboard, klik link verifikasi yang sudah kami kirim ke email Anda. Jika email belum diterima, kirim ulang dari halaman ini.",
+            "linkSent": "Link verifikasi baru sudah dikirim ke email Anda.",
+            "spamNotice": "Pastikan juga memeriksa folder spam atau promotion jika email belum terlihat di inbox.",
+            "resending": "Mengirim ulang...",
+            "resend": "Kirim Ulang Email Verifikasi",
+            "logout": "Keluar",
+            "heroTitle": "Aktivasi Akun Lebih Aman",
+            "heroDescription": "Verifikasi email membantu memastikan hanya akun yang valid yang dapat mengakses dashboard dan data operasional toko.",
+            "features": ["Akses Terverifikasi", "Perlindungan Akun", "Dashboard Aman"]
         },
         "hero": {
             "title": "Kelola Bisnis Anda dengan Mudah",
@@ -273,6 +309,19 @@
             "totalProducts": "Total Produk",
             "totalTransactions": "Total Transaksi",
             "totalUsers": "Total Pengguna"
+        }
+    },
+    "dashboardAccess": {
+        "title": "Pilih Akses",
+        "description": "Halaman ini muncul ketika Anda tidak memiliki akses dashboard.",
+        "noAccess": "Tidak ada akses tersedia. Hubungi admin.",
+        "cards": {
+            "transactions": { "title": "Transaksi", "description": "Mulai transaksi kasir" },
+            "customers": { "title": "Pelanggan", "description": "Kelola data pelanggan" },
+            "receivables": { "title": "Piutang", "description": "Nota barang pelanggan" },
+            "payables": { "title": "Hutang", "description": "Catat hutang supplier" },
+            "suppliers": { "title": "Supplier", "description": "Kelola data supplier" },
+            "reports": { "title": "Laporan", "description": "Lihat laporan penjualan" }
         }
     },
     "products": {

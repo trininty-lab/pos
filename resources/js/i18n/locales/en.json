@@ -121,7 +121,13 @@
             "submit": "Create Account",
             "submitting": "Processing...",
             "hasAccount": "Already have an account?",
-            "loginHere": "Sign in here"
+            "loginHere": "Sign in here",
+            "description": "Register your business today",
+            "namePlaceholder": "Your name",
+            "passwordPlaceholder": "At least 8 characters",
+            "heroTitle": "Join Us",
+            "heroDescription": "Start managing your business with a modern, fast, and easy-to-use Point of Sale system.",
+            "features": ["Free to get started", "Set up in 5 minutes", "Full support"]
         },
         "forgotPassword": {
             "title": "Forgot Password",
@@ -130,7 +136,37 @@
             "submit": "Send Reset Link",
             "submitting": "Sending...",
             "back": "Back",
-            "sentMessage": "Password reset link has been sent to your email"
+            "sentMessage": "Password reset link has been sent to your email",
+            "description": "Enter your email to receive a password reset link.",
+            "heroTitle": "Secure Account Recovery",
+            "heroDescription": "The password reset link helps restore account access without creating a bypass to the dashboard."
+        },
+        "resetPassword": {
+            "title": "Reset Password",
+            "confirmPassword": "Confirm Password",
+            "submit": "Reset Password"
+        },
+        "confirmPassword": {
+            "title": "Confirm Password",
+            "sensitiveAction": "sensitive action",
+            "description": "To continue with {{action}}, please enter your account password again.",
+            "placeholder": "Enter your password",
+            "processing": "Verifying...",
+            "continue": "Continue",
+            "heroTitle": "Admin Action Protection",
+            "heroDescription": "Reconfirming your password helps protect sensitive actions when an admin session has been active for a long time."
+        },
+        "verifyEmail": {
+            "title": "Verify Your Email",
+            "description": "Before accessing the dashboard, click the verification link we sent to your email. If you have not received it, resend it from this page.",
+            "linkSent": "A new verification link has been sent to your email.",
+            "spamNotice": "Also check your spam or promotions folder if the email is not visible in your inbox.",
+            "resending": "Resending...",
+            "resend": "Resend Verification Email",
+            "logout": "Log Out",
+            "heroTitle": "Safer Account Activation",
+            "heroDescription": "Email verification helps ensure that only valid accounts can access the dashboard and store operations data.",
+            "features": ["Verified Access", "Account Protection", "Secure Dashboard"]
         },
         "hero": {
             "title": "Manage Your Business with Ease",
@@ -273,6 +309,19 @@
             "totalProducts": "Total Products",
             "totalTransactions": "Total Transactions",
             "totalUsers": "Total Users"
+        }
+    },
+    "dashboardAccess": {
+        "title": "Choose Access",
+        "description": "This page appears when you do not have dashboard access.",
+        "noAccess": "No access is available. Contact an administrator.",
+        "cards": {
+            "transactions": { "title": "Transactions", "description": "Start a cashier transaction" },
+            "customers": { "title": "Customers", "description": "Manage customer data" },
+            "receivables": { "title": "Receivables", "description": "Customer invoices" },
+            "payables": { "title": "Payables", "description": "Record supplier payables" },
+            "suppliers": { "title": "Suppliers", "description": "Manage supplier data" },
+            "reports": { "title": "Reports", "description": "View sales reports" }
         }
     },
     "products": {

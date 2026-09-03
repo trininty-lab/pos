@@ -10,46 +10,41 @@ import {
     IconChartArrowsVertical,
 } from "@tabler/icons-react";
 import hasAnyPermission from "@/Utils/Permission";
+import { useTranslation } from "react-i18next";
 
 const cards = [
     {
-        title: "Transaksi",
-        desc: "Mulai transaksi kasir",
+        translationKey: "transactions",
         icon: <IconShoppingCart size={22} />,
         route: "transactions.index",
         perms: ["transactions-access"],
     },
     {
-        title: "Pelanggan",
-        desc: "Kelola data pelanggan",
+        translationKey: "customers",
         icon: <IconUsers size={22} />,
         route: "customers.index",
         perms: ["customers-access"],
     },
     {
-        title: "Piutang",
-        desc: "Nota barang pelanggan",
+        translationKey: "receivables",
         icon: <IconFileInvoice size={22} />,
         route: "receivables.index",
         perms: ["receivables-access"],
     },
     {
-        title: "Hutang",
-        desc: "Catat hutang supplier",
+        translationKey: "payables",
         icon: <IconCurrencyDollar size={22} />,
         route: "payables.index",
         perms: ["payables-access"],
     },
     {
-        title: "Supplier",
-        desc: "Kelola data supplier",
+        translationKey: "suppliers",
         icon: <IconBuildingWarehouse size={22} />,
         route: "suppliers.index",
         perms: ["suppliers-access"],
     },
     {
-        title: "Laporan",
-        desc: "Lihat laporan penjualan",
+        translationKey: "reports",
         icon: <IconChartArrowsVertical size={22} />,
         route: "reports.sales.index",
         perms: ["reports-access"],
@@ -58,6 +53,7 @@ const cards = [
 
 function AccessPage() {
     const { auth } = usePage().props;
+    const { t } = useTranslation();
 
     const visibleCards = cards.filter((card) =>
         hasAnyPermission(card.perms, auth?.permissions)
@@ -65,15 +61,14 @@ function AccessPage() {
 
     return (
         <>
-            <Head title="Akses" />
+            <Head title={t("dashboardAccess.title")} />
             <div className="space-y-6">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                        Pilih Akses
+                        {t("dashboardAccess.title")}
                     </h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Halaman ini muncul ketika Anda tidak memiliki akses
-                        dashboard.
+                        {t("dashboardAccess.description")}
                     </p>
                 </div>
 
@@ -81,7 +76,7 @@ function AccessPage() {
                     {visibleCards.length ? (
                         visibleCards.map((card) => (
                             <Link
-                                key={card.title}
+                                key={card.translationKey}
                                 href={route(card.route)}
                                 className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-start gap-3 hover:border-primary-300 dark:hover:border-primary-700 transition-colors shadow-sm"
                             >
@@ -90,17 +85,17 @@ function AccessPage() {
                                 </div>
                                 <div className="space-y-1">
                                     <h3 className="font-semibold text-slate-900 dark:text-white">
-                                        {card.title}
+                                        {t(`dashboardAccess.cards.${card.translationKey}.title`)}
                                     </h3>
                                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                                        {card.desc}
+                                        {t(`dashboardAccess.cards.${card.translationKey}.description`)}
                                     </p>
                                 </div>
                             </Link>
                         ))
                     ) : (
                         <div className="col-span-full text-slate-500 dark:text-slate-400">
-                            Tidak ada akses tersedia. Hubungi admin.
+                            {t("dashboardAccess.noAccess")}
                         </div>
                     )}
                 </div>

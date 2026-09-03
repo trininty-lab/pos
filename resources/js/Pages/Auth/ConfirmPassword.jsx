@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
 import {
     IconShoppingCart,
     IconShieldLock,
@@ -10,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 
 export default function ConfirmPassword({ challenge = null }) {
+    const { t } = useTranslation();
     const { data, setData, post, processing, errors, reset } = useForm({
         password: "",
     });
@@ -23,11 +25,11 @@ export default function ConfirmPassword({ challenge = null }) {
 
     const challengeLabel = useMemo(() => {
         if (!challenge?.route) {
-            return "aksi sensitif";
+            return t("auth.confirmPassword.sensitiveAction");
         }
 
         return challenge.route.replaceAll(".", " / ");
-    }, [challenge]);
+    }, [challenge, t]);
 
     const submit = (e) => {
         e.preventDefault();
@@ -37,7 +39,7 @@ export default function ConfirmPassword({ challenge = null }) {
 
     return (
         <>
-            <Head title="Konfirmasi Password" />
+            <Head title={t("auth.confirmPassword.title")} />
 
             <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
                 <div className="flex-1 flex items-center justify-center p-8">
@@ -55,10 +57,10 @@ export default function ConfirmPassword({ challenge = null }) {
                                 <IconShieldLock size={28} className="text-primary-600 dark:text-primary-400" />
                             </div>
                             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                                Konfirmasi Password
+                                {t("auth.confirmPassword.title")}
                             </h1>
                             <p className="mt-2 text-slate-600 dark:text-slate-400">
-                                Untuk melanjutkan {challengeLabel}, masukkan kembali password akun Anda.
+                                {t("auth.confirmPassword.description", { action: challengeLabel })}
                             </p>
                         </div>
 
@@ -82,7 +84,7 @@ export default function ConfirmPassword({ challenge = null }) {
                                                 : "border-slate-200 dark:border-slate-700 focus:border-primary-500"
                                         } bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-4 focus:ring-primary-500/20 transition-all`}
                                         autoFocus
-                                        placeholder="Masukkan password Anda"
+                                        placeholder={t("auth.confirmPassword.placeholder")}
                                     />
                                     <button
                                         type="button"
@@ -105,10 +107,10 @@ export default function ConfirmPassword({ challenge = null }) {
                                 {processing ? (
                                     <>
                                         <IconLoader2 size={18} className="animate-spin" />
-                                        Memverifikasi...
+                                        {t("auth.confirmPassword.processing")}
                                     </>
                                 ) : (
-                                    "Lanjutkan"
+                                    t("auth.confirmPassword.continue")
                                 )}
                             </button>
                         </form>
@@ -120,9 +122,9 @@ export default function ConfirmPassword({ challenge = null }) {
                         <div className="w-24 h-24 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-8">
                             <IconShieldLock size={48} />
                         </div>
-                        <h2 className="text-3xl font-bold mb-4">Proteksi Aksi Admin</h2>
+                        <h2 className="text-3xl font-bold mb-4">{t("auth.confirmPassword.heroTitle")}</h2>
                         <p className="text-lg opacity-90">
-                            Konfirmasi password ulang membantu menahan aksi sensitif saat sesi admin sudah lama aktif.
+                            {t("auth.confirmPassword.heroDescription")}
                         </p>
                     </div>
                 </div>

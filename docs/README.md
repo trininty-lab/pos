@@ -56,6 +56,9 @@ Dokumentasi ini ditujukan untuk developer yang ingin setup, memahami alur modul,
 - `planning/tier-2-implementation.md` — detail Tier 2
 - `planning/tier-3-implementation.md` — detail Tier 3
 
+### Translation
+- `docs/translation-progress.md` — completed and remaining Indonesian-to-English translation work
+
 ## Cara Membaca Dokumentasi
 
 1. Jika baru pertama kali: mulai dari `docs/getting-started.md`

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import AuthBotGuardFields from "@/Components/AuthBotGuardFields";
+import { useTranslation } from "react-i18next";
 import {
     IconShoppingCart,
     IconUser,
@@ -13,6 +14,7 @@ import {
 } from "@tabler/icons-react";
 
 export default function Register({ botGuard }) {
+    const { t } = useTranslation();
     const honeypotField = botGuard?.honeypot_field || "company_website";
     const tokenField = botGuard?.token_field || "bot_guard_token";
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -37,7 +39,7 @@ export default function Register({ botGuard }) {
 
     return (
         <>
-            <Head title="Daftar" />
+            <Head title={t("auth.register.title")} />
 
             <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
                 {/* Left - Decoration */}
@@ -47,18 +49,13 @@ export default function Register({ botGuard }) {
                             <IconShoppingCart size={48} />
                         </div>
                         <h2 className="text-3xl font-bold mb-4">
-                            Bergabung Bersama Kami
+                            {t("auth.register.heroTitle")}
                         </h2>
                         <p className="text-lg opacity-90">
-                            Mulai kelola bisnis Anda dengan sistem Point of Sale
-                            yang modern, cepat, dan mudah digunakan.
+                            {t("auth.register.heroDescription")}
                         </p>
                         <div className="mt-8 space-y-3">
-                            {[
-                                "Gratis untuk memulai",
-                                "Setup dalam 5 menit",
-                                "Dukungan penuh",
-                            ].map((feature, i) => (
+                            {t("auth.register.features", { returnObjects: true }).map((feature, i) => (
                                 <div
                                     key={i}
                                     className="flex items-center justify-center gap-2 text-sm font-medium"
@@ -90,14 +87,14 @@ export default function Register({ botGuard }) {
                                     />
                                 </div>
                                 <span className="text-2xl font-bold text-slate-900 dark:text-white">
-                                    Aplikasi Kasir
+                                    {t("auth.login.appName")}
                                 </span>
                             </Link>
                             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                                Buat Akun Baru
+                                {t("auth.register.subtitle")}
                             </h1>
                             <p className="mt-2 text-slate-600 dark:text-slate-400">
-                                Daftarkan bisnis Anda sekarang
+                                {t("auth.register.description")}
                             </p>
                         </div>
 
@@ -116,7 +113,7 @@ export default function Register({ botGuard }) {
                             {/* Name */}
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                    Nama Lengkap
+                                    {t("auth.register.name")}
                                 </label>
                                 <div className="relative">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
@@ -128,7 +125,7 @@ export default function Register({ botGuard }) {
                                         onChange={(e) =>
                                             setData("name", e.target.value)
                                         }
-                                        placeholder="Nama Anda"
+                                        placeholder={t("auth.register.namePlaceholder")}
                                         className={`w-full h-12 pl-12 pr-4 rounded-xl border-2 ${
                                             errors.name
                                                 ? "border-danger-500 focus:border-danger-500"
@@ -176,7 +173,7 @@ export default function Register({ botGuard }) {
                             {/* Password */}
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                    Password
+                                    {t("auth.register.password")}
                                 </label>
                                 <div className="relative">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
@@ -190,7 +187,7 @@ export default function Register({ botGuard }) {
                                         onChange={(e) =>
                                             setData("password", e.target.value)
                                         }
-                                        placeholder="Minimal 8 karakter"
+                                        placeholder={t("auth.register.passwordPlaceholder")}
                                         className={`w-full h-12 pl-12 pr-12 rounded-xl border-2 ${
                                             errors.password
                                                 ? "border-danger-500 focus:border-danger-500"
@@ -221,7 +218,7 @@ export default function Register({ botGuard }) {
                             {/* Confirm Password */}
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                    Konfirmasi Password
+                                    {t("auth.register.confirmPassword")}
                                 </label>
                                 <div className="relative">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">

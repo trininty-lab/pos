@@ -147,8 +147,8 @@ export default function Show({
 
         notesForm.patch(route("stock-opnames.update", stockOpname.id), {
             preserveScroll: true,
-            onSuccess: () => toast.success("Catatan sesi diperbarui"),
-            onError: () => toast.error("Gagal memperbarui catatan sesi"),
+            onSuccess: () => toast.success("Session notes updated"),
+            onError: () => toast.error("Failed to update session notes"),
         });
     };
 
@@ -160,9 +160,9 @@ export default function Show({
                 preserveScroll: true,
                 onSuccess: () => {
                     setShowProductModal(false);
-                    toast.success("Produk ditambahkan ke sesi");
+                    toast.success("Product added to session");
                 },
-                onError: () => toast.error("Gagal menambahkan produk"),
+                onError: () => toast.error("Failed to add product"),
             }
         );
     };
@@ -218,8 +218,8 @@ export default function Show({
             },
             {
                 preserveScroll: true,
-                onSuccess: () => toast.success("Item opname diperbarui"),
-                onError: () => toast.error("Gagal memperbarui item opname"),
+                onSuccess: () => toast.success("Stock opname item updated"),
+                onError: () => toast.error("Failed to update stock opname item"),
                 onFinish: () => setSavingItemId(null),
             }
         );
@@ -231,9 +231,9 @@ export default function Show({
             {},
             {
                 preserveScroll: true,
-                onSuccess: () => toast.success("Stock opname difinalisasi"),
+                onSuccess: () => toast.success("Stock opname finalized"),
                 onError: () =>
-                    toast.error("Gagal finalize. Periksa item yang belum valid."),
+                    toast.error("Failed to finalize. Check for invalid items."),
             }
         );
     };
@@ -248,7 +248,7 @@ export default function Show({
                     className="mb-3 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-primary-600"
                 >
                     <IconArrowLeft size={16} />
-                    Kembali ke daftar stock opname
+                    Back to Stock Opname
                 </Link>
 
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -268,12 +268,12 @@ export default function Show({
                             </span>
                         </div>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Dibuat oleh {stockOpname.creator?.name || "-"} •{" "}
+                            Created by {stockOpname.creator?.name || "-"} •{" "}
                             {formatDateTime(stockOpname.created_at)}
                         </p>
                         {!isDraft && (
                             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                Difinalisasi oleh {stockOpname.finalizer?.name || "-"} •{" "}
+                                Finalized by {stockOpname.finalizer?.name || "-"} •{" "}
                                 {formatDateTime(stockOpname.finalized_at)}
                             </p>
                         )}
@@ -295,14 +295,14 @@ export default function Show({
             </div>
 
             <div className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <SummaryCard label="Total Item" value={summary.totalItems} />
+                <SummaryCard label="Total Items" value={summary.totalItems} />
                 <SummaryCard
-                    label="Item Sesuai"
+                    label="Matching Items"
                     value={summary.matchedItems}
                     tone="success"
                 />
                 <SummaryCard
-                    label="Item Selisih"
+                    label="Items with Differences"
                     value={summary.differentItems}
                     tone="warning"
                 />
@@ -329,7 +329,7 @@ export default function Show({
                                     type="button"
                                     icon={<IconPlus size={18} />}
                                     className="bg-primary-500 hover:bg-primary-600 text-white"
-                                    label="Tambah Produk"
+                                    label="Add Product"
                                     onClick={() => setShowProductModal(true)}
                                 />
                             )}
@@ -338,12 +338,12 @@ export default function Show({
                         <Table>
                             <Table.Thead>
                                 <tr>
-                                    <Table.Th>Produk</Table.Th>
-                                    <Table.Th>Stok Sistem</Table.Th>
-                                    <Table.Th>Stok Fisik</Table.Th>
-                                    <Table.Th>Selisih</Table.Th>
-                                    <Table.Th>Alasan</Table.Th>
-                                    <Table.Th className="w-24 text-center">Simpan</Table.Th>
+                                    <Table.Th>Product</Table.Th>
+                                    <Table.Th>System Stock</Table.Th>
+                                    <Table.Th>Physical Stock</Table.Th>
+                                    <Table.Th>Difference</Table.Th>
+                                    <Table.Th>Reason</Table.Th>
+                                    <Table.Th className="w-24 text-center">Save</Table.Th>
                                 </tr>
                             </Table.Thead>
                             <Table.Tbody>
@@ -399,7 +399,7 @@ export default function Show({
                                                         }`}
                                                     >
                                                         {item.physical_stock === null
-                                                            ? "Belum dihitung"
+                                                            ? "Not counted"
                                                             : difference > 0
                                                               ? `+${difference}`
                                                               : difference}
@@ -419,8 +419,8 @@ export default function Show({
                                                         }
                                                         placeholder={
                                                             isDifferent
-                                                                ? "Wajib isi alasan"
-                                                                : "Tidak perlu"
+                                                                ? "Reason required"
+                                                                : "Not required"
                                                         }
                                                         className="h-10 w-full min-w-48 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                                     />
@@ -447,7 +447,7 @@ export default function Show({
                                         colSpan={6}
                                         message={
                                             <div className="text-slate-500 dark:text-slate-400">
-                                                Belum ada produk pada sesi ini.
+                                                No products in this session yet.
                                             </div>
                                         }
                                     >
@@ -467,7 +467,7 @@ export default function Show({
                         className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                     >
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
-                            Catatan Sesi
+                            Session Notes
                         </h2>
                         <textarea
                             value={notesForm.data.notes}
@@ -477,7 +477,7 @@ export default function Show({
                             }
                             rows={4}
                             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                            placeholder="Catatan sesi stock opname"
+                            placeholder="Stock opname session notes"
                         />
                         {canManageDraft && (
                             <div className="mt-4 flex justify-end">
@@ -485,7 +485,7 @@ export default function Show({
                                     type="submit"
                                     icon={<IconDeviceFloppy size={18} />}
                                     className="bg-primary-500 hover:bg-primary-600 text-white"
-                                    label="Simpan Catatan"
+                                    label="Save Notes"
                                 />
                             </div>
                         )}
@@ -493,18 +493,18 @@ export default function Show({
 
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
-                            Informasi Sesi
+                            Session Information
                         </h2>
                         <div className="space-y-3 text-sm text-slate-500 dark:text-slate-400">
                             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
                                 <p className="font-medium text-slate-700 dark:text-slate-200">
-                                    Cara penggunaan
+                                    How to use
                                 </p>
                                 <ul className="mt-2 space-y-2">
-                                    <li>1. Tambahkan produk ke sesi stock opname.</li>
-                                    <li>2. Input stok fisik hasil hitung lapangan.</li>
-                                    <li>3. Isi alasan jika terdapat selisih stok.</li>
-                                    <li>4. Finalize setelah semua item valid.</li>
+                                    <li>1. Add products to the stock opname session.</li>
+                                    <li>2. Enter the physical stock count.</li>
+                                    <li>3. Provide a reason for any stock difference.</li>
+                                    <li>4. Finalize after all items are valid.</li>
                                 </ul>
                             </div>
                         </div>
@@ -518,7 +518,7 @@ export default function Show({
                 title={
                     <div className="flex items-center gap-2">
                         <IconClipboardCheck size={18} />
-                        Cari Produk untuk Stock Opname
+                        Find Products for Stock Opname
                     </div>
                 }
                 maxWidth="2xl"
@@ -532,7 +532,7 @@ export default function Show({
                             onChange={(event) =>
                                 setProductSearchInput(event.target.value)
                             }
-                            placeholder="Cari nama produk, barcode, atau SKU..."
+                            placeholder="Search product name, barcode, or SKU..."
                             className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pr-11 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                         />
                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400">
@@ -542,7 +542,7 @@ export default function Show({
 
                     {isWaitingSearch ? (
                         <div className="rounded-xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-                            Menunggu input selesai, pencarian akan dijalankan dalam 1-2 detik.
+                            Waiting for input to finish. Search will run in 1-2 seconds.
                         </div>
                     ) : filters.product_search ? (
                         availableProducts.length > 0 ? (
@@ -562,23 +562,23 @@ export default function Show({
                                                 {product.category?.name || "-"} • {product.barcode || product.sku || "-"}
                                             </p>
                                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                                Stok sistem: {product.stock}
+                                                System stock: {product.stock}
                                             </p>
                                         </div>
                                         <span className="inline-flex rounded-lg bg-primary-500 px-3 py-2 text-xs font-semibold text-white">
-                                            Tambah
+                                            Add
                                         </span>
                                     </button>
                                 ))}
                             </div>
                         ) : (
                             <div className="rounded-xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-                                Tidak ada produk yang cocok dengan kata kunci pencarian.
+                                No products match the search keyword.
                             </div>
                         )
                     ) : (
                         <div className="rounded-xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-                            Ketik kata kunci, lalu tunggu sebentar untuk menampilkan hasil pencarian produk.
+                            Type a keyword and wait briefly for product search results.
                         </div>
                     )}
                 </div>

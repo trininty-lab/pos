@@ -60,6 +60,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Supplier management labels, confirmation, empty state, and form actions now use English visible text.
 - Customer and supplier routes, permissions, payloads, and server-provided data were unchanged.
 
+### Warehouses
+
+- Warehouse settings now use English visible text, including form labels, type names, confirmation, and empty state.
+- Warehouse routes, permissions, data fields, and form behavior were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -70,7 +75,7 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate inventory and warehouse pages.
+1. Translate stock mutations, stock opname, and stock transfers.
 2. Translate purchasing, receivables, and payables pages.
 3. Translate CRM, loyalty, promotions, and dine-in pages.
 4. Translate reports and settings pages.
@@ -91,4 +96,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Inventory and warehouse pages. Keep this slice limited to those screens, then build and test before continuing to purchasing.
+Stock mutations, stock opname, and stock transfers. Keep this slice limited to those screens, then build and test before continuing to purchasing.

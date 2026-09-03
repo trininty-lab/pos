@@ -128,6 +128,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Payment gateway settings headings, helper text, gateway labels, and save controls now use English text.
 - Report calculations, chart data, filters, payment fields, credentials, routes, and configuration behavior were unchanged.
 
+### Bank, loyalty, printer, and store settings
+
+- Bank account management, loyalty settings, printer settings, and store profile screens now use English visible text.
+- Settings routes, permissions, toggles, uploads, credentials, payloads, and update behavior were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.

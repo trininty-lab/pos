@@ -21,14 +21,14 @@ export default function Loyalty({ settings }) {
         event.preventDefault();
         post(route("settings.loyalty.update"), {
             preserveScroll: true,
-            onSuccess: () => toast.success("Pengaturan loyalty disimpan"),
-            onError: () => toast.error("Gagal menyimpan pengaturan loyalty"),
+            onSuccess: () => toast.success("Loyalty settings saved"),
+            onError: () => toast.error("Failed to save loyalty settings"),
         });
     };
 
     return (
         <>
-            <Head title="Pengaturan Loyalty" />
+            <Head title="Loyalty Settings" />
 
             <div className="space-y-6">
                 <div>
@@ -36,7 +36,7 @@ export default function Loyalty({ settings }) {
                         Loyalty Settings
                     </h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Atur earn rate, redeem value, dan threshold tier member.
+                        Configure earn rates, redeem values, and member tier thresholds.
                     </p>
                 </div>
 
@@ -55,7 +55,7 @@ export default function Loyalty({ settings }) {
                                         Earn & Redeem
                                     </h2>
                                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                                        Kontrol perolehan dan penggunaan poin.
+                                        Control how points are earned and redeemed.
                                     </p>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@ export default function Loyalty({ settings }) {
                             <div className="space-y-4">
                                 <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800">
                                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                                        Aktifkan earn points
+                                        Enable earning points
                                     </span>
                                     <input
                                         type="checkbox"
@@ -76,7 +76,7 @@ export default function Loyalty({ settings }) {
                                 </label>
                                 <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800">
                                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                                        Aktifkan redeem points
+                                        Enable redeeming points
                                     </span>
                                     <input
                                         type="checkbox"
@@ -93,7 +93,7 @@ export default function Loyalty({ settings }) {
 
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                        Nominal belanja untuk 1 poin
+                                        Spending amount for 1 point
                                     </label>
                                     <input
                                         type="number"
@@ -116,7 +116,7 @@ export default function Loyalty({ settings }) {
 
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                        Nilai rupiah per 1 poin redeem
+                                        Currency value per redeemed point
                                     </label>
                                     <input
                                         type="number"
@@ -149,7 +149,7 @@ export default function Loyalty({ settings }) {
                                         Threshold Tier
                                     </h2>
                                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                                        Threshold ini akan menentukan upgrade dan downgrade tier.
+                                        These thresholds determine tier upgrades and downgrades.
                                     </p>
                                 </div>
                             </div>
@@ -188,7 +188,7 @@ export default function Loyalty({ settings }) {
                             className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 font-medium text-white transition-colors hover:bg-primary-600 disabled:opacity-50"
                         >
                             <IconDeviceFloppy size={18} />
-                            {processing ? "Menyimpan..." : "Simpan Pengaturan"}
+                            {processing ? "Saving..." : "Save Settings"}
                         </button>
                     </div>
                 </form>

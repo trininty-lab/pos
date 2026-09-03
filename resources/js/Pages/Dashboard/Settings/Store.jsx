@@ -45,24 +45,24 @@ export default function Store({ settings }) {
         post(route("settings.store.update"), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success("Profil toko disimpan");
+                toast.success("Store profile saved");
                 reset("store_logo");
             },
-            onError: () => toast.error("Gagal menyimpan profil toko"),
+            onError: () => toast.error("Failed to save store profile"),
         });
     };
 
     return (
         <>
-            <Head title="Profil Toko" />
+            <Head title="Store Profile" />
 
             <div className="space-y-6">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                        Pengaturan Toko
+                        Store Settings
                     </h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Atur identitas toko yang muncul di struk dan laporan.
+                        Configure the store identity shown on receipts and reports.
                     </p>
                 </div>
 
@@ -72,7 +72,7 @@ export default function Store({ settings }) {
                         <div className="lg:w-1/3">
                             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
                                 <IconPhoto size={18} />
-                                Logo Toko
+                                Store Logo
                             </label>
                             <div className="w-32 h-32 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center overflow-hidden mb-3">
                                 {logoPreview ? (
@@ -108,14 +108,14 @@ export default function Store({ settings }) {
                         {/* Info */}
                         <div className="lg:flex-1 space-y-4">
                             <Input
-                                label="Nama Toko"
+                                label="Store Name"
                                 value={data.store_name}
                                 errors={errors.store_name}
                                 onChange={(e) => setData("store_name", e.target.value)}
-                                placeholder="Nama toko"
+                                placeholder="Store name"
                             />
                             <Textarea
-                                label="Alamat Lengkap"
+                                label="Full Address"
                                 value={data.store_address}
                                 errors={errors.store_address}
                                 onChange={(e) => setData("store_address", e.target.value)}
@@ -123,7 +123,7 @@ export default function Store({ settings }) {
                             />
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input
-                                    label="Kota/Kabupaten"
+                                    label="City/Regency"
                                     value={data.store_city}
                                     errors={errors.store_city}
                                     onChange={(e) => setData("store_city", e.target.value)}
@@ -131,7 +131,7 @@ export default function Store({ settings }) {
                                     icon={<IconMapPin size={16} />}
                                 />
                                 <Input
-                                    label="Nomor Telepon"
+                                    label="Phone Number"
                                     value={data.store_phone}
                                     errors={errors.store_phone}
                                     onChange={(e) => setData("store_phone", e.target.value)}
@@ -165,11 +165,11 @@ export default function Store({ settings }) {
                     <div className="border-t border-slate-100 dark:border-slate-800 pt-6">
                         <h2 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
                             <IconReceiptTax size={20} className="text-primary-500" />
-                            Informasi Pajak & Legal
+                            Tax & Legal Information
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Input
-                                label="NPWP Toko"
+                                label="Store NPWP"
                                 value={data.store_npwp}
                                 errors={errors.store_npwp}
                                 onChange={(e) => setData("store_npwp", e.target.value)}
@@ -186,7 +186,7 @@ export default function Store({ settings }) {
                         </div>
                         <div className="mt-4">
                             <Input
-                                label="Tarif PPN Default (%)"
+                                label="Default PPN Rate (%)"
                                 type="number"
                                 step="0.01"
                                 min="0"
@@ -197,7 +197,7 @@ export default function Store({ settings }) {
                                 placeholder="11.00"
                             />
                             <p className="mt-1 text-xs text-slate-400">
-                                Tarif default untuk produk baru. Dapat diubah per produk.
+                                Default rate for new products. Can be changed per product.
                             </p>
                         </div>
                     </div>
@@ -209,7 +209,7 @@ export default function Store({ settings }) {
                             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-medium transition-colors disabled:opacity-50"
                         >
                             <IconDeviceFloppy size={18} />
-                            {processing ? "Menyimpan..." : "Simpan Profil"}
+                            {processing ? "Saving..." : "Save Profile"}
                         </button>
                     </div>
                 </form>

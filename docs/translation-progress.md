@@ -102,6 +102,21 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Member list, registration/edit form, detail, summaries, reward history, and empty states now use English visible text.
 - Member CRUD routes, permissions, regional data, tier values, reward data, and form behavior were unchanged.
 
+### Customer vouchers
+
+- Customer voucher list, create/edit form, statuses, filters, and empty state now use English visible text.
+- Voucher CRUD routes, discount values, dates, customer data, and form behavior were unchanged.
+
+### Pricing rules
+
+- Pricing rule list and complex promotion form now use English visible text.
+- Rule types, target/scope values, quantity and bundle arrays, preview requests, calculations, and CRUD routes were unchanged.
+
+### Dine-in tables
+
+- Dine-in table grid/list views, filters, CRUD modal, statuses, confirmations, and controls now use English visible text.
+- Table drag/drop layout, QR actions, filters, permissions, routes, and table data were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -112,14 +127,12 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate customer vouchers.
-2. Translate pricing rules.
-3. Translate dine-in tables and areas.
-4. Translate reports and settings pages.
-5. Translate backend flash messages and API responses carefully.
-6. Translate PDF and document labels.
-7. Review date, number, and currency formatting separately from text translation.
-8. Run a final Indonesian-text scan and full validation.
+1. Translate dine-in areas and orders.
+2. Translate reports and settings pages.
+3. Translate backend flash messages and API responses carefully.
+4. Translate PDF and document labels.
+5. Review date, number, and currency formatting separately from text translation.
+6. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 
@@ -133,4 +146,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Customer vouchers, pricing rules, and dine-in tables/areas. Keep each feature as a separate checkpoint, then build and test before continuing to reports and settings.
+Dine-in areas and orders. Keep each feature as a separate checkpoint, then build and test before continuing to reports and settings.

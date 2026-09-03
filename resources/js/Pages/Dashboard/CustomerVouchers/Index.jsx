@@ -24,7 +24,7 @@ const formatPrice = (value = 0) =>
 const statusBadge = (voucher) => {
     if (voucher.is_used) {
         return {
-            label: "Sudah Dipakai",
+            label: "Used",
             className:
                 "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
         };
@@ -36,7 +36,7 @@ const statusBadge = (voucher) => {
 
     if (!voucher.is_active) {
         return {
-            label: "Nonaktif",
+            label: "Inactive",
             className:
                 "bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300",
         };
@@ -44,7 +44,7 @@ const statusBadge = (voucher) => {
 
     if (startsAt && startsAt > now) {
         return {
-            label: "Terjadwal",
+            label: "Scheduled",
             className:
                 "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300",
         };
@@ -59,7 +59,7 @@ const statusBadge = (voucher) => {
     }
 
     return {
-        label: "Aktif",
+        label: "Active",
         className:
             "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300",
     };
@@ -79,16 +79,16 @@ export default function Index({ vouchers, filters = {} }) {
 
     return (
         <>
-            <Head title="Voucher Customer" />
+            <Head title="Customer Vouchers" />
 
             <div className="w-full">
                 <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                            Voucher Customer
+                            Customer Vouchers
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Voucher personal untuk promosi retensi dan reward pelanggan.
+                            Personal vouchers for customer retention and rewards.
                         </p>
                     </div>
                     {can("customer-vouchers-create") && (
@@ -97,7 +97,7 @@ export default function Index({ vouchers, filters = {} }) {
                             href={route("customer-vouchers.create")}
                             icon={<IconCirclePlus size={18} />}
                             className="bg-primary-500 text-white hover:bg-primary-600 shadow-lg shadow-primary-500/30"
-                            label="Buat Voucher"
+                            label="Create Voucher"
                         />
                     )}
                 </div>
@@ -106,7 +106,7 @@ export default function Index({ vouchers, filters = {} }) {
                     <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">
                         <Search
                             url={route("customer-vouchers.index")}
-                            placeholder="Cari kode, voucher, pelanggan..."
+                            placeholder="Search code, voucher, or customer..."
                             query={filters.search || ""}
                         />
                         <select
@@ -116,26 +116,26 @@ export default function Index({ vouchers, filters = {} }) {
                             }
                             className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                         >
-                            <option value="">Semua Status</option>
-                            <option value="active">Aktif</option>
-                            <option value="scheduled">Terjadwal</option>
+                            <option value="">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="scheduled">Scheduled</option>
                             <option value="expired">Expired</option>
-                            <option value="used">Sudah Dipakai</option>
-                            <option value="inactive">Nonaktif</option>
+                            <option value="used">Used</option>
+                            <option value="inactive">Inactive</option>
                         </select>
                     </div>
                 </div>
 
-                <Table.Card title="Daftar Voucher">
+                <Table.Card title="Voucher List">
                     <Table>
                         <Table.Thead>
                             <tr>
-                                <Table.Th>Kode</Table.Th>
-                                <Table.Th>Pelanggan</Table.Th>
+                                <Table.Th>Code</Table.Th>
+                                <Table.Th>Customer</Table.Th>
                                 <Table.Th>Benefit</Table.Th>
                                 <Table.Th>Status</Table.Th>
-                                <Table.Th>Kedaluwarsa</Table.Th>
-                                <Table.Th className="w-28 text-center">Aksi</Table.Th>
+                                <Table.Th>Expires</Table.Th>
+                                <Table.Th className="w-28 text-center">Actions</Table.Th>
                             </tr>
                         </Table.Thead>
                         <Table.Tbody>
@@ -223,7 +223,7 @@ export default function Index({ vouchers, filters = {} }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty colSpan={6} message="Belum ada voucher customer.">
+                                <Table.Empty colSpan={6} message="No customer vouchers yet.">
                                     <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                                         <IconDatabaseOff
                                             size={28}

@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
     IconCash,
     IconCreditCard,
@@ -128,6 +129,7 @@ export default function PaymentPanel({
     selectedCustomer = null,
     className = "",
 }) {
+    const { t } = useTranslation();
     // Quick amount options
     const quickAmounts = [10000, 20000, 50000, 100000];
 
@@ -148,12 +150,12 @@ export default function PaymentPanel({
 
     // Submit label
     const submitLabel = useMemo(() => {
-        if (!hasItems) return "Keranjang Kosong";
-        if (!selectedCustomer) return "Pilih Pelanggan";
+        if (!hasItems) return t("transactions.emptyCart");
+        if (!selectedCustomer) return t("transactions.selectCustomer");
         if (isCashPayment && remaining > 0)
             return `Kurang ${formatPrice(remaining)}`;
-        return "Selesaikan Transaksi";
-    }, [hasItems, selectedCustomer, isCashPayment, remaining]);
+        return t("transactions.checkout");
+    }, [hasItems, selectedCustomer, isCashPayment, remaining, t]);
 
     return (
         <div className={`flex flex-col h-full ${className}`}>
@@ -164,7 +166,7 @@ export default function PaymentPanel({
                     className="text-slate-600 dark:text-slate-400"
                 />
                 <h2 className="text-base font-semibold text-slate-800 dark:text-white">
-                    Pembayaran
+                    {t("transactions.paymentMethod")}
                 </h2>
             </div>
 
@@ -182,7 +184,7 @@ export default function PaymentPanel({
                     </div>
                     <div className="flex justify-between text-sm">
                         <span className="text-slate-500 dark:text-slate-400">
-                            Promo Otomatis
+                            {t("transactions.automaticPromo")}
                         </span>
                         <span className="font-medium text-danger-500">
                             - {formatPrice(promoDiscount)}
@@ -198,7 +200,7 @@ export default function PaymentPanel({
                     </div>
                     <div className="flex justify-between text-sm">
                         <span className="text-slate-500 dark:text-slate-400">
-                            Redeem Poin
+                            {t("transactions.redeemPoints")}
                         </span>
                         <span className="font-medium text-danger-500">
                             - {formatPrice(loyaltyDiscount)}
@@ -206,7 +208,7 @@ export default function PaymentPanel({
                     </div>
                     <div className="flex justify-between text-sm">
                         <span className="text-slate-500 dark:text-slate-400">
-                            Diskon
+                            {t("transactions.discount")}
                         </span>
                         <span className="font-medium text-danger-500">
                             - {formatPrice(discount)}
@@ -215,7 +217,7 @@ export default function PaymentPanel({
                     {taxTotal > 0 && (
                         <div className="flex justify-between text-sm">
                             <span className="text-slate-500 dark:text-slate-400">
-                                PPN
+                                {t("transactions.tax")}
                             </span>
                             <span className="font-medium text-slate-800 dark:text-slate-200">
                                 {formatPrice(taxTotal)}
@@ -225,7 +227,7 @@ export default function PaymentPanel({
                     <div className="h-px bg-slate-200 dark:bg-slate-700 my-2" />
                     <div className="flex justify-between">
                         <span className="text-base font-semibold text-slate-800 dark:text-white">
-                            Total
+                            {t("transactions.total")}
                         </span>
                         <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
                             {formatPrice(payable)}
@@ -237,7 +239,7 @@ export default function PaymentPanel({
                     <>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                Redeem Poin
+                                {t("transactions.redeemPoints")}
                             </label>
                             <input
                                 type="text"
@@ -248,20 +250,20 @@ export default function PaymentPanel({
                                         e.target.value.replace(/[^\d]/g, "")
                                     )
                                 }
-                                placeholder={`Maks ${availablePoints} poin`}
+                                placeholder={t("transactions.maxPoints", { points: availablePoints })}
                                 className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700
                                     bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200
                                     focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500
                                     transition-all text-base"
                             />
                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                Saldo tersedia: {availablePoints} poin
+                                {t("transactions.availableBalance", { points: availablePoints })}
                             </p>
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                Voucher Customer
+                                {t("transactions.voucherCustomer")}
                             </label>
                             <select
                                 value={selectedVoucherId}
@@ -273,7 +275,7 @@ export default function PaymentPanel({
                                     focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500
                                     transition-all text-base"
                             >
-                                <option value="">Tanpa voucher</option>
+                                <option value="">{t("transactions.withoutVoucher")}</option>
                                 {voucherOptions.map((voucher) => (
                                     <option key={voucher.id} value={voucher.id}>
                                         {voucher.code} - {voucher.name}
@@ -287,7 +289,7 @@ export default function PaymentPanel({
                 {/* Discount Input */}
                 <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Diskon (Rp)
+                        {t("transactions.discountRupiah")}
                     </label>
                     <input
                         type="text"
@@ -309,7 +311,7 @@ export default function PaymentPanel({
                 {/* Payment Method */}
                 <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Metode Pembayaran
+                        {t("transactions.paymentMethod")}
                     </label>
                     <div className="space-y-2">
                         {paymentOptions.map((method) => (
@@ -328,7 +330,7 @@ export default function PaymentPanel({
                     bankAccounts.length > 0 && (
                         <div>
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                Pilih Rekening Tujuan
+                                {t("transactions.selectBankAccount")}
                             </label>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {bankAccounts.map((bank) => {
@@ -374,7 +376,7 @@ export default function PaymentPanel({
                                             </div>
                                             {isActive && (
                                                 <span className="text-primary-600 text-xs font-semibold">
-                                                    Dipilih
+                                                    {t("transactions.selected")}
                                                 </span>
                                             )}
                                         </button>
@@ -388,7 +390,7 @@ export default function PaymentPanel({
                 {isCashPayment && (
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Jumlah Bayar (Rp)
+                            {t("transactions.paymentAmount")}
                         </label>
 
                         {/* Quick Amounts */}
@@ -424,7 +426,7 @@ export default function PaymentPanel({
                         <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                                    Kembalian
+                                    {t("transactions.change")}
                                 </span>
                                 <span
                                     className={`text-lg font-bold ${
@@ -449,8 +451,7 @@ export default function PaymentPanel({
                                 className="text-warning-500 flex-shrink-0 mt-0.5"
                             />
                             <p className="text-sm text-warning-700 dark:text-warning-400">
-                                Tautan pembayaran akan muncul di halaman invoice
-                                setelah transaksi dibuat.
+                                {t("transactions.paymentLinkNotice")}
                             </p>
                         </div>
                     </div>

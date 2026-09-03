@@ -55,7 +55,7 @@ function CustomerCard({ customer, canUpdate, canDelete }) {
                                     : "non-member"}
                             </span>
                             <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                                {customer.loyalty_points || 0} poin
+                                {customer.loyalty_points || 0} points
                             </span>
                         </div>
                     </div>
@@ -101,7 +101,7 @@ function CustomerCard({ customer, canUpdate, canDelete }) {
                                 "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-danger-100 text-danger-600 hover:bg-danger-200 dark:bg-danger-900/50 dark:text-danger-400 text-sm font-medium"
                             }
                             url={route("customers.destroy", customer.id)}
-                            label="Hapus"
+                            label="Delete"
                         />
                     )}
                 </div>
@@ -119,18 +119,18 @@ export default function Index({ customers }) {
 
     return (
         <>
-            <Head title="Pelanggan" />
+            <Head title="Customers" />
 
             {/* Header */}
             <div className="mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                            Pelanggan
+                            Customers
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             {customers.total || customers.data?.length || 0}{" "}
-                            pelanggan terdaftar
+                            customers registered
                         </p>
                     </div>
                     {canCreateCustomers && (
@@ -167,7 +167,7 @@ export default function Index({ customers }) {
                             className={
                                 "bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/30"
                             }
-                            label={"Tambah Pelanggan"}
+                            label={"Add Customer"}
                             href={route("customers.create")}
                         />
                         </div>
@@ -180,7 +180,7 @@ export default function Index({ customers }) {
                 <div className="w-full sm:w-80">
                     <Search
                         url={route("customers.index")}
-                        placeholder="Cari pelanggan..."
+                        placeholder="Search customers..."
                     />
                 </div>
                 <div className="flex items-center gap-2">
@@ -225,15 +225,15 @@ export default function Index({ customers }) {
                     </div>
                 ) : (
                     /* List View */
-                    <Table.Card title={"Data Pelanggan"}>
+                    <Table.Card title={"Customer Data"}>
                         <Table>
                             <Table.Thead>
                                 <tr>
                                     <Table.Th className="w-10">No</Table.Th>
-                                    <Table.Th>Pelanggan</Table.Th>
+                                    <Table.Th>Customer</Table.Th>
                                     <Table.Th>Loyalty</Table.Th>
-                                    <Table.Th>No. Telepon</Table.Th>
-                                    <Table.Th>Alamat</Table.Th>
+                                    <Table.Th>Phone</Table.Th>
+                                    <Table.Th>Address</Table.Th>
                                     <Table.Th></Table.Th>
                                 </tr>
                             </Table.Thead>
@@ -286,7 +286,7 @@ export default function Index({ customers }) {
                                                 <span className="text-xs text-slate-500 dark:text-slate-400">
                                                     {customer.loyalty_points ||
                                                         0}{" "}
-                                                    poin
+                                                    points
                                                 </span>
                                             </div>
                                         </Table.Td>
@@ -361,10 +361,10 @@ export default function Index({ customers }) {
                         />
                     </div>
                     <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1">
-                        Belum Ada Pelanggan
+                        No Customers Yet
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                        Tambahkan pelanggan pertama Anda.
+                        Add your first customer to get started.
                     </p>
                     <Button
                         type={"link"}
@@ -372,7 +372,7 @@ export default function Index({ customers }) {
                         className={
                             "bg-primary-500 hover:bg-primary-600 text-white"
                         }
-                        label={"Tambah Pelanggan"}
+                        label={"Add Customer"}
                         href={route("customers.create")}
                     />
                 </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
     IconShoppingBag,
     IconPhoto,
@@ -16,6 +17,7 @@ const formatPrice = (value = 0) =>
 
 // Single Product Card
 function ProductCard({ product, onAddToCart, isAdding }) {
+    const { t } = useTranslation();
     const hasStock = product.stock > 0;
     const lowStock = product.stock > 0 && product.stock <= 5;
     const promoBadge = product.pricing_badge;
@@ -60,7 +62,7 @@ function ProductCard({ product, onAddToCart, isAdding }) {
                 {/* Stock Badge */}
                 {lowStock && (
                     <span className="absolute top-2 right-2 px-2 py-0.5 text-xs font-medium bg-warning-100 text-warning-700 dark:bg-warning-900/50 dark:text-warning-400 rounded-full">
-                        Sisa {product.stock}
+                        {t("transactions.remainingStock", { count: product.stock })}
                     </span>
                 )}
 
@@ -74,7 +76,7 @@ function ProductCard({ product, onAddToCart, isAdding }) {
                 {!hasStock && (
                     <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
                         <span className="px-3 py-1 bg-danger-500 text-white text-xs font-semibold rounded-full">
-                            Habis
+                            {t("transactions.outOfStock")}
                         </span>
                     </div>
                 )}
@@ -83,7 +85,7 @@ function ProductCard({ product, onAddToCart, isAdding }) {
                 {hasStock && (
                     <div className="absolute inset-0 bg-primary-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
                         <div className="bg-primary-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            + Tambah
+                            + {t("transactions.add")}
                         </div>
                     </div>
                 )}
@@ -105,7 +107,7 @@ function ProductCard({ product, onAddToCart, isAdding }) {
                     </p>
                     {showBadge && !showPromo && (
                         <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
-                            Promo tersedia
+                            {t("transactions.promoAvailable")}
                         </p>
                     )}
                 </div>
@@ -144,6 +146,7 @@ function SearchInput({
     placeholder,
     inputRef,
 }) {
+    const { t } = useTranslation();
     return (
         <div className="relative">
             <input
@@ -212,7 +215,7 @@ export default function ProductGrid({
                     onChange={onSearchChange}
                     onSearch={onSearch}
                     isSearching={isSearching}
-                    placeholder="Cari produk atau scan barcode... (tekan / untuk fokus)"
+                    placeholder={t("transactions.searchBarcode")}
                     inputRef={searchInputRef}
                 />
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { IconSearch, IconX, IconBarcode, IconCamera } from "@tabler/icons-react";
 import { getProductImageUrl } from "@/Utils/imageUrl";
 import BarcodeScanner from "./BarcodeScanner";
@@ -17,9 +18,11 @@ export default function SearchBar({
     onSelect,
     suggestions = [],
     isSearching = false,
-    placeholder = "Cari produk atau scan barcode...",
+    placeholder,
     autoFocus = false,
 }) {
+    const { t } = useTranslation();
+    const searchPlaceholder = placeholder || t("transactions.searchProduct");
     const [isFocused, setIsFocused] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [showScanner, setShowScanner] = useState(false);
@@ -101,7 +104,7 @@ export default function SearchBar({
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setTimeout(() => setIsFocused(false), 200)}
                     onKeyDown={handleKeyDown}
-                    placeholder={placeholder}
+                    placeholder={searchPlaceholder}
                     autoFocus={autoFocus}
                     className="w-full h-14 pl-12 pr-24 rounded-2xl
                         border-2 border-slate-200 dark:border-slate-700

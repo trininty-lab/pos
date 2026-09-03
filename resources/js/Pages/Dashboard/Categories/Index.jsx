@@ -89,18 +89,18 @@ export default function Index({ categories }) {
 
     return (
         <>
-            <Head title="Kategori" />
+            <Head title="Categories" />
 
             {/* Header */}
             <div className="mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                            Kategori
+                            Categories
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             {categories.total || categories.data?.length || 0}{" "}
-                            kategori terdaftar
+                            categories registered
                         </p>
                     </div>
                     {canCreateCategories && (
@@ -115,7 +115,7 @@ export default function Index({ categories }) {
                             className={
                                 "bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/30"
                             }
-                            label={"Tambah Kategori"}
+                            label={"Add Category"}
                             href={route("categories.create")}
                         />
                     )}
@@ -127,7 +127,7 @@ export default function Index({ categories }) {
                 <div className="w-full sm:w-80">
                     <Search
                         url={route("categories.index")}
-                        placeholder="Cari kategori..."
+                        placeholder="Search categories..."
                     />
                 </div>
                 <div className="flex items-center gap-2">
@@ -172,12 +172,12 @@ export default function Index({ categories }) {
                     </div>
                 ) : (
                     /* List View */
-                    <Table.Card title={"Data Kategori"}>
+                    <Table.Card title={"Category Data"}>
                         <Table>
                             <Table.Thead>
                                 <tr>
                                     <Table.Th className="w-10">No</Table.Th>
-                                    <Table.Th>Kategori</Table.Th>
+                                    <Table.Th>Category</Table.Th>
                                     <Table.Th>Deskripsi</Table.Th>
                                     <Table.Th></Table.Th>
                                 </tr>
@@ -282,10 +282,10 @@ export default function Index({ categories }) {
                         />
                     </div>
                     <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1">
-                        Belum Ada Kategori
+                        No Categories Yet
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                        Tambahkan kategori pertama Anda.
+                        Add your first category to get started.
                     </p>
                     <Button
                         type={"link"}
@@ -293,7 +293,7 @@ export default function Index({ categories }) {
                         className={
                             "bg-primary-500 hover:bg-primary-600 text-white"
                         }
-                        label={"Tambah Kategori"}
+                            label={"Add Category"}
                         href={route("categories.create")}
                     />
                 </div>

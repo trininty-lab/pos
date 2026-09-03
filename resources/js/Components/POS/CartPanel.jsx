@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
     IconTrash,
     IconMinus,
@@ -102,6 +103,7 @@ function CartItem({ item, onUpdateQty, onRemove, isRemoving }) {
 
 // Empty Cart State
 function EmptyCart() {
+    const { t } = useTranslation();
     return (
         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
             <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
@@ -111,10 +113,10 @@ function EmptyCart() {
                 />
             </div>
             <h3 className="text-base font-medium text-slate-600 dark:text-slate-400">
-                Keranjang Kosong
+                {t("transactions.emptyCart")}
             </h3>
             <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
-                Klik produk untuk menambahkan
+                {t("transactions.addProductHint")}
             </p>
         </div>
     );
@@ -128,6 +130,7 @@ export default function CartPanel({
     removingItemId,
     className = "",
 }) {
+    const { t } = useTranslation();
     const totalItems = items.reduce((sum, item) => sum + Number(item.qty || 0), 0);
     // Note: item.price from backend is already sell_price * qty
     const subtotal = items.reduce((sum, item) => sum + Number(item.price || 0), 0);
@@ -142,12 +145,12 @@ export default function CartPanel({
                         className="text-slate-600 dark:text-slate-400"
                     />
                     <h2 className="text-base font-semibold text-slate-800 dark:text-white">
-                        Keranjang
+                        {t("transactions.cart")}
                     </h2>
                 </div>
                 {totalItems > 0 && (
                     <span className="px-2.5 py-0.5 text-xs font-bold bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full">
-                        {totalItems} item
+                        {totalItems} {t("transactions.item")}
                     </span>
                 )}
             </div>
@@ -177,7 +180,7 @@ export default function CartPanel({
                 <div className="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-slate-600 dark:text-slate-400">
-                            Subtotal
+                            {t("transactions.subtotal")}
                         </span>
                         <span className="text-lg font-bold text-slate-900 dark:text-white">
                             {formatPrice(subtotal)}

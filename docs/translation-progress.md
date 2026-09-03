@@ -34,6 +34,26 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Dashboard routes, permissions, and card destinations were unchanged.
 - Both `en.json` and `id.json` contain the dashboard access keys.
 
+### POS checkout and shared components
+
+- Cart labels and empty-cart states now use translation keys.
+- Product grid stock, add, promotion, and search labels now use translation keys.
+- Shared POS search placeholder now uses translation keys while preserving custom placeholders.
+- Payment panel labels, checkout states, voucher, loyalty, bank, cash, and payment-link text now use translation keys.
+- Product names, payment values, currency formatting, callbacks, and transaction logic were unchanged.
+
+### Products
+
+- Product list, create, and edit screens now use English visible text.
+- Product field names, routes, permissions, API payloads, and product data were unchanged.
+- Product integration tests and the frontend build pass.
+
+### Categories
+
+- Category list, create, and edit screens now use English visible text.
+- Category CRUD behavior, routes, permissions, and upload handling were unchanged.
+- Category pages compile successfully with the rest of the frontend.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -44,16 +64,15 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate the POS checkout workflow and shared POS components.
-2. Translate master data pages: products, categories, customers, and suppliers.
-3. Translate inventory and warehouse pages.
-4. Translate purchasing, receivables, and payables pages.
-5. Translate CRM, loyalty, promotions, and dine-in pages.
-6. Translate reports and settings pages.
-7. Translate backend flash messages and API responses carefully.
-8. Translate PDF and document labels.
-9. Review date, number, and currency formatting separately from text translation.
-10. Run a final Indonesian-text scan and full validation.
+1. Translate master data pages: customers and suppliers.
+2. Translate inventory and warehouse pages.
+3. Translate purchasing, receivables, and payables pages.
+4. Translate CRM, loyalty, promotions, and dine-in pages.
+5. Translate reports and settings pages.
+6. Translate backend flash messages and API responses carefully.
+7. Translate PDF and document labels.
+8. Review date, number, and currency formatting separately from text translation.
+9. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 
@@ -67,4 +86,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-POS checkout workflow and shared POS components. Keep this slice limited to checkout, cart, payment, and receipt UI, then build and test before continuing to master data.
+Master data pages: customers and suppliers. Keep this slice limited to those CRUD screens, then build and test before continuing to inventory.

@@ -55,7 +55,7 @@ export default function Show({
 
     return (
         <>
-            <Head title={`Pelanggan - ${customer.name}`} />
+            <Head title={`Customer - ${customer.name}`} />
 
             <div className="w-full">
                 <div className="mb-6">
@@ -64,7 +64,7 @@ export default function Show({
                         className="mb-3 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-primary-600"
                     >
                         <IconArrowLeft size={16} />
-                        Kembali ke Pelanggan
+                        Back to Customers
                     </Link>
 
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -106,7 +106,7 @@ export default function Show({
                                     className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-3 py-1 text-xs font-semibold text-white transition hover:bg-primary-600"
                                 >
                                     <IconCrown size={14} />
-                                    Jadikan Member
+                                    Make Member
                                 </Link>
                             ) : null}
                         </div>
@@ -117,12 +117,12 @@ export default function Show({
                     <div className="space-y-6">
                         <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
-                                Ringkasan Pelanggan
+                                Customer Summary
                             </h2>
                             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                                 <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                                     <p className="text-xs uppercase tracking-wide text-slate-500">
-                                        Total Transaksi
+                                        Total Transactions
                                     </p>
                                     <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
                                         {stats?.total_transactions || 0}
@@ -130,7 +130,7 @@ export default function Show({
                                 </div>
                                 <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                                     <p className="text-xs uppercase tracking-wide text-slate-500">
-                                        Total Belanja
+                                        Total Spending
                                     </p>
                                     <p className="mt-2 text-lg font-bold text-slate-900 dark:text-white">
                                         {formatPrice(stats?.total_spent || 0)}
@@ -138,7 +138,7 @@ export default function Show({
                                 </div>
                                 <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                                     <p className="text-xs uppercase tracking-wide text-slate-500">
-                                        Member Sejak
+                                        Member Since
                                     </p>
                                     <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">
                                         {customer.loyalty_member_since
@@ -150,7 +150,7 @@ export default function Show({
                                 </div>
                                 <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                                     <p className="text-xs uppercase tracking-wide text-slate-500">
-                                        Kunjungan Terakhir
+                                        Last Visit
                                     </p>
                                     <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">
                                         {stats?.last_visit
@@ -167,7 +167,7 @@ export default function Show({
                             <div className="mb-4 flex items-center gap-2">
                                 <IconTags size={18} className="text-primary-500" />
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                                    Segment Customer
+                                    Customer Segments
                                 </h2>
                             </div>
                             {hasSegments ? (
@@ -195,7 +195,7 @@ export default function Show({
                                         className="mx-auto mb-3 text-slate-400"
                                     />
                                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                                        Customer belum memiliki segment.
+                                        Customer has no segments.
                                     </p>
                                 </div>
                             )}

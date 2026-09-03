@@ -140,7 +140,7 @@ class StockOpnameController extends Controller
 
         $stockOpname->update($request->validated());
 
-        return back()->with('success', 'Catatan stock opname berhasil diperbarui.');
+        return back()->with('success', 'Stock opname notes updated.');
     }
 
     public function storeItem(StoreStockOpnameItemRequest $request, StockOpname $stockOpname): RedirectResponse
@@ -151,7 +151,7 @@ class StockOpnameController extends Controller
 
         if ($stockOpname->items()->where('product_id', $product->id)->exists()) {
             throw ValidationException::withMessages([
-                'product_id' => 'Produk sudah ada di sesi stock opname ini.',
+                'product_id' => 'Product is already in this stock opname session.',
             ]);
         }
 
@@ -166,7 +166,7 @@ class StockOpnameController extends Controller
             'system_stock' => $systemStock,
         ]);
 
-        return back()->with('success', 'Produk berhasil ditambahkan ke stock opname.');
+        return back()->with('success', 'Product added to stock opname successfully.');
     }
 
     public function updateItem(
@@ -187,7 +187,7 @@ class StockOpnameController extends Controller
 
         if ($difference !== null && $difference !== 0 && blank($adjustmentReason)) {
             throw ValidationException::withMessages([
-                'adjustment_reason' => 'Alasan adjustment wajib diisi jika ada selisih stok.',
+                'adjustment_reason' => 'An adjustment reason is required when there is a stock difference.',
             ]);
         }
 
@@ -201,7 +201,7 @@ class StockOpnameController extends Controller
             'adjustment_reason' => $adjustmentReason,
         ]);
 
-        return back()->with('success', 'Item stock opname berhasil diperbarui.');
+        return back()->with('success', 'Stock opname item updated successfully.');
     }
 
     public function finalize(Request $request, StockOpname $stockOpname): RedirectResponse
@@ -214,7 +214,7 @@ class StockOpnameController extends Controller
         foreach ($stockOpname->items as $item) {
             if ($item->difference !== null && $item->difference !== 0 && blank($item->adjustment_reason)) {
                 throw ValidationException::withMessages([
-                    'finalize' => 'Masih ada item selisih yang belum memiliki alasan adjustment.',
+                    'finalize' => 'Some items with stock differences are missing an adjustment reason.',
                 ]);
             }
         }
@@ -288,14 +288,14 @@ class StockOpnameController extends Controller
             ],
         );
 
-        return back()->with('success', 'Stock opname berhasil difinalisasi.');
+        return back()->with('success', 'Stock opname finalized successfully.');
     }
 
     private function ensureDraft(StockOpname $stockOpname): void
     {
         if (! $stockOpname->isDraft()) {
             throw ValidationException::withMessages([
-                'stock_opname' => 'Sesi stock opname yang sudah final tidak dapat diubah.',
+                'stock_opname' => 'A finalized stock opname session cannot be changed.',
             ]);
         }
     }

@@ -48,7 +48,7 @@ class SettingController extends Controller
             'Target penjualan bulanan'
         );
 
-        return back()->with('success', 'Target berhasil disimpan');
+        return back()->with('success', 'Target saved successfully');
     }
 
     /**
@@ -128,7 +128,7 @@ class SettingController extends Controller
             event: 'store.setting.updated',
             module: 'store_settings',
             auditable: ['target_label' => 'Store Profile'],
-            description: 'Profil toko diperbarui.',
+            description: 'Store profile updated.',
             before: $before,
             after: [
                 'store_name' => $request->store_name,
@@ -143,7 +143,7 @@ class SettingController extends Controller
             ],
         );
 
-        return back()->with('success', 'Profil toko berhasil diperbarui');
+        return back()->with('success', 'Store profile updated successfully');
     }
 
     public function printer()
@@ -166,7 +166,7 @@ class SettingController extends Controller
         Setting::set('printer_auto_print', $validated['printer_auto_print'] ? '1' : '0', 'Auto-print receipt setelah transaksi');
         Setting::set('printer_paper_size', $validated['printer_paper_size'], 'Ukuran kertas printer thermal');
 
-        return back()->with('success', 'Pengaturan printer disimpan.');
+        return back()->with('success', 'Printer settings saved.');
     }
 
     public function loyalty()
@@ -204,7 +204,7 @@ class SettingController extends Controller
         ) {
             return back()
                 ->withErrors([
-                    'tiers' => 'Threshold tier harus berurutan dari Regular ke Platinum.',
+                    'tiers' => 'Tier thresholds must be ordered from Regular to Platinum.',
                 ])
                 ->withInput();
         }
@@ -220,12 +220,12 @@ class SettingController extends Controller
             event: 'loyalty.setting.updated',
             module: 'loyalty_settings',
             auditable: ['target_label' => 'Loyalty Settings'],
-            description: 'Pengaturan loyalty diperbarui.',
+            description: 'Loyalty settings updated.',
             before: $before,
             after: $this->loyaltyService->settingsPayload()
         );
 
-        return back()->with('success', 'Pengaturan loyalty berhasil disimpan');
+        return back()->with('success', 'Loyalty settings saved successfully');
     }
 
     public function whatsapp()
@@ -264,7 +264,7 @@ class SettingController extends Controller
         Setting::set('wa_auto_reminder', ($validated['wa_auto_reminder'] ?? false) ? '1' : '0', 'Auto-kirim reminder via WA');
         Setting::set('wa_auto_invoice', ($validated['wa_auto_invoice'] ?? false) ? '1' : '0', 'Auto-kirim invoice via WA');
 
-        return back()->with('success', 'Pengaturan WhatsApp disimpan.');
+        return back()->with('success', 'WhatsApp settings saved.');
     }
 
     public function testWhatsapp(Request $request)

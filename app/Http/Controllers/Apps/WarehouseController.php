@@ -41,7 +41,7 @@ class WarehouseController extends Controller
             ['stock' => 0]
         );
 
-        return back()->with('success', 'Gudang berhasil ditambahkan.');
+        return back()->with('success', 'Warehouse added successfully.');
     }
 
     public function update(Request $request, Warehouse $warehouse)
@@ -58,22 +58,22 @@ class WarehouseController extends Controller
 
         $warehouse->update($validated);
 
-        return back()->with('success', 'Gudang berhasil diperbarui.');
+        return back()->with('success', 'Warehouse updated successfully.');
     }
 
     public function destroy(Warehouse $warehouse)
     {
         if ($warehouse->type === 'main') {
-            return back()->with('error', 'Gudang utama tidak bisa dihapus.');
+            return back()->with('error', 'The main warehouse cannot be deleted.');
         }
 
         $totalStock = $warehouse->products()->sum('product_warehouse.stock');
         if ($totalStock > 0) {
-            return back()->with('error', 'Gudang masih memiliki stok. Pindahkan stok terlebih dahulu.');
+            return back()->with('error', 'The warehouse still has stock. Move the stock first.');
         }
 
         $warehouse->delete();
 
-        return back()->with('success', 'Gudang berhasil dihapus.');
+        return back()->with('success', 'Warehouse deleted successfully.');
     }
 }

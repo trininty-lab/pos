@@ -78,7 +78,7 @@ class PayableController extends Controller
 
         return redirect()
             ->route('payables.index')
-            ->with('success', 'Hutang supplier berhasil dibuat.');
+            ->with('success', 'Supplier payable created successfully.');
     }
 
     public function show(Payable $payable)
@@ -161,7 +161,7 @@ class PayableController extends Controller
 
         $remaining = $payable->remaining;
         if ($validated['amount'] > $remaining) {
-            return back()->with('error', 'Nominal melebihi sisa hutang.');
+            return back()->with('error', 'Amount exceeds the remaining payable.');
         }
 
         DB::transaction(function () use ($validated, $payable, $request) {
@@ -186,6 +186,6 @@ class PayableController extends Controller
 
         return redirect()
             ->route('payables.show', $payable)
-            ->with('success', 'Pembayaran hutang berhasil dicatat.');
+            ->with('success', 'Payable payment recorded successfully.');
     }
 }

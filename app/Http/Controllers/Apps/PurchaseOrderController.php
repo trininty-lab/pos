@@ -76,7 +76,7 @@ class PurchaseOrderController extends Controller
 
         return redirect()
             ->route('purchase-orders.show', $order)
-            ->with('success', 'Purchase order berhasil dibuat.');
+            ->with('success', __('messages.purchase_orders.created'));
     }
 
     public function show(PurchaseOrder $purchaseOrder)
@@ -100,26 +100,26 @@ class PurchaseOrderController extends Controller
     public function placeOrder(Request $request, PurchaseOrder $purchaseOrder)
     {
         if ($purchaseOrder->status !== 'draft') {
-            return back()->with('error', 'Hanya PO dengan status draft yang bisa dipesan.');
+            return back()->with('error', __('messages.purchase_orders.only_draft'));
         }
 
         $this->purchaseOrderService->placeOrder($purchaseOrder);
 
         return redirect()
             ->route('purchase-orders.show', $purchaseOrder)
-            ->with('success', 'Purchase order berhasil dipesan.');
+            ->with('success', __('messages.purchase_orders.placed'));
     }
 
     public function cancel(Request $request, PurchaseOrder $purchaseOrder)
     {
         if (! in_array($purchaseOrder->status, ['draft', 'ordered', 'partial_received'])) {
-            return back()->with('error', 'PO tidak dapat dibatalkan.');
+            return back()->with('error', __('messages.purchase_orders.cannot_cancel'));
         }
 
         $this->purchaseOrderService->cancelOrder($purchaseOrder);
 
         return redirect()
             ->route('purchase-orders.index')
-            ->with('success', 'Purchase order dibatalkan.');
+            ->with('success', __('messages.purchase_orders.cancelled'));
     }
 }

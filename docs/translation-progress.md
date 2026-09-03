@@ -153,6 +153,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Shared API fallback messages and POS cart, stock, shift, hold, and checkout messages now use English text.
 - API response shapes, HTTP status codes, validation keys, route contracts, and business logic were unchanged.
 
+### Application flash messages
+
+- User-facing flash, JSON, and validation messages for customers, suppliers, warehouses, inventory, purchasing, receivables, payables, receiving, and settings now use English text.
+- Message keys, response shapes, HTTP status codes, redirects, validation behavior, and business logic were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.

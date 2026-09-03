@@ -3,9 +3,13 @@
 namespace Tests\Feature\Inventory;
 
 use App\Models\Category;
+use App\Models\GoodsReceiving;
 use App\Models\Product;
+use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderItem;
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Services\GoodsReceivingService;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
@@ -164,6 +168,42 @@ class WarehouseTest extends TestCase
         $product->warehouses()->syncWithPivotValues([$warehouse->id], ['stock' => 50]);
 
         $this->assertEquals(50, $product->stockTotal());
+    }
+
+    public function test_goods_receiving_increases_product_and_warehouse_stock()
+    {
+        $warehouse = Warehouse::where('code', 'PUSAT')->first();
+        $product = Product::first();
+        $product->update(['stock' => 12]);
+        $warehouse->products()->syncWithoutDetaching([$product->id => ['stock' => 12]]);
+
+        $order = PurchaseOrder::create([
+            'supplier_id' => null,
+            'warehouse_id' => $warehouse->id,
+            'document_number' => 'PO-TEST-001',
+            'status' => 'ordered',
+            'created_by' => $this->admin->id,
+        ]);
+
+        $item = PurchaseOrderItem::create([
+            'purchase_order_id' => $order->id,
+            'product_id' => $product->id,
+            'qty_ordered' => 5,
+            'qty_received' => 0,
+            'unit_price' => 25000,
+        ]);
+
+        $service = app(GoodsReceivingService::class);
+        $service->receive(
+            $order,
+            [['purchase_order_item_id' => $item->id, 'qty_received' => 3]],
+            'Receive stock',
+            $this->admin->id,
+        );
+
+        $this->assertEquals(15, $product->fresh()->stock);
+        $this->assertEquals(15, $warehouse->products()->where('products.id', $product->id)->first()->pivot->stock);
+        $this->assertDatabaseHas('goods_receivings', ['purchase_order_id' => $order->id]);
     }
 
     public function test_code_must_be_unique()

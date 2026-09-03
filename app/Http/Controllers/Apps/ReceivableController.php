@@ -88,7 +88,7 @@ class ReceivableController extends Controller
 
         $remaining = $receivable->remaining;
         if ($validated['amount'] > $remaining) {
-            return back()->with('error', 'Nominal melebihi sisa piutang.');
+            return back()->with('error', 'Amount exceeds the remaining receivable.');
         }
 
         DB::transaction(function () use ($validated, $receivable, $request) {
@@ -119,7 +119,7 @@ class ReceivableController extends Controller
 
         return redirect()
             ->route('receivables.show', $receivable)
-            ->with('success', 'Pembayaran piutang berhasil dicatat.');
+            ->with('success', 'Receivable payment recorded successfully.');
     }
 
     public function aging()
@@ -154,6 +154,6 @@ class ReceivableController extends Controller
 
         $receivable->update(['collection_notes' => $validated['collection_notes'] ?? null]);
 
-        return back()->with('success', 'Catatan penagihan berhasil disimpan.');
+        return back()->with('success', 'Collection notes saved successfully.');
     }
 }

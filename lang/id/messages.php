@@ -172,6 +172,7 @@ return [
         'cancelled' => 'Purchase Order berhasil dibatalkan.',
         'not_found' => 'Purchase Order tidak ditemukan.',
         'cannot_cancel' => 'PO tidak dapat dibatalkan pada status ini.',
+        'only_draft' => 'Hanya Purchase Order dengan status Draft yang dapat ditempatkan.',
     ],
 
     /*
@@ -182,6 +183,8 @@ return [
     'goods_receivings' => [
         'created' => 'Penerimaan barang berhasil dicatat.',
         'not_found' => 'Penerimaan barang tidak ditemukan.',
+        'item_not_found' => 'Item tidak ditemukan dalam purchase order.',
+        'exceeds_remaining' => 'Jumlah barang yang diterima melebihi sisa stok untuk item :product_id.',
     ],
 
     /*

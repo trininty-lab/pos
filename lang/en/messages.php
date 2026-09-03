@@ -172,6 +172,7 @@ return [
         'cancelled' => 'Purchase Order cancelled successfully.',
         'not_found' => 'Purchase Order not found.',
         'cannot_cancel' => 'PO cannot be cancelled in this status.',
+        'only_draft' => 'Only Purchase Orders with Draft status can be placed.',
     ],
 
     /*
@@ -182,6 +183,8 @@ return [
     'goods_receivings' => [
         'created' => 'Goods receiving recorded successfully.',
         'not_found' => 'Goods receiving not found.',
+        'item_not_found' => 'Item not found in the purchase order.',
+        'exceeds_remaining' => 'Received quantity exceeds the remaining quantity for item :product_id.',
     ],
 
     /*

@@ -191,6 +191,7 @@ export default function ProductGrid({
     addingProductId,
     searchInputRef,
 }) {
+    const { t } = useTranslation();
     const normalizedSelectedCategory =
         selectedCategory === null ? null : Number(selectedCategory);
 
@@ -201,8 +202,12 @@ export default function ProductGrid({
             Number(product.category_id) === normalizedSelectedCategory;
         const matchesSearch =
             !searchQuery ||
-            product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            product.barcode?.toLowerCase().includes(searchQuery.toLowerCase());
+            String(product.title ?? "")
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+            String(product.barcode ?? "")
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
     });
 

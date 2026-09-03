@@ -33,6 +33,8 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Dashboard access cards now use translation keys.
 - Dashboard routes, permissions, and card destinations were unchanged.
 - Both `en.json` and `id.json` contain the dashboard access keys.
+- The core dashboard home view was translated to English for key KPI cards, charts, alerts, and summary sections.
+- The public-facing roadmap, documentation, and contribution pages were translated to English for the main user experience flow.
 
 ### POS checkout and shared components
 
@@ -168,9 +170,17 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate remaining backend flash messages and API responses carefully.
+1. Translate the remaining backend flash messages and API responses carefully.
 2. Review date, number, and currency formatting separately from text translation.
 3. Run a final Indonesian-text scan and full validation.
+4. Continue the English pass for secondary admin pages and less critical dialogs.
+
+## Current Progress Snapshot
+
+- Public landing/marketing pages are translated and build cleanly.
+- The main operational dashboard overview is translated to English.
+- Translation documentation is kept updated as work progresses.
+- Remaining tasks are mostly backend/user-facing validation copy and lower-priority secondary screens.
 
 ## Working Rules
 

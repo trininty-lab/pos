@@ -236,7 +236,7 @@ export default function Dashboard({
                 labels,
                 datasets: [
                     {
-                        label: "Pendapatan",
+                        label: "Revenue",
                         data: totals,
                         borderColor: "#6366f1",
                         backgroundColor: gradient,
@@ -313,7 +313,7 @@ export default function Dashboard({
                             Dashboard
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Ringkasan aktivitas bisnis Anda
+                            Overview of your business activity
                         </p>
                     </div>
                     <Link
@@ -321,37 +321,37 @@ export default function Dashboard({
                         className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors shadow-lg shadow-primary-500/30"
                     >
                         <IconShoppingCart size={18} />
-                        <span>Transaksi Baru</span>
+                        <span>New Transaction</span>
                     </Link>
                 </div>
 
                 {/* Main Stat Cards - Reorganized */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard
-                        title="Penjualan Hari Ini"
+                        title="Today's Sales"
                         value={formatCurrency(todaySales)}
-                        subtitle="Total penjualan hari ini"
+                        subtitle="Total sales today"
                         icon={IconCoin}
                         gradient="from-primary-500 to-primary-700"
                     />
                     <StatCard
-                        title="Profit Hari Ini"
+                        title="Today's Profit"
                         value={formatCurrency(todayProfit)}
-                        subtitle="Profit bersih hari ini"
+                        subtitle="Net profit today"
                         icon={IconTrendingUp}
                         gradient="from-success-500 to-success-700"
                         trend="up"
                     />
                     <TargetCard
-                        title="Target Bulan Ini"
+                        title="This Month's Target"
                         current={currentMonthSales}
                         target={monthlyTarget}
                         icon={IconTarget}
                     />
                     <StatCard
-                        title="Transaksi Hari Ini"
+                        title="Today's Transactions"
                         value={todayTransactions}
-                        subtitle="Transaksi"
+                        subtitle="Transactions"
                         icon={IconClock}
                         gradient="from-warning-500 to-warning-600"
                     />
@@ -360,22 +360,22 @@ export default function Dashboard({
                 {/* Secondary Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <InfoCard
-                        title="Total Kategori"
+                        title="Total Categories"
                         value={totalCategories}
                         icon={IconCategory}
                     />
                     <InfoCard
-                        title="Total Produk"
+                        title="Total Products"
                         value={totalProducts}
                         icon={IconBox}
                     />
                     <InfoCard
-                        title="Total Transaksi"
+                        title="Total Transactions"
                         value={totalTransactions}
                         icon={IconMoneybag}
                     />
                     <InfoCard
-                        title="Total Pelanggan"
+                        title="Total Customers"
                         value={totalCustomers}
                         icon={IconUsers}
                     />
@@ -383,10 +383,10 @@ export default function Dashboard({
 
                 {/* Revenue Chart - Full Width */}
                 <ListCard
-                    title="Tren Pendapatan"
-                    subtitle="12 data terakhir"
+                    title="Revenue Trend"
+                    subtitle="Last 12 data points"
                     icon={IconChartBar}
-                    emptyMessage="Belum ada data pendapatan"
+                    emptyMessage="No revenue data yet"
                 >
                     {chartData.length > 0 && (
                         <div className="h-72">
@@ -398,10 +398,10 @@ export default function Dashboard({
                 {/* 4-Column Bottom Widgets */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <ListCard
-                        title="Shift Aktif"
-                        subtitle="Pemantauan kasir"
+                        title="Active Shifts"
+                        subtitle="Cashier monitoring"
                         icon={IconWallet}
-                        emptyMessage="Tidak ada shift aktif"
+                        emptyMessage="No active shifts"
                     >
                         {activeShifts.length > 0 && (
                             <div className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -416,7 +416,7 @@ export default function Dashboard({
                                                     {shift.user?.name || "-"}
                                                 </p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                    {shift.transactions_count} transaksi
+                                                    {shift.transactions_count} transactions
                                                 </p>
                                             </div>
                                             <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
@@ -431,10 +431,10 @@ export default function Dashboard({
 
                     {/* Top Products */}
                     <ListCard
-                        title="Produk Terlaris"
-                        subtitle="Best seller"
+                        title="Best-Selling Products"
+                        subtitle="Best sellers"
                         icon={IconBox}
-                        emptyMessage="Belum ada data"
+                        emptyMessage="No data yet"
                     >
                         {topProducts.length > 0 && (
                             <div className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -461,7 +461,7 @@ export default function Dashboard({
                                                 {product.qty}x
                                             </p>
                                             <p className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                                Terjual
+                                                Sold
                                             </p>
                                         </div>
                                     </div>
@@ -473,9 +473,9 @@ export default function Dashboard({
                     {/* Slow Moving Products */}
                     <ListCard
                         title="Slow Moving"
-                        subtitle="Tidak terjual 30 hari"
+                        subtitle="Not sold in 30 days"
                         icon={IconPackageOff}
-                        emptyMessage="Semua produk laku"
+                        emptyMessage="All products are moving"
                     >
                         {slowMovingProducts.length > 0 && (
                             <ul className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -503,10 +503,10 @@ export default function Dashboard({
 
                     {/* Top Customers */}
                     <ListCard
-                        title="Pelanggan Terbaik"
-                        subtitle="Top spender"
+                        title="Top Customers"
+                        subtitle="Top spenders"
                         icon={IconUsers}
-                        emptyMessage="Belum ada data"
+                        emptyMessage="No data yet"
                     >
                         {topCustomers.length > 0 && (
                             <ul className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -536,10 +536,10 @@ export default function Dashboard({
 
                     {/* Top Locations */}
                     <ListCard
-                        title="Lokasi Terbanyak"
-                        subtitle="Berdasar kelurahan transaksi"
+                        title="Most Common Locations"
+                        subtitle="Based on transaction area"
                         icon={IconMapPin}
-                        emptyMessage="Belum ada data"
+                        emptyMessage="No data yet"
                     >
                         {topLocations.length > 0 && (
                             <ul className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -568,10 +568,10 @@ export default function Dashboard({
 
                 {/* Recent Transactions */}
                 <ListCard
-                    title="Transaksi Terbaru"
-                    subtitle="5 transaksi terakhir"
+                    title="Recent Transactions"
+                    subtitle="Last 5 transactions"
                     icon={IconReceipt}
-                    emptyMessage="Belum ada transaksi"
+                    emptyMessage="No transactions yet"
                 >
                     {recentTransactions.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -599,10 +599,10 @@ export default function Dashboard({
 
                 {/* Low Stock Highlight */}
                 <ListCard
-                    title="Stok Menipis"
-                    subtitle="Stok < 10"
+                    title="Low Stock"
+                    subtitle="Stock < 10"
                     icon={IconAlertTriangle}
-                    emptyMessage="Semua stok aman"
+                    emptyMessage="All stock is healthy"
                 >
                     {lowStockProducts.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

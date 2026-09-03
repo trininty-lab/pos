@@ -48,11 +48,25 @@ export default function Button({
 
     return (
         <>
-            {type === "link" && (
+            {type === "link" && href ? (
+                <Link
+                    href={href}
+                    className={`${baseStyles} ${sizeStyles} ${className}`}
+                    {...props}
+                >
+                    {icon}{" "}
+                    <span
+                        className={`${added === true ? "hidden lg:block" : ""}`}
+                    >
+                        {label}
+                    </span>
+                </Link>
+            ) : type === "link" ? (
                 <button
                     type="button"
-                    onClick={href ? undefined : props.onClick}
+                    onClick={props.onClick}
                     className={`${baseStyles} ${sizeStyles} ${className}`}
+                    {...props}
                 >
                     {icon}{" "}
                     <span
@@ -61,7 +75,7 @@ export default function Button({
                         {label}
                     </span>
                 </button>
-            )}
+            ) : null}
             {type === "button" && (
                 <button
                     className={`${baseStyles} ${sizeStyles} ${className}`}

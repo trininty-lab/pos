@@ -41,7 +41,7 @@ class FeatureCoverageSeeder extends Seeder
             return;
         }
 
-        $admin = User::where('email', 'arya@gmail.com')->first() ?? User::first();
+        $admin = User::where('email', 'cybertrinity6@gmail.com')->first() ?? User::first();
         $cashier = User::where('email', 'cashier@gmail.com')->first() ?? $admin;
 
         if (! $admin || ! $cashier) {

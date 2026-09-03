@@ -116,7 +116,7 @@ export default function Contributing() {
                     <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
                         Data contoh (produk, transaksi, user) sudah termasuk via{" "}
                         <code className="font-mono text-primary-600 dark:text-primary-400">migrate --seed</code>.
-                        Akun default: <code className="font-mono">arya@gmail.com</code> (admin) dan{" "}
+                        Akun default: <code className="font-mono">cybertrinity6@gmail.com</code> (admin) dan{" "}
                         <code className="font-mono">cashier@gmail.com</code> (kasir), password:{" "}
                         <code className="font-mono">password</code>.
                     </p>

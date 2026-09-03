@@ -68,7 +68,7 @@ Route::get('/kontribusi', fn () => Inertia::render('Public/Contributing'))->name
 
 Route::get('/dashboard/access', function () {
     return Inertia::render('Dashboard/Access');
-})->middleware(['auth', 'verified'])->name('dashboard.access');
+})->middleware('auth')->name('dashboard.access');
 
 // Public share routes (no login)
 Route::get('/share/transactions/{invoice}', [DocumentController::class, 'publicInvoice'])
@@ -81,8 +81,8 @@ Route::post('/portal/receivables/{receivable}/pay', [PublicPortalController::cla
 // Language switch
 Route::post('/language/switch', [LanguageController::class, 'switch'])->name('language.switch');
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'verified']], function () {
-    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'permission:dashboard-access'])->name('dashboard');
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
+    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'permission:dashboard-access'])->name('dashboard');
     Route::get('/permissions', [PermissionController::class, 'index'])->middleware('permission:permissions-access')->name('permissions.index');
     // roles route
     Route::resource('/roles', RoleController::class)

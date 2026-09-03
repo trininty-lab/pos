@@ -107,7 +107,7 @@ npm install && npm start
 
 ## Default Login
 
-- Admin: `arya@gmail.com` / `password`
+- Admin: `cybertrinity6@gmail.com` / `password`
 - Kasir: `cashier@gmail.com` / `password`
 
 ## Dokumentasi Detail

@@ -394,7 +394,7 @@ export default function Welcome() {
                                     Admin
                                 </div>
                                 <div className="font-mono text-sm text-slate-700 dark:text-slate-300">
-                                    arya@gmail.com
+                                    cybertrinity6@gmail.com
                                 </div>
                                 <div className="font-mono text-sm text-slate-500 dark:text-slate-400">
                                     password

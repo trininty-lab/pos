@@ -15,16 +15,16 @@ import { useAuthorization } from "@/Utils/authorization";
 import toast from "react-hot-toast";
 
 const STATUS_CONFIG = {
-    submitted: { label: "Menunggu", color: "bg-warning-100 text-warning-700 dark:bg-warning-900/50 dark:text-warning-400", icon: IconClock },
-    accepted: { label: "Diterima", color: "bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-400", icon: IconCheck },
-    completed: { label: "Selesai", color: "bg-success-100 text-success-700 dark:bg-success-900/50 dark:text-success-400", icon: IconCheck },
-    rejected: { label: "Ditolak", color: "bg-danger-100 text-danger-700 dark:bg-danger-900/50 dark:text-danger-400", icon: IconX },
-    cancelled: { label: "Dibatalkan", color: "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400", icon: IconX },
+    submitted: { label: "Pending", color: "bg-warning-100 text-warning-700 dark:bg-warning-900/50 dark:text-warning-400", icon: IconClock },
+    accepted: { label: "Accepted", color: "bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-400", icon: IconCheck },
+    completed: { label: "Completed", color: "bg-success-100 text-success-700 dark:bg-success-900/50 dark:text-success-400", icon: IconCheck },
+    rejected: { label: "Rejected", color: "bg-danger-100 text-danger-700 dark:bg-danger-900/50 dark:text-danger-400", icon: IconX },
+    cancelled: { label: "Cancelled", color: "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400", icon: IconX },
 };
 
 const PAY_CONFIG = {
-    pay_at_counter: { label: "Bayar di Kasir", color: "text-slate-600 dark:text-slate-400" },
-    pay_online: { label: "Bayar Online", color: "text-primary-600 dark:text-primary-400" },
+    pay_at_counter: { label: "Pay at Counter", color: "text-slate-600 dark:text-slate-400" },
+    pay_online: { label: "Pay Online", color: "text-primary-600 dark:text-primary-400" },
 };
 
 export default function Index({ orders }) {
@@ -33,42 +33,42 @@ export default function Index({ orders }) {
     const canProcess = can("dine-orders-process");
 
     const handleAccept = (order) => {
-        if (!confirm("Terima pesanan ini dan lanjutkan ke kasir?")) return;
+        if (!confirm("Accept this order and continue to checkout?")) return;
         router.post(
             route("dine-orders.accept", order.id),
             {},
             {
-                onSuccess: () => toast.success("Pesanan diterima."),
-                onError: () => toast.error("Gagal menerima pesanan."),
+                onSuccess: () => toast.success("Order accepted."),
+                onError: () => toast.error("Failed to accept order."),
             }
         );
     };
 
     const handleReject = (order) => {
-        const reason = prompt("Alasan penolakan (opsional):");
+        const reason = prompt("Rejection reason (optional):");
         if (reason === null) return;
         router.post(
             route("dine-orders.reject", order.id),
             { reason },
             {
-                onSuccess: () => toast.success("Pesanan ditolak."),
-                onError: () => toast.error("Gagal menolak pesanan."),
+                onSuccess: () => toast.success("Order rejected."),
+                onError: () => toast.error("Failed to reject order."),
             }
         );
     };
 
     return (
         <>
-            <Head title="Pesanan Dine-In" />
+            <Head title="Dine-In Orders" />
 
             <div className="mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                            Pesanan Dine-In
+                            Dine-In Orders
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            {orders.length} pesanan
+                            {orders.length} orders
                         </p>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ export default function Index({ orders }) {
                                         <div>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className="font-semibold text-slate-800 dark:text-slate-200">
-                                                    {order.table?.name ?? "Meja"}
+                                                    {order.table?.name ?? "Table"}
                                                 </span>
                                                 <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${status.color}`}>
                                                     <StatusIcon size={12} />
@@ -99,7 +99,7 @@ export default function Index({ orders }) {
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-                                                <span>{order.item_count} item</span>
+                                                <span>{order.item_count} items</span>
                                                 <span>Subtotal: Rp {Number(order.subtotal ?? 0).toLocaleString("id-ID")}</span>
                                                 <span className={pay.color}>{pay.label}</span>
                                             </div>
@@ -137,10 +137,10 @@ export default function Index({ orders }) {
                                             <div key={item.id} className="flex justify-between items-center py-2 border-b border-slate-50 dark:border-slate-800 last:border-0">
                                                 <div>
                                                     <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                                                        {item.product?.title ?? "Produk"}
+                                                        {item.product?.title ?? "Product"}
                                                     </p>
                                                     {item.note && (
-                                                        <p className="text-xs text-slate-400 mt-0.5">Catatan: {item.note}</p>
+                                                        <p className="text-xs text-slate-400 mt-0.5">Note: {item.note}</p>
                                                     )}
                                                 </div>
                                                 <div className="text-right">
@@ -179,10 +179,10 @@ export default function Index({ orders }) {
                         <IconDatabaseOff size={32} className="text-slate-400" strokeWidth={1.5} />
                     </div>
                     <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1">
-                        Tidak Ada Pesanan
+                        No Orders
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Pesanan dari pelanggan akan muncul di sini.
+                        Customer orders will appear here.
                     </p>
                 </div>
             )}

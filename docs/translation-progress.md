@@ -117,6 +117,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Dine-in table grid/list views, filters, CRUD modal, statuses, confirmations, and controls now use English visible text.
 - Table drag/drop layout, QR actions, filters, permissions, routes, and table data were unchanged.
 
+### Dine-in areas and orders
+
+- Dine-in area CRUD and dine-in order processing screens now use English visible text.
+- Area and order routes, permissions, status values, payment options, prompts, and data behavior were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -127,12 +132,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate dine-in areas and orders.
-2. Translate reports and settings pages.
-3. Translate backend flash messages and API responses carefully.
-4. Translate PDF and document labels.
-5. Review date, number, and currency formatting separately from text translation.
-6. Run a final Indonesian-text scan and full validation.
+1. Translate reports and settings pages.
+2. Translate backend flash messages and API responses carefully.
+3. Translate PDF and document labels.
+4. Review date, number, and currency formatting separately from text translation.
+5. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 
@@ -146,4 +150,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Dine-in areas and orders. Keep each feature as a separate checkpoint, then build and test before continuing to reports and settings.
+Reports and settings pages. Keep each feature as a separate checkpoint, then build and test before final backend/PDF review.

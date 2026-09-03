@@ -54,25 +54,25 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
             case "paid":
                 return (
                     <span className={`${base} bg-success-100 text-success-700`}>
-                        Lunas
+                        Paid
                     </span>
                 );
             case "partial":
                 return (
                     <span className={`${base} bg-primary-100 text-primary-700`}>
-                        Parsial
+                        Partial
                     </span>
                 );
             case "overdue":
                 return (
                     <span className={`${base} bg-rose-100 text-rose-700`}>
-                        Jatuh Tempo
+                        Overdue
                     </span>
                 );
             default:
                 return (
                     <span className={`${base} bg-amber-100 text-amber-700`}>
-                        Belum Lunas
+                        Unpaid
                     </span>
                 );
         }
@@ -95,7 +95,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
 
     return (
         <>
-            <Head title={`Hutang ${payable.document_number}`} />
+            <Head title={`Payable ${payable.document_number}`} />
             <div className="space-y-6">
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                     <div className="flex items-center gap-3">
@@ -104,10 +104,10 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                             className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                         >
                             <IconArrowLeft size={18} />
-                            Kembali
+                            Back
                         </Link>
                         <div>
-                            <p className="text-xs text-slate-500">Dokumen</p>
+                            <p className="text-xs text-slate-500">Document</p>
                             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                                 {payable.document_number}
                             </h1>
@@ -136,7 +136,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 )}
                             </div>
                             <div className="text-right">
-                                <p className="text-slate-500">Jatuh Tempo</p>
+                                <p className="text-slate-500">Due Date</p>
                                 <p className="font-semibold text-slate-800 dark:text-white">
                                     {formatDate(payable.due_date)}
                                 </p>
@@ -150,7 +150,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 </p>
                             </div>
                             <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                                <p className="text-xs text-slate-500">Terbayar</p>
+                                <p className="text-xs text-slate-500">Paid</p>
                                 <p className="text-lg font-bold text-success-600">
                                     {formatCurrency(payable.paid)}
                                 </p>
@@ -164,14 +164,14 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                         </div>
                         <div className="flex items-center justify-between">
                             <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Riwayat Pembayaran
+                                Payment History
                             </p>
                             {payable.status !== "paid" && canPayPayable && (
                                 <button
                                     onClick={() => setShowForm(!showForm)}
                                     className="px-3 py-2 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white transition-colors"
                                 >
-                                    Tambah Pembayaran
+                                    Add Payment
                                 </button>
                             )}
                         </div>
@@ -188,7 +188,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                                             {formatCurrency(pay.amount)}
                                                         </p>
                                                         <p className="text-xs text-slate-500">
-                                                            {formatDate(pay.paid_at)} • {pay.method || "metode"}
+                                                            {formatDate(pay.paid_at)} • {pay.method || "method"}
                                                             {pay.bank_account && ` • ${pay.bank_account.bank_name}`}
                                                         </p>
                                                         {pay.note && (
@@ -204,7 +204,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 ))
                             ) : (
                                 <div className="text-sm text-slate-500">
-                                    Belum ada pembayaran.
+                                    No payments yet.
                                 </div>
                             )}
                         </div>
@@ -212,17 +212,17 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
 
                     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 print:hidden">
                         <p className="text-sm font-semibold text-slate-800 dark:text-white mb-3">
-                            Detail Hutang
+                            Payable Details
                         </p>
                         <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                             <div className="flex justify-between">
-                                <span>Nomor</span>
+                                <span>Number</span>
                                 <span className="font-semibold text-slate-800 dark:text-white">
                                     {payable.document_number}
                                 </span>
                             </div>
                             <div className="flex justify-between">
-                                <span>Jatuh Tempo</span>
+                                <span>Due Date</span>
                                 <span>{formatDate(payable.due_date)}</span>
                             </div>
                             <div className="flex justify-between">
@@ -235,7 +235,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                             <form onSubmit={submitPayment} className="mt-4 space-y-3">
                                 <div>
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                        Nominal
+                                        Amount
                                     </label>
                                     <input
                                         type="number"
@@ -253,7 +253,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 </div>
                                 <div>
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                        Tanggal Bayar
+                                        Payment Date
                                     </label>
                                     <input
                                         type="date"
@@ -274,7 +274,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                         }`}
                                     >
                                         <IconCash size={16} />
-                                        Tunai
+                                        Cash
                                     </button>
                                     <button
                                         type="button"
@@ -292,7 +292,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 {data.method === "bank_transfer" && (
                                     <div>
                                         <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                            Rekening
+                                            Bank Account
                                         </label>
                                         <select
                                             value={data.bank_account_id}
@@ -301,7 +301,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                             }
                                             className="w-full h-11 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                         >
-                                            <option value="">Pilih rekening</option>
+                                            <option value="">Select account</option>
                                             {bankAccounts.map((bank) => (
                                                 <option key={bank.id} value={bank.id}>
                                                     {bank.bank_name} - {bank.account_number}
@@ -312,14 +312,14 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 )}
                                 <div>
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                        Catatan (opsional)
+                                        Notes (optional)
                                     </label>
                                     <textarea
                                         rows={2}
                                         value={data.note}
                                         onChange={(e) => setData("note", e.target.value)}
                                         className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-                                        placeholder="Catatan pembayaran"
+                                        placeholder="Payment notes"
                                     />
                                 </div>
                                 <button
@@ -327,7 +327,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                     disabled={processing}
                                     className="w-full h-11 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                                 >
-                                    Simpan Pembayaran
+                                    Save Payment
                                 </button>
                             </form>
                         )}
@@ -350,7 +350,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-3xl relative overflow-hidden">
                         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800">
                             <div>
-                                <p className="text-xs text-slate-500">Preview Hutang</p>
+                                <p className="text-xs text-slate-500">Payable Preview</p>
                                 <p className="text-sm font-semibold text-slate-800 dark:text-white">
                                     {payable.document_number}
                                 </p>
@@ -363,13 +363,13 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                     className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold"
                                 >
                                     <IconPrinter size={16} />
-                                    PDF / Cetak
+                                    PDF / Print
                                 </a>
                                 <button
                                     onClick={() => setShowPreview(false)}
                                     className="text-sm px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
                                 >
-                                    Tutup
+                                    Close
                                 </button>
                             </div>
                         </div>
@@ -405,7 +405,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                     {payable.document_number}
                                 </p>
                                 <p className="text-xs text-slate-500">
-                                    Jatuh tempo: {formatDate(payable.due_date)}
+                                    Due date: {formatDate(payable.due_date)}
                                 </p>
                             </div>
                         </div>
@@ -438,7 +438,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                         </p>
                                     </div>
                                     <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                                        <p className="text-xs text-slate-500">Terbayar</p>
+                                        <p className="text-xs text-slate-500">Paid</p>
                                         <p className="text-lg font-bold text-success-600">
                                             {formatCurrency(payable.paid)}
                                         </p>
@@ -453,7 +453,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
 
                                 <div className="mt-4">
                                     <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                                        Riwayat Pembayaran
+                                        Payment History
                                     </p>
                                     <div className="space-y-2 text-sm">
                                         {payable.payments?.length ? (
@@ -478,7 +478,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                             ))
                                         ) : (
                                             <div className="text-xs text-slate-500">
-                                                Belum ada pembayaran.
+                                                No payments yet.
                                             </div>
                                         )}
                                     </div>

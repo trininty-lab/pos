@@ -59,13 +59,13 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
         const base = "px-2 py-1 text-xs font-semibold rounded-full";
         switch (value) {
             case "paid":
-                return <span className={`${base} bg-success-100 text-success-700`}>Lunas</span>;
+                return <span className={`${base} bg-success-100 text-success-700`}>Paid</span>;
             case "partial":
-                return <span className={`${base} bg-primary-100 text-primary-700`}>Parsial</span>;
+                return <span className={`${base} bg-primary-100 text-primary-700`}>Partial</span>;
             case "overdue":
-                return <span className={`${base} bg-rose-100 text-rose-700`}>Jatuh Tempo</span>;
+                return <span className={`${base} bg-rose-100 text-rose-700`}>Overdue</span>;
             default:
-                return <span className={`${base} bg-amber-100 text-amber-700`}>Belum Lunas</span>;
+                return <span className={`${base} bg-amber-100 text-amber-700`}>Unpaid</span>;
         }
     };
 
@@ -80,16 +80,16 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
 
     return (
         <>
-            <Head title="Hutang Supplier" />
+            <Head title="Supplier Payables" />
             <div className="space-y-6">
                 <div className="flex items-center justify-between flex-wrap gap-3">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             <IconClockHour6 size={26} className="text-primary-500" />
-                            Hutang Supplier
+                            Supplier Payables
                         </h1>
                         <p className="text-sm text-slate-500">
-                            Catat dan lacak pembayaran hutang ke supplier.
+                            Record and track supplier payable payments.
                         </p>
                     </div>
                 </div>
@@ -118,7 +118,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                     </div>
                     <div>
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            Nomor Dokumen
+                            Document Number
                         </label>
                         <input
                             value={data.document_number}
@@ -143,7 +143,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                     </div>
                     <div>
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            Jatuh Tempo
+                            Due Date
                         </label>
                         <input
                             type="date"
@@ -159,19 +159,19 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                             className="w-full h-11 rounded-xl bg-primary-500 text-white text-sm font-semibold flex items-center justify-center gap-2"
                         >
                             <IconPlus size={16} />
-                            Simpan
+                            Save
                         </button>
                     </div>
                     <div className="md:col-span-5">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            Catatan
+                            Notes
                         </label>
                         <textarea
                             rows={2}
                             value={data.note}
                             onChange={(e) => setData("note", e.target.value)}
                             className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
-                            placeholder="Catatan tambahan (opsional)"
+                            placeholder="Additional notes (optional)"
                         />
                     </div>
                 </form>
@@ -189,7 +189,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                         <input
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Cari nomor dokumen"
+                            placeholder="Search document number"
                             className="w-full h-11 pl-10 pr-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
                         />
                     </div>
@@ -217,18 +217,18 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                             onChange={(e) => setStatus(e.target.value)}
                             className="w-full h-11 pl-10 pr-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
                         >
-                            <option value="">Semua Status</option>
-                            <option value="unpaid">Belum Lunas</option>
+                            <option value="">All Statuses</option>
+                            <option value="unpaid">Unpaid</option>
                             <option value="partial">Parsial</option>
-                            <option value="paid">Lunas</option>
-                            <option value="overdue">Jatuh Tempo</option>
+                            <option value="paid">Paid</option>
+                            <option value="overdue">Overdue</option>
                         </select>
                     </div>
                     <button
                         type="submit"
                         className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-semibold"
                     >
-                        Terapkan
+                        Apply
                     </button>
                 </form>
 
@@ -237,11 +237,11 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                     <div className="w-full overflow-x-auto hidden sm:block">
                         <div className="min-w-[720px]">
                             <div className="grid grid-cols-12 px-3 sm:px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
-                                <div className="col-span-2">Dokumen</div>
+                                <div className="col-span-2">Document</div>
                                 <div className="col-span-2">Supplier</div>
                                 <div className="col-span-2 text-right">Total</div>
                                 <div className="col-span-2 text-right">Sisa</div>
-                                <div className="col-span-2 text-right">Jatuh Tempo</div>
+                                <div className="col-span-2 text-right">Due Date</div>
                                 <div className="col-span-2 text-center min-w-[140px]">Status</div>
                             </div>
                             {rows.length ? (
@@ -281,7 +281,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                                         size={28}
                                         className="mx-auto mb-2 text-slate-400"
                                     />
-                                    Belum ada data hutang.
+                                    No payable data yet.
                                 </div>
                             )}
                         </div>
@@ -299,13 +299,13 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                                     <div className="flex items-start justify-between">
                                         <div className="space-y-1">
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Dokumen
+                                                Document
                                             </p>
                                             <p className="text-base font-semibold text-slate-900 dark:text-white">
                                                 {item.document_number || "-"}
                                             </p>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Jatuh tempo: {formatDate(item.due_date)}
+                                                Due date: {formatDate(item.due_date)}
                                             </p>
                                         </div>
                                         <div className="text-right space-y-2">
@@ -314,7 +314,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                                                 {formatCurrency(item.total)}
                                             </p>
                                             <p className="text-xs text-primary-600 dark:text-primary-400">
-                                                Sisa {formatCurrency(item.remaining)}
+                                                Remaining {formatCurrency(item.remaining)}
                                             </p>
                                         </div>
                                     </div>
@@ -342,7 +342,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                                     size={28}
                                     className="mx-auto mb-2 text-slate-400"
                                 />
-                                Belum ada data hutang.
+                                No payable data yet.
                             </div>
                         )}
                     </div>

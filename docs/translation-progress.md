@@ -92,6 +92,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Goods receiving list, creation, and detail screens now use English visible text.
 - Financial and receiving routes, statuses, submitted fields, calculations, and action behavior were unchanged.
 
+### CRM campaigns
+
+- CRM campaign list, creation/edit form, detail, audience, delivery logs, and action feedback now use English visible text.
+- Campaign content, audience option data, statuses, routes, permissions, payloads, and WhatsApp actions were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -102,7 +107,7 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate CRM, loyalty, promotions, and dine-in pages.
+1. Translate loyalty, promotions, and dine-in pages.
 2. Translate reports and settings pages.
 3. Translate backend flash messages and API responses carefully.
 4. Translate PDF and document labels.
@@ -121,4 +126,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-CRM, loyalty, promotions, and dine-in pages. Keep this slice limited to those screens, then build and test before continuing to reports and settings.
+Loyalty, promotions, and dine-in pages. Keep this slice limited to those screens, then build and test before continuing to reports and settings.

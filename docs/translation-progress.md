@@ -148,6 +148,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Invoice, receivable, payable, and 58mm receipt templates now use English static labels.
 - PDF calculations, document data, formatting, and receipt behavior were unchanged.
 
+### Shared POS API messages
+
+- Shared API fallback messages and POS cart, stock, shift, hold, and checkout messages now use English text.
+- API response shapes, HTTP status codes, validation keys, route contracts, and business logic were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -158,7 +163,7 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate backend flash messages and API responses carefully.
+1. Translate remaining backend flash messages and API responses carefully.
 2. Review date, number, and currency formatting separately from text translation.
 3. Run a final Indonesian-text scan and full validation.
 

@@ -104,7 +104,7 @@ class PosApiController extends Controller
         $shift = $this->cashierShiftService->getActiveShiftForUser($request->user()->id);
 
         if (! $shift) {
-            return $this->error('Tidak ada shift aktif.', 422);
+            return $this->error('There is no active shift.', 422);
         }
 
         try {
@@ -177,7 +177,7 @@ class PosApiController extends Controller
             ->first();
 
         if (! $product) {
-            return $this->notFound('Produk dengan barcode tersebut tidak ditemukan.');
+            return $this->notFound('No product was found with that barcode.');
         }
 
         $stock = $warehouseId
@@ -192,7 +192,7 @@ class PosApiController extends Controller
             'conversion_factor' => (float) $u->pivot->conversion_factor,
         ]);
 
-        return $this->ok($data, 'Produk ditemukan');
+        return $this->ok($data, 'Product found');
     }
 
     /**
@@ -252,7 +252,7 @@ class PosApiController extends Controller
         $shift = $this->cashierShiftService->getActiveShiftForUser($request->user()->id);
 
         if (! $shift) {
-            return $this->error('Shift kasir belum dibuka.', 422);
+            return $this->error('The cashier shift has not been opened.', 422);
         }
 
         $warehouseId = $shift->warehouse_id;
@@ -260,7 +260,7 @@ class PosApiController extends Controller
         $product = Product::find($validated['product_id']);
 
         if (! $product) {
-            return $this->notFound('Produk tidak ditemukan.');
+            return $this->notFound('Product not found.');
         }
 
         if ($product->is_composite) {
@@ -269,7 +269,7 @@ class PosApiController extends Controller
                 $needed = (float) $component->pivot->qty * $validated['qty'];
                 $avail = (int) ($component->warehouses()->where('warehouse_id', $warehouseId)->first()?->pivot->stock ?? 0);
                 if ($avail < $needed) {
-                    return $this->error("Stok {$component->title} tidak mencukupi.", 422);
+                    return $this->error("Insufficient stock for {$component->title}.", 422);
                 }
             }
             $sellPrice = (int) $product->components->sum(fn ($c) => $c->sell_price * (float) $c->pivot->qty);
@@ -284,7 +284,7 @@ class PosApiController extends Controller
                 : (int) $product->stock;
 
             if ($availableStock < $baseQty) {
-                return $this->error("Stok tidak mencukupi. Tersedia: {$availableStock}", 422);
+                return $this->error("Insufficient stock. Available: {$availableStock}", 422);
             }
 
             $sellPrice = $this->unitConversionService->getSellPrice($product, $unitId);
@@ -316,7 +316,7 @@ class PosApiController extends Controller
 
         return $this->ok(
             new CartResource($cart->load('product', 'unit')),
-            'Produk ditambahkan ke keranjang'
+            'Product added to cart'
         );
     }
 
@@ -337,7 +337,7 @@ class PosApiController extends Controller
         $shift = $this->cashierShiftService->getActiveShiftForUser($request->user()->id);
 
         if (! $shift) {
-            return $this->error('Shift kasir belum dibuka.', 422);
+            return $this->error('The cashier shift has not been opened.', 422);
         }
 
         $warehouseId = $shift->warehouse_id;
@@ -351,7 +351,7 @@ class PosApiController extends Controller
                 : (int) $product->stock;
 
             if ($availableStock < $baseQty) {
-                return $this->error("Stok tidak mencukupi. Tersedia: {$availableStock}", 422);
+                return $this->error("Insufficient stock. Available: {$availableStock}", 422);
             }
         }
 
@@ -361,7 +361,7 @@ class PosApiController extends Controller
             : $this->unitConversionService->getSellPrice($product, $cart->unit_id) * $validated['qty'];
         $cart->save();
 
-        return $this->ok(new CartResource($cart->load('product', 'unit')), 'Keranjang diperbarui');
+        return $this->ok(new CartResource($cart->load('product', 'unit')), 'Cart updated');
     }
 
     /**
@@ -404,7 +404,7 @@ class PosApiController extends Controller
         $activeCarts = Cart::where('cashier_id', $userId)->active()->get();
 
         if ($activeCarts->isEmpty()) {
-            return $this->error('Keranjang kosong, tidak ada yang bisa ditahan.', 422);
+            return $this->error('The cart is empty; there is nothing to hold.', 422);
         }
 
         $holdId = 'HOLD-'.strtoupper(Str::random(10));
@@ -416,7 +416,7 @@ class PosApiController extends Controller
             'held_at' => now(),
         ]);
 
-        return $this->ok(['hold_id' => $holdId, 'label' => $label], 'Transaksi ditahan');
+        return $this->ok(['hold_id' => $holdId, 'label' => $label], 'Transaction held');
     }
 
     /**
@@ -456,12 +456,12 @@ class PosApiController extends Controller
 
         $activeCount = Cart::where('cashier_id', $userId)->active()->count();
         if ($activeCount > 0) {
-            return $this->error('Selesaikan atau tahan transaksi aktif terlebih dahulu.', 422);
+            return $this->error('Complete or hold the active transaction first.', 422);
         }
 
         $held = Cart::where('cashier_id', $userId)->forHold($holdId)->get();
         if ($held->isEmpty()) {
-            return $this->notFound('Transaksi ditahan tidak ditemukan.');
+            return $this->notFound('Held transaction not found.');
         }
 
         Cart::where('cashier_id', $userId)->forHold($holdId)->update([
@@ -470,7 +470,7 @@ class PosApiController extends Controller
             'held_at' => null,
         ]);
 
-        return $this->ok(null, 'Transaksi dilanjutkan');
+        return $this->ok(null, 'Transaction resumed');
     }
 
     /**
@@ -513,13 +513,13 @@ class PosApiController extends Controller
             : null;
 
         if ($isPayLater && ! $request->filled('due_date')) {
-            return $this->error('Tanggal jatuh tempo wajib diisi untuk nota barang.', 422);
+            return $this->error('A due date is required for a receivable.', 422);
         }
 
         if ($paymentGateway) {
             $paymentSetting = PaymentSetting::first();
             if (! $paymentSetting || ! $paymentSetting->isGatewayReady($paymentGateway)) {
-                return $this->error('Gateway pembayaran belum dikonfigurasi.', 422);
+                return $this->error('The payment gateway is not configured.', 422);
             }
         }
 

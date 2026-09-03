@@ -75,6 +75,11 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 - Stock opname list, creation, and detail workflows now use English visible text.
 - Stock opname validation messages, audit statuses, routes, submitted fields, and calculation behavior were unchanged.
 
+### Stock transfers
+
+- Stock transfer list, creation, and detail workflows now use English visible text.
+- Stock transfer statuses, confirmation actions, routes, submitted fields, and warehouse/product data were unchanged.
+
 ## Validation Completed
 
 - Frontend production build passes with `npm run build`.
@@ -85,14 +90,13 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Remaining Work
 
-1. Translate stock transfers.
-2. Translate purchasing, receivables, and payables pages.
-3. Translate CRM, loyalty, promotions, and dine-in pages.
-4. Translate reports and settings pages.
-5. Translate backend flash messages and API responses carefully.
-6. Translate PDF and document labels.
-7. Review date, number, and currency formatting separately from text translation.
-8. Run a final Indonesian-text scan and full validation.
+1. Translate purchasing, receivables, and payables pages.
+2. Translate CRM, loyalty, promotions, and dine-in pages.
+3. Translate reports and settings pages.
+4. Translate backend flash messages and API responses carefully.
+5. Translate PDF and document labels.
+6. Review date, number, and currency formatting separately from text translation.
+7. Run a final Indonesian-text scan and full validation.
 
 ## Working Rules
 
@@ -106,4 +110,4 @@ This document tracks the Indonesian-to-English translation work. Translation cha
 
 ## Suggested Next Slice
 
-Stock transfers. Keep this slice limited to those screens, then build and test before continuing to purchasing.
+Purchasing, receivables, and payables pages. Keep this slice limited to those screens, then build and test before continuing to CRM and loyalty.

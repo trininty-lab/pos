@@ -1,0 +1,59 @@
+services:
+  app:
+    build:
+      target: runtime
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      LOG_LEVEL: debug
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+      - app-node-modules:/var/www/html/node_modules
+      - app-storage:/var/www/html/storage/app
+      - app-framework:/var/www/html/storage/framework
+      - app-logs:/var/www/html/storage/logs
+      - app-bootstrap-cache:/var/www/html/bootstrap/cache
+
+  web:
+    volumes:
+      - .:/var/www/html
+      - app-storage:/var/www/html/storage/app:ro
+
+  queue:
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+      - app-storage:/var/www/html/storage/app
+      - app-framework:/var/www/html/storage/framework
+      - app-logs:/var/www/html/storage/logs
+      - app-bootstrap-cache:/var/www/html/bootstrap/cache
+
+  scheduler:
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+      - app-storage:/var/www/html/storage/app
+      - app-framework:/var/www/html/storage/framework
+      - app-logs:/var/www/html/storage/logs
+      - app-bootstrap-cache:/var/www/html/bootstrap/cache
+
+  frontend:
+    image: node:22.14.0-bookworm-slim
+    working_dir: /var/www/html
+    command: sh -c "npm ci --no-audit --no-fund && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    environment:
+      VITE_APP_NAME: ${APP_NAME:-Point of Sales}
+    volumes:
+      - .:/var/www/html
+      - app-node-modules:/var/www/html/node_modules
+    networks:
+      - frontend
+    depends_on:
+      - app
+
+volumes:
+  vendor:
+  app-node-modules:

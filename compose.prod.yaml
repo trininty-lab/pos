@@ -1,0 +1,14 @@
+services:
+  web:
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    restart: always
+
+  app:
+    restart: always
+
+  queue:
+    restart: always
+
+  scheduler:
+    restart: always

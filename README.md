@@ -1,8 +1,30 @@
 # Point of Sales
 
-Sistem kasir berbasis Laravel + Inertia + React untuk transaksi penjualan, inventory audit, purchasing, finance, CRM, loyalty, dan observability operasional — dengan dukungan multi-warehouse, PPN, dan offline mode.
+A complete retail management platform built with Laravel, Inertia.js, and React. The application connects checkout, inventory, purchasing, finance, customer management, loyalty, reporting, and operational controls in one system.
+
+It is designed for retail stores, supermarkets, and businesses with multiple cashiers or warehouse locations. Users can manage the full business workflow from purchasing stock through selling products, collecting payments, engaging customers, and reviewing performance.
 
 > 200+ GitHub stars • Open-source • MIT License
+
+## What This Application Provides
+
+- **Sales and checkout:** barcode/product search, camera scanning, held carts, multiple payment methods, sales returns, cashier shifts, tax calculation, and offline transaction sync.
+- **Inventory and warehouses:** product and category management, stock opname, stock history, batch and expiry tracking, unit conversion, composite products, low-stock alerts, and transfers between warehouses.
+- **Purchasing and suppliers:** purchase orders, goods receiving, supplier returns, and supplier payable aging.
+- **Finance:** customer receivables, partial payments, aging analysis, collection notes, PPN/PPh settings, and online customer payment through the portal.
+- **CRM and loyalty:** customer profiles, member tiers, points, vouchers, price lists, promotions, customer segments, campaigns, reminders, and WhatsApp messaging.
+- **Reports and documents:** sales, profit, and advanced insight reports; PDF invoices and receipts; shipping labels; and Excel/CSV import and export.
+- **Administration and security:** role-based access control, permission management, discount approvals, audit logs, store settings, payment gateways, bank accounts, and printer configuration.
+
+## Business Workflow
+
+```text
+Purchase stock → Receive goods → Manage warehouse inventory
+  → Sell products → Collect payment → Engage customers
+  → Review reports and business performance
+```
+
+The platform supports multi-warehouse operations, Indonesian tax requirements, thermal printers, payment gateways, a mobile-friendly PWA, and an optional WhatsApp Gateway for automated customer communication.
 
 ---
 
@@ -86,6 +108,23 @@ Sistem kasir berbasis Laravel + Inertia + React untuk transaksi penjualan, inven
 ---
 
 ## Quick Start
+
+### Docker
+
+The supported container workflow runs Laravel behind Nginx with MySQL, Redis, a separate queue worker, and a separate scheduler. It does not require PHP, Composer, Node, MySQL, or Redis on the host.
+
+```powershell
+Copy-Item .env.example .env
+docker compose -f compose.yaml -f compose.dev.yaml run --rm app php artisan key:generate --show
+# Set the displayed value as APP_KEY in .env.
+docker compose -f compose.yaml -f compose.dev.yaml up -d --build
+docker compose -f compose.yaml -f compose.dev.yaml exec app php artisan migrate --seed
+docker compose -f compose.yaml -f compose.dev.yaml exec app php artisan storage:link
+```
+
+Open `http://localhost:8080`. Use `docker compose -f compose.yaml -f compose.dev.yaml logs -f` for logs and see [DOCKER.md](DOCKER.md) for production deployment, backups, health checks, and troubleshooting.
+
+### Host development
 
 ```bash
 git clone https://github.com/aryadwiputra/point-of-sales.git

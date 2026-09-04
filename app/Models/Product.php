@@ -143,7 +143,9 @@ class Product extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => asset('/storage/products/'.$value),
+            get: fn ($value) => $value === 'default.jpg'
+                ? asset('/images/icon-512.png')
+                : asset('/storage/products/'.$value),
         );
     }
 }

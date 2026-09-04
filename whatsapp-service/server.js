@@ -4,6 +4,10 @@ const QRCode = require('qrcode');
 const app = express();
 app.use(express.json());
 
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', connected: isConnected });
+});
+
 let client = null;
 let qrCodeData = null;
 let isConnected = false;

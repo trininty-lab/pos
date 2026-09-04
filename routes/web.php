@@ -48,6 +48,8 @@ use App\Http\Controllers\Reports\SalesReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -59,6 +61,17 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/health', function () {
+    try {
+        DB::connection()->getPdo();
+        Redis::connection()->ping();
+
+        return response()->json(['status' => 'ok']);
+    } catch (Throwable) {
+        return response()->json(['status' => 'unavailable'], 503);
+    }
+})->name('health');
 
 // Public marketing pages (open source)
 Route::get('/fitur', fn () => Inertia::render('Public/Features'))->name('features.index');

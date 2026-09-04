@@ -26,6 +26,8 @@ export function getImageUrl(image, folder = "products") {
  * @returns {string|null}
  */
 export function getProductImageUrl(image) {
+    if (image === "default.jpg") return "/images/icon-512.png";
+
     return getImageUrl(image, "products");
 }
 

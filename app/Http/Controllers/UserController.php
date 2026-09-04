@@ -181,6 +181,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        abort_if(request()->user()->hasRole('cashier'), 403);
+
         $ids = explode(',', $id);
         $users = User::query()->with('roles')->whereIn('id', $ids)->get();
 

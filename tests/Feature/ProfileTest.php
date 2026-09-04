@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -94,6 +95,39 @@ class ProfileTest extends TestCase
             ->assertSessionHasErrors('password')
             ->assertRedirect(route('profile.edit'));
 
+        $this->assertNotNull($user->fresh());
+    }
+
+    public function test_cashier_cannot_update_profile_details(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole(Role::create(['name' => 'cashier', 'guard_name' => 'web']));
+
+        $response = $this
+            ->actingAs($user)
+            ->patch(route('profile.update'), [
+                'name' => 'Changed Name',
+                'email' => 'changed@example.com',
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('profile.edit'));
+
+        $this->assertSame($user->name, $user->refresh()->name);
+        $this->assertSame($user->email, $user->email);
+    }
+
+    public function test_cashier_cannot_delete_any_account(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole(Role::create(['name' => 'cashier', 'guard_name' => 'web']));
+
+        $response = $this
+            ->actingAs($user)
+            ->delete(route('profile.destroy'), ['password' => 'password']);
+
+        $response->assertForbidden();
         $this->assertNotNull($user->fresh());
     }
 }

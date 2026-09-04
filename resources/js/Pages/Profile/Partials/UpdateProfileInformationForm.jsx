@@ -6,7 +6,7 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 
-export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
+export default function UpdateProfileInformation({ mustVerifyEmail, status, isCashier, className = '' }) {
     const user = usePage().props.auth.user;
 
     const { data, setData, patch, errors, processing, recentlySuccessful, reset } = useForm({
@@ -47,7 +47,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
+                {!isCashier && <div>
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
@@ -61,9 +61,9 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.name} />
-                </div>
+                </div>}
 
-                <div>
+                {!isCashier && <div>
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
@@ -77,7 +77,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.email} />
-                </div>
+                </div>}
 
                 <div>
                     <InputLabel htmlFor="avatar" value="Avatar" />

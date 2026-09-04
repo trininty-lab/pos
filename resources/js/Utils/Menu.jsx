@@ -21,7 +21,6 @@ import {
     IconBuildingStore,
     IconSchool,
     IconShoppingCart,
-    IconTable,
     IconUserBolt,
     IconUserShield,
     IconUserSquare,
@@ -39,14 +38,14 @@ import {
     IconAlertCircle,
     IconListDetails,
     IconBrandWhatsapp,
-    IconToolsKitchen2,
 } from "@tabler/icons-react";
 import hasAnyPermission from "./Permission";
 import React from "react";
 
 export default function Menu() {
     const { t } = useTranslation();
-    const { url } = usePage();
+    const page = usePage();
+    const url = page.url ?? page.props?.url ?? "";
 
     // define menu navigations
     const menuNavigation = [
@@ -254,32 +253,6 @@ export default function Menu() {
             ],
         },
         {
-            title: t("sidebar.sections.dineIn"),
-            details: [
-                {
-                    title: t("sidebar.items.dineAreas"),
-                    href: route("dine-areas.index"),
-                    active: url.startsWith("/dashboard/dine-areas"),
-                    icon: <IconFolder size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["dine-tables-access"]),
-                },
-                {
-                    title: t("sidebar.items.dineTables"),
-                    href: route("dine-tables.index"),
-                    active: url.startsWith("/dashboard/dine-tables"),
-                    icon: <IconTable size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["dine-tables-access"]),
-                },
-                {
-                    title: t("sidebar.items.dineOrders"),
-                    href: route("dine-orders.index"),
-                    active: url.startsWith("/dashboard/dine-orders"),
-                    icon: <IconToolsKitchen2 size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["dine-orders-access"]),
-                },
-            ],
-        },
-        {
             title: t("sidebar.sections.reports"),
             details: [
                 {
@@ -349,7 +322,7 @@ export default function Menu() {
                         {
                             title: t("sidebar.items.usersList"),
                             href: route("users.index"),
-                            icon: <IconTable size={20} strokeWidth={1.5} />,
+                            icon: <IconUsers size={20} strokeWidth={1.5} />,
                             active: url === "/dashboard/users" ? true : false,
                             permissions: hasAnyPermission(["users-access"]),
                         },

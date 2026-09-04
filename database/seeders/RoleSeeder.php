@@ -78,8 +78,6 @@ class RoleSeeder extends Seeder
             'payables-access',
             'payables-pay',
             'suppliers-access',
-            'dine-orders-access',
-            'dine-orders-process',
         ])->get();
         $cashierRole->syncPermissions($cashierPermissions);
 

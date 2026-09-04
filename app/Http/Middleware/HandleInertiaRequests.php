@@ -169,6 +169,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'permissions' => $request->user() ? $request->user()->getPermissions() : [],
                 'super' => $request->user() ? $request->user()->isSuperAdmin() : false,
+                'isCashier' => $request->user()?->hasRole('cashier') ?? false,
             ],
             'locale' => [
                 'current' => app()->getLocale(),

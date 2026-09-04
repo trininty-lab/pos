@@ -23,6 +23,12 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->user()->hasRole('cashier')) {
+            return [
+                'avatar' => ['nullable', 'image', 'max:2048'],
+            ];
+        }
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],

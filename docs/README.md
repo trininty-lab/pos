@@ -9,6 +9,7 @@ Dokumentasi ini ditujukan untuk developer yang ingin setup, memahami alur modul,
 - `docs/configuration.md` — environment, payment, tax, printer
 
 ### Arsitektur
+- `docs/application-overview.md` — complete technical overview from runtime architecture to operations
 - `docs/architecture-overview.md` — stack, middleware, service layer
 - `docs/feature-index.md` — indeks semua modul
 

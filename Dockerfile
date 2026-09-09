@@ -120,3 +120,22 @@ COPY --from=php-dependencies /var/www/html/public ./public
 COPY --from=frontend /var/www/html/public/build ./public/build
 COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080
+
+FROM runtime AS railway
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nginx \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f /etc/nginx/sites-enabled/default
+
+COPY docker/nginx/railway.conf /etc/nginx/nginx.conf
+COPY docker/scripts/railway-start.sh /usr/local/bin/railway-start.sh
+
+RUN chmod 755 /usr/local/bin/railway-start.sh \
+    && mkdir -p /var/lib/nginx /var/log/nginx \
+    && chown -R app:app /var/lib/nginx /var/log/nginx
+
+EXPOSE 8080
+ENTRYPOINT ["/usr/local/bin/railway-start.sh"]

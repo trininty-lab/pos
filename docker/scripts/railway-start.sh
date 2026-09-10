@@ -24,6 +24,12 @@ if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
 	php artisan storage:link || true
 fi
 
+if [ "${RUN_AUTH_SEEDERS:-false}" = "true" ]; then
+	php artisan db:seed --class=PermissionSeeder --force
+	php artisan db:seed --class=RoleSeeder --force
+	php artisan db:seed --class=UserSeeder --force
+fi
+
 php-fpm -D
 
 exec nginx -g 'daemon off;'

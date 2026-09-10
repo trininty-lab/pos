@@ -147,7 +147,7 @@ npm install && npm start
 ## Default Login
 
 - Admin: `cybertrinity6@gmail.com` / `password`
-- Kasir: `cashier@gmail.com` / `password`
+- Kasir: `cashier@gmail.com` / `Cheri@2026` (Charity Mainda)
 
 ## Dokumentasi Detail
 

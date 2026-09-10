@@ -114,8 +114,8 @@ export default function Contributing() {
                         Demo data (products, transactions, users) is already included via{" "}
                         <code className="font-mono text-primary-600 dark:text-primary-400">migrate --seed</code>.
                         Default accounts: <code className="font-mono">cybertrinity6@gmail.com</code> (admin) and{" "}
-                        <code className="font-mono">cashier@gmail.com</code> (cashier), password:{" "}
-                        <code className="font-mono">password</code>.
+                        <code className="font-mono">cashier@gmail.com</code> (Charity Mainda, cashier), password:{" "}
+                        <code className="font-mono">Cheri@2026</code>.
                     </p>
                 </div>
             </section>

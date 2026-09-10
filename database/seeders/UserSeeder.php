@@ -36,10 +36,10 @@ class UserSeeder extends Seeder
         $admin->syncPermissions($permissions);
 
         $cashier = User::updateOrCreate(
-            ['email' => 'cashier@gmail.com'],
+            ['email' => 'charitymainda@gmail.com'],
             [
-                'name' => 'Cashier',
-                'password' => Hash::make('password'),
+                'name' => 'Charity Mainda',
+                'password' => Hash::make('Cheri@2026'),
             ]
         );
 

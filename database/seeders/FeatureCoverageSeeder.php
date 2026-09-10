@@ -156,10 +156,10 @@ class FeatureCoverageSeeder extends Seeder
     {
         $settings = [
             'monthly_sales_target' => ['value' => '15000000', 'description' => 'Target penjualan bulanan'],
-            'store_name' => ['value' => 'Toko Maju Bersama', 'description' => 'Nama toko'],
+            'store_name' => ['value' => 'FAY COLLECTION', 'description' => 'Nama toko'],
             'store_logo' => ['value' => null, 'description' => 'Logo toko'],
             'store_address' => ['value' => 'Jl. Sukajadi No. 88, Bandung', 'description' => 'Alamat lengkap toko'],
-            'store_phone' => ['value' => '022-6012345', 'description' => 'Nomor telepon toko'],
+            'store_phone' => ['value' => '0799976209', 'description' => 'Nomor telepon toko'],
             'store_email' => ['value' => 'halo@majubersama.test', 'description' => 'Email toko'],
             'store_website' => ['value' => 'https://majubersama.test', 'description' => 'Website atau sosial media'],
             'store_city' => ['value' => 'Bandung', 'description' => 'Kota/Kabupaten toko'],

@@ -45,7 +45,7 @@ services:
     ports:
       - "${VITE_PORT:-5173}:5173"
     environment:
-      VITE_APP_NAME: ${APP_NAME:-Point of Sales}
+      VITE_APP_NAME: ${APP_NAME:-FAY COLLECTION}
     volumes:
       - .:/var/www/html
       - app-node-modules:/var/www/html/node_modules

@@ -646,7 +646,7 @@ class FeatureCoverageSeeder extends Seeder
             auditable: ['target_label' => 'Store Profile'],
             description: 'Profil toko diperbarui.',
             before: [
-                'store_name' => 'Toko Anda',
+                'store_name' => 'Fay Collection',
                 'store_address' => 'Alamat belum diisi',
                 'store_phone' => '',
                 'store_email' => '',

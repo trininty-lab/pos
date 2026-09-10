@@ -42,7 +42,7 @@ class DocumentController extends Controller
         }
 
         return [
-            'name' => Setting::get('store_name', 'Toko Anda'),
+            'name' => Setting::get('store_name', 'Fay Collection'),
             'logo' => $logo,
             'logo_data' => $logoData,
             'address' => Setting::get('store_address', ''),

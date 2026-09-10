@@ -9,14 +9,14 @@ class ThermalPrintService
 {
     public function generateReceiptText(Transaction $transaction, string $paperSize = '80mm'): string
     {
-        $storeName = Setting::get('store_name', 'Toko Anda');
+        $storeName = Setting::get('store_name', 'Fay Collection');
         $storeAddress = Setting::get('store_address', '');
         $storePhone = Setting::get('store_phone', '');
         $maxWidth = $paperSize === '58mm' ? 32 : 48;
 
         $lines = [];
         $lines[] = '';
-        $lines[] = $this->center(strtoupper($storeName ?? 'TOKO ANDA'), $maxWidth);
+        $lines[] = $this->center(strtoupper($storeName ?? 'FAY COLLECTION'), $maxWidth);
         if ($storeAddress) {
             $lines[] = $this->center($storeAddress, $maxWidth);
         }

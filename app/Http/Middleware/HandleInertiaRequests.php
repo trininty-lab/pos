@@ -137,7 +137,7 @@ class HandleInertiaRequests extends Middleware
         }
 
         $storeProfile = [
-            'name' => 'Toko Anda',
+            'name' => 'FAY COLLECTION',
             'logo' => null,
             'address' => '',
             'phone' => '',
@@ -153,7 +153,7 @@ class HandleInertiaRequests extends Middleware
             }
 
             $storeProfile = [
-                'name' => Setting::get('store_name', 'Toko Anda'),
+                'name' => Setting::get('store_name', 'FAY COLLECTION'),
                 'logo' => $logo,
                 'address' => Setting::get('store_address', ''),
                 'phone' => Setting::get('store_phone', ''),

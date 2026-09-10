@@ -143,24 +143,6 @@ export default function Edit({ categories, product }) {
                                 </div>
                                 <Input
                                     type="text"
-                                    label="Barcode"
-                                    value={data.barcode}
-                                    onChange={(e) =>
-                                        setData("barcode", e.target.value)
-                                    }
-                                    errors={errors.barcode}
-                                    placeholder="Product code"
-                                />
-                                <Input
-                                    type="text"
-                                    label="SKU"
-                                    value={data.sku}
-                                    onChange={(e) => setData("sku", e.target.value)}
-                                    errors={errors.sku}
-                                    placeholder="SKU unik"
-                                />
-                                <Input
-                                    type="text"
                                     label="Product Name"
                                     value={data.title}
                                     onChange={(e) =>

@@ -47,7 +47,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'barcode' => ['required', 'string', 'max:255', Rule::unique('products', 'barcode')],
+            'barcode' => ['nullable', 'string', 'max:255', Rule::unique('products', 'barcode')],
             'sku' => ['nullable', 'string', 'max:255', Rule::unique('products', 'sku')],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'buy_price' => ['required', 'numeric', 'min:0'],

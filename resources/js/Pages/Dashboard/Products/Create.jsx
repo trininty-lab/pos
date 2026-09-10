@@ -134,24 +134,6 @@ export default function Create({ categories }) {
                                 </div>
                                 <Input
                                     type="text"
-                                    label="Barcode"
-                                    value={data.barcode}
-                                    onChange={(e) =>
-                                        setData("barcode", e.target.value)
-                                    }
-                                    errors={errors.barcode}
-                                    placeholder="Enter product code"
-                                />
-                                <Input
-                                    type="text"
-                                    label="SKU"
-                                    value={data.sku}
-                                    onChange={(e) => setData("sku", e.target.value)}
-                                    errors={errors.sku}
-                                    placeholder="Enter a unique SKU"
-                                />
-                                <Input
-                                    type="text"
                                     label="Product Name"
                                     value={data.title}
                                     onChange={(e) =>

@@ -339,8 +339,8 @@
         "image": "Image",
         "description": "Description",
         "unit": "Unit",
-        "buyPriceInput": "Buy Price (Rp)",
-        "sellPriceInput": "Sell Price (Rp)",
+        "buyPriceInput": "Buy Price (KSh)",
+        "sellPriceInput": "Sell Price (KSh)",
         "stockInput": "Stock",
         "minStock": "Min Stock",
         "maxStock": "Max Stock",
@@ -519,10 +519,10 @@
         "withoutVoucher": "Without voucher",
         "maxPoints": "Max {{points}} points",
         "availableBalance": "Available balance: {{points}} points",
-        "discountRupiah": "Discount (Rp)",
+        "discountRupiah": "Discount (KSh)",
         "selectBankAccount": "Select destination account",
         "selected": "Selected",
-        "paymentAmount": "Payment Amount (Rp)",
+        "paymentAmount": "Payment Amount (KSh)",
         "change": "Change",
         "paymentLinkNotice": "A payment link will appear on the invoice page after the transaction is created."
     },
@@ -797,7 +797,7 @@
         "loyalty": {
             "title": "Loyalty Settings",
             "enabled": "Enable Loyalty",
-            "pointsPerRupiah": "Points per Rp 1,000",
+            "pointsPerRupiah": "Points per KSh 1,000",
             "pointsToRupiah": "Points Value",
             "tiers": {
                 "title": "Member Tiers",

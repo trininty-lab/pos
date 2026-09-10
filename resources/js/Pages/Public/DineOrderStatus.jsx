@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Head } from "@inertiajs/react";
 import { IconCheck, IconClock, IconX, IconRefresh } from "@tabler/icons-react";
 
-const fmt = (v) => Number(v || 0).toLocaleString("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+const fmt = (v) => Number(v || 0).toLocaleString("en-KE", { style: "currency", currency: "KES", minimumFractionDigits: 0 });
 
 const STATUS_CONFIG = {
     submitted: { label: "Menunggu Konfirmasi", color: "bg-amber-100 text-amber-700", icon: IconClock, desc: "Pesanan Anda sedang menunggu konfirmasi dari staff." },

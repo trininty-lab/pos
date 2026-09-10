@@ -15,7 +15,7 @@ import {
 const formatCurrency = (value = 0) =>
     Number(value || 0).toLocaleString("id-ID", {
         style: "currency",
-        currency: "IDR",
+        currency: "KES",
         minimumFractionDigits: 0,
     });
 

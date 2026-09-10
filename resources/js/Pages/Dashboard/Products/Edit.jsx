@@ -236,7 +236,7 @@ export default function Edit({ categories, product }) {
                                                 Estimated Profit per Item
                                             </p>
                                             <p className="text-2xl font-bold text-success-600 dark:text-success-500 mt-1">
-                                                + Rp{" "}
+                                                + KSh{" "}
                                                 {(
                                                     data.sell_price -
                                                     data.buy_price

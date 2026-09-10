@@ -5,9 +5,9 @@ import { getProductImageUrl } from "@/Utils/imageUrl";
 import BarcodeScanner from "./BarcodeScanner";
 
 const formatPrice = (value = 0) =>
-    Number(value || 0).toLocaleString("id-ID", {
+    Number(value || 0).toLocaleString("en-KE", {
         style: "currency",
-        currency: "IDR",
+        currency: "KES",
         minimumFractionDigits: 0,
     });
 

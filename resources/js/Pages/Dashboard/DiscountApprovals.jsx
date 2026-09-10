@@ -4,7 +4,7 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import { IconCheck, IconX, IconAlertCircle, IconEye } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 
-const formatCurrency = (v = 0) => Number(v || 0).toLocaleString("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+const formatCurrency = (v = 0) => Number(v || 0).toLocaleString("en-KE", { style: "currency", currency: "KES", minimumFractionDigits: 0 });
 
 export default function DiscountApprovals({ pendingTransactions }) {
     const confirm = (action, tx) => {

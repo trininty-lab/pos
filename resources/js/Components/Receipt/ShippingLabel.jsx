@@ -10,16 +10,16 @@ import {
 
 export default function ShippingLabel({ transaction, store = {} }) {
     const formatPrice = (price = 0) =>
-        Number(price || 0).toLocaleString("id-ID", {
+        Number(price || 0).toLocaleString("en-KE", {
             style: "currency",
-            currency: "IDR",
+            currency: "KES",
             minimumFractionDigits: 0,
         });
 
     const formatDate = (value) => {
         if (!value) return "-";
         const d = new Date(value);
-        return d.toLocaleDateString("id-ID", {
+        return d.toLocaleDateString("en-KE", {
             day: "2-digit",
             month: "short",
             year: "numeric",

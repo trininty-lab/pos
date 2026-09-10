@@ -2,7 +2,7 @@ import React from "react";
 import { Head } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-const formatPrice = (v = 0) => Number(v || 0).toLocaleString("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+const formatPrice = (v = 0) => Number(v || 0).toLocaleString("en-KE", { style: "currency", currency: "KES", minimumFractionDigits: 0 });
 const formatDate = (v) => v ? new Date(v).toLocaleString("id-ID", { dateStyle: "full", timeStyle: "short" }) : "-";
 
 const statusBadge = (status) => {

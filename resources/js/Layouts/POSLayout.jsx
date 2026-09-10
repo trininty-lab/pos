@@ -49,14 +49,14 @@ export default function POSLayout({ children }) {
     }, []);
 
     const formatTime = (date) => {
-        return date.toLocaleTimeString("id-ID", {
+        return date.toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
         });
     };
 
     const formatDate = (date) => {
-        return date.toLocaleDateString("id-ID", {
+        return date.toLocaleDateString("en-US", {
             weekday: "long",
             day: "numeric",
             month: "short",
@@ -138,7 +138,7 @@ export default function POSLayout({ children }) {
                             className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors"
                         >
                             <IconHistory size={18} />
-                            <span>Riwayat</span>
+                            <span>History</span>
                         </Link>
                     </nav>
 
@@ -159,7 +159,7 @@ export default function POSLayout({ children }) {
                     <button
                         onClick={toggleFullscreen}
                         className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch flex items-center justify-center"
-                        title={isFullscreen ? "Keluar Fullscreen" : "Fullscreen"}
+                        title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
                     >
                         {isFullscreen ? (
                             <IconArrowsMinimize size={20} className="text-slate-500" />
@@ -195,8 +195,8 @@ export default function POSLayout({ children }) {
                             >
                                 <IconWallet size={16} />
                                 <span>
-                                    Shift aktif •{" "}
-                                    {new Intl.NumberFormat("id-ID").format(
+                                    Active shift •{" "}
+                                    {new Intl.NumberFormat("en-US").format(
                                         activeCashierShift.expected_cash || 0
                                     )}
                                 </span>
@@ -222,7 +222,7 @@ export default function POSLayout({ children }) {
 
             {!isOnline && (
                 <div className="bg-amber-500 text-white text-center text-xs font-medium py-1 px-4">
-                    Transaksi disimpan offline — akan dikirim saat online kembali
+                    Transactions are saved offline and will sync when you are back online
                 </div>
             )}
 
@@ -250,7 +250,7 @@ export default function POSLayout({ children }) {
                             >
                                 <IconHistory size={20} />
                                 <span className="font-medium">
-                                    Riwayat Transaksi
+                                    Transaction History
                                 </span>
                             </Link>
                             <Link
@@ -258,7 +258,7 @@ export default function POSLayout({ children }) {
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
                             >
                                 <IconUser size={20} />
-                                <span className="font-medium">Profil</span>
+                                <span className="font-medium">Profile</span>
                             </Link>
                             <hr className="border-slate-200 dark:border-slate-700" />
                             <Link
@@ -268,7 +268,7 @@ export default function POSLayout({ children }) {
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-danger-600 hover:bg-danger-50 dark:hover:bg-danger-950/50 transition-colors w-full"
                             >
                                 <IconLogout size={20} />
-                                <span className="font-medium">Keluar</span>
+                                <span className="font-medium">Logout</span>
                             </Link>
                         </nav>
                     </div>

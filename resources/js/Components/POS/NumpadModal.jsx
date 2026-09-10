@@ -96,13 +96,13 @@ export default function NumpadModal({
     const formatDisplay = (val) => {
         const num = parseInt(val, 10) || 0;
         if (isCurrency) {
-            return new Intl.NumberFormat("id-ID", {
+            return new Intl.NumberFormat("en-KE", {
                 style: "currency",
-                currency: "IDR",
+                currency: "KES",
                 minimumFractionDigits: 0,
             }).format(num);
         }
-        return num.toLocaleString("id-ID");
+        return num.toLocaleString("en-KE");
     };
 
     if (!isOpen) return null;

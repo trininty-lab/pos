@@ -9,9 +9,9 @@ import {
 import { getProductImageUrl } from "@/Utils/imageUrl";
 
 const formatPrice = (value = 0) =>
-    Number(value || 0).toLocaleString("id-ID", {
+    Number(value || 0).toLocaleString("en-KE", {
         style: "currency",
-        currency: "IDR",
+        currency: "KES",
         minimumFractionDigits: 0,
     });
 
@@ -157,7 +157,7 @@ function SearchInput({
                 onKeyDown={(e) => e.key === "Enter" && onSearch?.()}
                 placeholder={
                     placeholder ||
-                    "Cari produk atau scan barcode... (/ untuk fokus)"
+                    "Search products or scan a barcode... (/ to focus)"
                 }
                 className="w-full h-12 pl-4 pr-12 rounded-xl border border-slate-200 dark:border-slate-700
                     bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200
@@ -229,7 +229,7 @@ export default function ProductGrid({
             <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-hide">
                 <div className="flex gap-2">
                     <CategoryTab
-                        category={{ id: null, name: "Semua" }}
+                        category={{ id: null, name: "All" }}
                         isActive={normalizedSelectedCategory === null}
                         onClick={() => onCategoryChange(null)}
                     />
@@ -269,8 +269,8 @@ export default function ProductGrid({
                         />
                         <p className="text-sm">
                             {searchQuery
-                                ? "Produk tidak ditemukan"
-                                : "Tidak ada produk"}
+                                ? "No products found"
+                                : "No products available"}
                         </p>
                     </div>
                 )}

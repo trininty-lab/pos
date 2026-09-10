@@ -123,7 +123,7 @@ export default function Notification() {
         <div className="flex flex-col gap-3 items-start max-h-80 overflow-y-auto pr-1">
             {badgeCount === 0 && (
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                    Tidak ada notifikasi
+                    No notifications
                 </div>
             )}
             {data.map((item) => (

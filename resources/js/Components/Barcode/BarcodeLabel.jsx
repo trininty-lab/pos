@@ -59,7 +59,7 @@ export default function BarcodeLabel({
     const formatPrice = (value = 0) =>
         value.toLocaleString("id-ID", {
             style: "currency",
-            currency: "IDR",
+            currency: "KES",
             minimumFractionDigits: 0,
         });
 

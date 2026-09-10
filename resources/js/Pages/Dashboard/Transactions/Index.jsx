@@ -38,7 +38,7 @@ import {
 const formatPrice = (value = 0) =>
     Number(value || 0).toLocaleString("id-ID", {
         style: "currency",
-        currency: "IDR",
+        currency: "KES",
         minimumFractionDigits: 0,
     });
 
@@ -1222,11 +1222,11 @@ export default function Index({
 
                             <div>
                                 <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">
-                                    Manual Discount (Rp)
+                                    Manual Discount (KSh)
                                 </label>
                                 <div className="relative">
                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-                                        Rp
+                                        KSh
                                     </span>
                                     <input
                                         type="text"
@@ -1249,11 +1249,11 @@ export default function Index({
                             {/* Shipping Cost Input */}
                             <div>
                                 <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">
-                                    Shipping Cost (Rp)
+                                    Shipping Cost (KSh)
                                 </label>
                                 <div className="relative">
                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-                                        Rp
+                                        KSh
                                     </span>
                                     <input
                                         type="text"
@@ -1296,11 +1296,11 @@ export default function Index({
                             {paymentMethod === "cash" && (
                                 <div>
                                     <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">
-                                        Amount Paid (Rp)
+                                        Amount Paid (KSh)
                                     </label>
                                     <div className="relative">
                                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-                                            Rp
+                                            KSh
                                         </span>
                                         <input
                                             type="text"

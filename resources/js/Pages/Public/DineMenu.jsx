@@ -3,7 +3,7 @@ import { Head, router } from "@inertiajs/react";
 import { IconShoppingCart, IconMinus, IconPlus } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 
-const fmt = (v) => Number(v || 0).toLocaleString("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+const fmt = (v) => Number(v || 0).toLocaleString("en-KE", { style: "currency", currency: "KES", minimumFractionDigits: 0 });
 
 export default function DineMenu({ table, categories, products, selfOrderEnabled, payOnlineEnabled, storeName }) {
     const [cart, setCart] = useState([]);

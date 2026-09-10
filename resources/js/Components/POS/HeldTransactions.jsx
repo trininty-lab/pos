@@ -11,9 +11,9 @@ import {
 import toast from "react-hot-toast";
 
 const formatPrice = (value = 0) =>
-    Number(value || 0).toLocaleString("id-ID", {
+    Number(value || 0).toLocaleString("en-KE", {
         style: "currency",
-        currency: "IDR",
+        currency: "KES",
         minimumFractionDigits: 0,
     });
 

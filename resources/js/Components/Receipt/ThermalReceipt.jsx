@@ -19,11 +19,11 @@ export default function ThermalReceipt({
     storeWebsite = "",
 }) {
     const formatPrice = (price = 0) => {
-        return "Rp " + Number(price || 0).toLocaleString("id-ID");
+        return "KSh " + Number(price || 0).toLocaleString("en-KE");
     };
 
     const formatDate = (value) => {
-        return new Date(value).toLocaleString("id-ID", {
+        return new Date(value).toLocaleString("en-KE", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
@@ -269,11 +269,11 @@ export function ThermalReceipt58mm({
     storeWebsite = "",
 }) {
     const formatPrice = (price = 0) => {
-        return "Rp" + Number(price || 0).toLocaleString("id-ID");
+        return "KSh " + Number(price || 0).toLocaleString("en-KE");
     };
 
     const formatTime = (value) => {
-        return new Date(value).toLocaleString("id-ID", {
+        return new Date(value).toLocaleString("en-KE", {
             day: "2-digit",
             month: "2-digit",
             hour: "2-digit",

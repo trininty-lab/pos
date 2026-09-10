@@ -100,7 +100,7 @@ export default function Index({ orders }) {
                                             </div>
                                             <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
                                                 <span>{order.item_count} items</span>
-                                                <span>Subtotal: Rp {Number(order.subtotal ?? 0).toLocaleString("id-ID")}</span>
+                                                <span>Subtotal: KSh {Number(order.subtotal ?? 0).toLocaleString("en-KE")}</span>
                                                 <span className={pay.color}>{pay.label}</span>
                                             </div>
                                         </div>
@@ -145,7 +145,7 @@ export default function Index({ orders }) {
                                                 </div>
                                                 <div className="text-right">
                                                     <p className="text-sm text-slate-700 dark:text-slate-300">
-                                                        {item.qty}x Rp {Number(item.price).toLocaleString("id-ID")}
+                                                        {item.qty}x KSh {Number(item.price).toLocaleString("en-KE")}
                                                     </p>
                                                 </div>
                                             </div>
@@ -165,7 +165,7 @@ export default function Index({ orders }) {
                                             {order.created_at}
                                         </span>
                                         <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                            Total: Rp {Number(order.subtotal ?? 0).toLocaleString("id-ID")}
+                                            Total: KSh {Number(order.subtotal ?? 0).toLocaleString("en-KE")}
                                         </span>
                                     </div>
                                 </div>

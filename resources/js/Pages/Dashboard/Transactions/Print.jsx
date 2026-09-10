@@ -29,7 +29,7 @@ export default function Print({ transaction }) {
     const formatPrice = (price = 0) =>
         Number(price || 0).toLocaleString("id-ID", {
             style: "currency",
-            currency: "IDR",
+            currency: "KES",
             minimumFractionDigits: 0,
         });
 
@@ -68,7 +68,7 @@ export default function Print({ transaction }) {
 
     const store = useMemo(
         () => ({
-            name: storeProfile?.name || "Toko Anda",
+            name: storeProfile?.name || "FAY COLLECTION",
             logo: storeProfile?.logo || null,
             address: storeProfile?.address || "",
             phone: storeProfile?.phone || "",

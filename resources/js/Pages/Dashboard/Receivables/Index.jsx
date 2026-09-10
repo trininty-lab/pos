@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 const formatCurrency = (value = 0) =>
     new Intl.NumberFormat("id-ID", {
         style: "currency",
-        currency: "IDR",
+        currency: "KES",
         minimumFractionDigits: 0,
     }).format(value);
 

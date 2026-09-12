@@ -12,6 +12,9 @@ class Category extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'cloudinary_bytes' => 'integer',
+        'cloudinary_width' => 'integer',
+        'cloudinary_height' => 'integer',
     ];
 
     /**
@@ -21,6 +24,13 @@ class Category extends Model
      */
     protected $fillable = [
         'image', 'name', 'description',
+        'cloudinary_public_id',
+        'cloudinary_version',
+        'cloudinary_format',
+        'cloudinary_resource_type',
+        'cloudinary_bytes',
+        'cloudinary_width',
+        'cloudinary_height',
     ];
 
     /**
@@ -44,9 +54,15 @@ class Category extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value === 'default.jpg'
-                ? asset('/images/icon-512.png')
-                : asset('/storage/category/'.$value),
+            get: function ($value) {
+                if ($this->cloudinary_public_id) {
+                    return app(\App\Services\ImageService::class)->getImageUrl($this->cloudinary_public_id);
+                }
+
+                return $value === 'default.jpg'
+                    ? asset('/images/icon-512.png')
+                    : asset('/storage/category/'.$value);
+            },
         );
     }
 }

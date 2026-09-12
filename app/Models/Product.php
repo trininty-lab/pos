@@ -23,6 +23,9 @@ class Product extends Model
         'min_stock' => 'integer',
         'max_stock' => 'integer',
         'is_composite' => 'boolean',
+        'cloudinary_bytes' => 'integer',
+        'cloudinary_width' => 'integer',
+        'cloudinary_height' => 'integer',
     ];
 
     protected $fillable = [
@@ -40,6 +43,13 @@ class Product extends Model
         'min_stock',
         'max_stock',
         'is_composite',
+        'cloudinary_public_id',
+        'cloudinary_version',
+        'cloudinary_format',
+        'cloudinary_resource_type',
+        'cloudinary_bytes',
+        'cloudinary_width',
+        'cloudinary_height',
     ];
 
     public function category()
@@ -143,9 +153,15 @@ class Product extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value === 'default.jpg'
-                ? asset('/images/icon-512.png')
-                : asset('/storage/products/'.$value),
+            get: function ($value) {
+                if ($this->cloudinary_public_id) {
+                    return app(\App\Services\ImageService::class)->getImageUrl($this->cloudinary_public_id);
+                }
+
+                return $value === 'default.jpg'
+                    ? asset('/images/icon-512.png')
+                    : asset('/storage/products/'.$value);
+            },
         );
     }
 }

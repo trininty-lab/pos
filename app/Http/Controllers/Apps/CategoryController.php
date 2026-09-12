@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,7 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
+    public function __construct(private readonly ImageService $imageService) {}
     /**
      * Display a listing of the resource.
      *
@@ -50,21 +52,36 @@ class CategoryController extends Controller
          * validate
          */
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'name' => 'required',
             'description' => 'required',
         ]);
 
-        // upload image
-        $image = $request->file('image');
-        $image->storeAs('public/category', $image->hashName());
-
         // create category
-        Category::create([
-            'image' => $image->hashName(),
+        $category = Category::create([
+            'image' => 'default.jpg',
             'name' => $request->name,
             'description' => $request->description,
         ]);
+
+        if ($request->file('image')) {
+            try {
+                $image = $this->imageService->uploadImage($request->file('image'), 'categories/'.$category->id);
+                $category->forceFill([
+                    'image' => $image->secureUrl,
+                    'cloudinary_public_id' => $image->publicId,
+                    'cloudinary_version' => $image->version,
+                    'cloudinary_format' => $image->format,
+                    'cloudinary_resource_type' => $image->resourceType,
+                    'cloudinary_bytes' => $image->bytes,
+                    'cloudinary_width' => $image->width,
+                    'cloudinary_height' => $image->height,
+                ])->save();
+            } catch (\Throwable $exception) {
+                $category->delete();
+                throw $exception;
+            }
+        }
 
         // redirect
         return to_route('categories.index');
@@ -102,16 +119,23 @@ class CategoryController extends Controller
         // check image update
         if ($request->file('image')) {
 
-            // remove old image
-            Storage::disk('local')->delete('public/category/'.basename($category->image));
-
-            // upload new image
             $image = $request->file('image');
-            $image->storeAs('public/category', $image->hashName());
+            $uploaded = $this->imageService->replaceImage($image, 'categories/'.$category->id, $category->cloudinary_public_id);
+
+            if (! $category->cloudinary_public_id) {
+                Storage::disk('local')->delete('public/category/'.basename($category->image));
+            }
 
             // update category with new image
             $category->update([
-                'image' => $image->hashName(),
+                'image' => $uploaded->secureUrl,
+                'cloudinary_public_id' => $uploaded->publicId,
+                'cloudinary_version' => $uploaded->version,
+                'cloudinary_format' => $uploaded->format,
+                'cloudinary_resource_type' => $uploaded->resourceType,
+                'cloudinary_bytes' => $uploaded->bytes,
+                'cloudinary_width' => $uploaded->width,
+                'cloudinary_height' => $uploaded->height,
                 'name' => $request->name,
                 'description' => $request->description,
             ]);
@@ -138,8 +162,11 @@ class CategoryController extends Controller
         // find by ID
         $category = Category::findOrFail($id);
 
-        // remove image
-        Storage::disk('local')->delete('public/category/'.basename($category->image));
+        if ($category->cloudinary_public_id) {
+            $this->imageService->deleteImage($category->cloudinary_public_id);
+        } else {
+            Storage::disk('local')->delete('public/category/'.basename($category->image));
+        }
 
         // delete
         $category->delete();

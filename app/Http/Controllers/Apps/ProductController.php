@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Services\AuditLogService;
+use App\Services\ImageService;
 use App\Services\StockMutationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,7 +18,8 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly StockMutationService $stockMutationService,
-        private readonly AuditLogService $auditLogService
+        private readonly AuditLogService $auditLogService,
+        private readonly ImageService $imageService
     ) {}
 
     /**
@@ -77,13 +79,9 @@ class ProductController extends Controller
             'min_stock' => 'nullable|integer|min:0',
             'max_stock' => 'nullable|integer|min:0',
         ]);
-        // upload image
-        $image = $request->file('image');
-        $image->storeAs('public/products', $image->hashName());
-
         // create product
         $product = Product::create([
-            'image' => $image->hashName(),
+            'image' => 'default.jpg',
             'barcode' => $request->barcode,
             'sku' => $request->sku,
             'title' => $request->title,
@@ -95,6 +93,25 @@ class ProductController extends Controller
             'min_stock' => $request->min_stock ?? 0,
             'max_stock' => $request->max_stock ?? 0,
         ]);
+
+        if ($request->file('image')) {
+            try {
+                $image = $this->imageService->uploadImage($request->file('image'), 'products/'.$product->id);
+                $product->forceFill([
+                    'image' => $image->secureUrl,
+                    'cloudinary_public_id' => $image->publicId,
+                    'cloudinary_version' => $image->version,
+                    'cloudinary_format' => $image->format,
+                    'cloudinary_resource_type' => $image->resourceType,
+                    'cloudinary_bytes' => $image->bytes,
+                    'cloudinary_width' => $image->width,
+                    'cloudinary_height' => $image->height,
+                ])->save();
+            } catch (\Throwable $exception) {
+                $product->delete();
+                throw $exception;
+            }
+        }
 
         $this->stockMutationService->recordInitialStock($product, $request->user()?->id);
         $this->auditLogService->log(
@@ -154,16 +171,23 @@ class ProductController extends Controller
         // check image update
         if ($request->file('image')) {
 
-            // remove old image
-            Storage::disk('local')->delete('public/products/'.basename($product->image));
-
-            // upload new image
             $image = $request->file('image');
-            $image->storeAs('public/products', $image->hashName());
+            $uploaded = $this->imageService->replaceImage($image, 'products/'.$product->id, $product->cloudinary_public_id);
+
+            if (! $product->cloudinary_public_id) {
+                Storage::disk('local')->delete('public/products/'.basename($product->image));
+            }
 
             // update product with new image
             $product->update([
-                'image' => $image->hashName(),
+                'image' => $uploaded->secureUrl,
+                'cloudinary_public_id' => $uploaded->publicId,
+                'cloudinary_version' => $uploaded->version,
+                'cloudinary_format' => $uploaded->format,
+                'cloudinary_resource_type' => $uploaded->resourceType,
+                'cloudinary_bytes' => $uploaded->bytes,
+                'cloudinary_width' => $uploaded->width,
+                'cloudinary_height' => $uploaded->height,
                 'barcode' => $request->barcode,
                 'sku' => $request->sku,
                 'title' => $request->title,
@@ -207,8 +231,11 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $before = $this->productAuditPayload($product);
 
-        // remove image
-        Storage::disk('local')->delete('public/products/'.basename($product->image));
+        if ($product->cloudinary_public_id) {
+            $this->imageService->deleteImage($product->cloudinary_public_id);
+        } else {
+            Storage::disk('local')->delete('public/products/'.basename($product->image));
+        }
 
         // delete
         $product->delete();

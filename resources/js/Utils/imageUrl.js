@@ -37,7 +37,9 @@ export function getProductImageUrl(image) {
  * @returns {string|null}
  */
 export function getCategoryImageUrl(image) {
-    return getImageUrl(image, "categories");
+    return image === "default.jpg"
+        ? "/images/icon-512.png"
+        : getImageUrl(image, "category");
 }
 
 export default { getImageUrl, getProductImageUrl, getCategoryImageUrl };

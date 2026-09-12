@@ -11,6 +11,10 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
+    public function __construct(
+        private readonly \App\Services\CloudinaryImageService $cloudinaryImageService
+    ) {}
+
     /**
      * Display a listing of the resource.
      *
@@ -57,11 +61,11 @@ class CategoryController extends Controller
 
         // upload image
         $image = $request->file('image');
-        $image->storeAs('public/category', $image->hashName());
+        $imagePath = $this->cloudinaryImageService->upload($image, 'category')['url'];
 
         // create category
         Category::create([
-            'image' => $image->hashName(),
+            'image' => $imagePath,
             'name' => $request->name,
             'description' => $request->description,
         ]);
@@ -103,15 +107,17 @@ class CategoryController extends Controller
         if ($request->file('image')) {
 
             // remove old image
-            Storage::disk('local')->delete('public/category/'.basename($category->image));
+            $oldImage = $category->getRawOriginal('image');
+            $this->cloudinaryImageService->deleteUrl($oldImage);
+            Storage::disk('local')->delete('public/category/'.basename((string) $oldImage));
 
             // upload new image
             $image = $request->file('image');
-            $image->storeAs('public/category', $image->hashName());
+            $imagePath = $this->cloudinaryImageService->upload($image, 'category')['url'];
 
             // update category with new image
             $category->update([
-                'image' => $image->hashName(),
+                'image' => $imagePath,
                 'name' => $request->name,
                 'description' => $request->description,
             ]);
@@ -139,7 +145,9 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         // remove image
-        Storage::disk('local')->delete('public/category/'.basename($category->image));
+        $oldImage = $category->getRawOriginal('image');
+        $this->cloudinaryImageService->deleteUrl($oldImage);
+        Storage::disk('local')->delete('public/category/'.basename((string) $oldImage));
 
         // delete
         $category->delete();

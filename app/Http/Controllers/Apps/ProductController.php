@@ -17,7 +17,8 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly StockMutationService $stockMutationService,
-        private readonly AuditLogService $auditLogService
+        private readonly AuditLogService $auditLogService,
+        private readonly \App\Services\CloudinaryImageService $cloudinaryImageService
     ) {}
 
     /**
@@ -76,14 +77,15 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'min_stock' => 'nullable|integer|min:0',
             'max_stock' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
         // upload image
         $image = $request->file('image');
-        $image->storeAs('public/products', $image->hashName());
+        $imagePath = $image ? $this->cloudinaryImageService->upload($image, 'products')['url'] : 'default.jpg';
 
         // create product
         $product = Product::create([
-            'image' => $image->hashName(),
+            'image' => $imagePath,
             'barcode' => $request->barcode,
             'sku' => $request->sku,
             'title' => $request->title,
@@ -155,15 +157,17 @@ class ProductController extends Controller
         if ($request->file('image')) {
 
             // remove old image
-            Storage::disk('local')->delete('public/products/'.basename($product->image));
+            $oldImage = $product->getRawOriginal('image');
+            $this->cloudinaryImageService->deleteUrl($oldImage);
+            Storage::disk('local')->delete('public/products/'.basename((string) $oldImage));
 
             // upload new image
             $image = $request->file('image');
-            $image->storeAs('public/products', $image->hashName());
+            $imagePath = $this->cloudinaryImageService->upload($image, 'products')['url'];
 
             // update product with new image
             $product->update([
-                'image' => $image->hashName(),
+                'image' => $imagePath,
                 'barcode' => $request->barcode,
                 'sku' => $request->sku,
                 'title' => $request->title,
@@ -208,7 +212,9 @@ class ProductController extends Controller
         $before = $this->productAuditPayload($product);
 
         // remove image
-        Storage::disk('local')->delete('public/products/'.basename($product->image));
+        $oldImage = $product->getRawOriginal('image');
+        $this->cloudinaryImageService->deleteUrl($oldImage);
+        Storage::disk('local')->delete('public/products/'.basename((string) $oldImage));
 
         // delete
         $product->delete();

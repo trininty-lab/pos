@@ -145,7 +145,9 @@ class Product extends Model
         return Attribute::make(
             get: fn ($value) => $value === 'default.jpg'
                 ? asset('/images/icon-512.png')
-                : asset('/storage/products/'.$value),
+                : (is_string($value) && str_starts_with($value, 'http')
+                    ? $value
+                    : asset('/storage/products/'.$value)),
         );
     }
 }

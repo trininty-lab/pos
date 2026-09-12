@@ -142,6 +142,16 @@ export default function Create({ categories }) {
                                     errors={errors.title}
                                     placeholder="Enter product name"
                                 />
+                                <Input
+                                    type="text"
+                                    label="Barcode"
+                                    value={data.barcode}
+                                    onChange={(e) =>
+                                        setData("barcode", e.target.value)
+                                    }
+                                    errors={errors.barcode}
+                                    placeholder="Enter barcode (optional)"
+                                />
                                 <div className="md:col-span-2">
                                     <Textarea
                                         label="Description"

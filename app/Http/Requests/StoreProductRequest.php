@@ -14,7 +14,9 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp,gif|max:5120',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:5120',
+            'image_crop' => ['nullable', 'json'],
+            'remove_image' => ['nullable', 'boolean'],
             'barcode' => 'nullable|unique:products,barcode',
             'sku' => 'nullable|unique:products,sku',
             'title' => 'required',

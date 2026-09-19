@@ -21,7 +21,11 @@ export function getImageUrl(image, folder = "products") {
  * @param {string} image - Product image
  * @returns {string|null}
  */
-export function getProductImageUrl(image) {
+export function getProductImageUrl(image, variant = "display") {
+    if (image && typeof image === "object") {
+        return image[variant] || image.display || image.large || null;
+    }
+
     if (image === "default.jpg") return "/images/icon-512.png";
 
     return getImageUrl(image, "products");

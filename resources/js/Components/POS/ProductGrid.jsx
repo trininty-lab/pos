@@ -45,7 +45,7 @@ function ProductCard({ product, onAddToCart, isAdding }) {
             <div className="relative aspect-square bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 {product.image ? (
                     <img
-                        src={getProductImageUrl(product.image)}
+                        src={getProductImageUrl(product.image_variants || product.image, "card")}
                         alt={product.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"

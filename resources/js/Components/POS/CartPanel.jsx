@@ -37,7 +37,7 @@ function CartItem({ item, onUpdateQty, onRemove, isRemoving }) {
             <div className="w-14 h-14 rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
                 {item.product?.image ? (
                     <img
-                        src={getProductImageUrl(item.product.image)}
+                        src={getProductImageUrl(item.product.image_variants || item.product.image, "thumb")}
                         alt={item.product.title}
                         className="w-full h-full object-cover"
                     />

@@ -183,7 +183,8 @@ export default function SearchBar({
                                         {product.image ? (
                                             <img
                                                 src={getProductImageUrl(
-                                                    product.image
+                                                    product.image_variants || product.image,
+                                                    "thumb"
                                                 )}
                                                 alt={product.title}
                                                 className="w-full h-full object-cover"

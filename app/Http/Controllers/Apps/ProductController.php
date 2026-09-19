@@ -15,6 +15,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
+use JsonException;
 
 class ProductController extends Controller
 {
@@ -87,7 +88,7 @@ class ProductController extends Controller
 
         if ($request->file('image')) {
             try {
-                $this->imageService->attachProductImage($product, $request->file('image'));
+                $this->imageService->attachProductImage($product, $request->file('image'), $this->cropFromRequest($request));
             } catch (\Throwable $exception) {
                 $product->delete();
                 throw $exception;
@@ -124,6 +125,13 @@ class ProductController extends Controller
         ]);
     }
 
+    public function show(Product $product)
+    {
+        return Inertia::render('Dashboard/Products/Show', [
+            'product' => $product->load('category'),
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -142,7 +150,7 @@ class ProductController extends Controller
         // check image update
         if ($request->file('image')) {
 
-            $this->imageService->replaceProductImage($product, $request->file('image'));
+            $this->imageService->replaceProductImage($product, $request->file('image'), $this->cropFromRequest($request));
 
             // update product with new image
             $product->update([
@@ -158,6 +166,10 @@ class ProductController extends Controller
             $this->logProductUpdate($product, $before);
 
             return to_route('products.index');
+        }
+
+        if ($request->boolean('remove_image')) {
+            $this->imageService->removeProductImage($product);
         }
 
         // update product without image
@@ -256,5 +268,22 @@ class ProductController extends Controller
             'stock',
             'category_id',
         ]);
+    }
+
+    private function cropFromRequest(Request $request): ?array
+    {
+        $crop = $request->input('image_crop');
+
+        if (! is_string($crop) || trim($crop) === '') {
+            return null;
+        }
+
+        try {
+            $decoded = json_decode($crop, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return null;
+        }
+
+        return is_array($decoded) ? $decoded : null;
     }
 }

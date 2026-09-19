@@ -14,12 +14,15 @@ import {
     IconCurrencyDollar,
 } from "@tabler/icons-react";
 import { getProductImageUrl } from "@/Utils/imageUrl";
+import ProductImageEditor from "@/Components/Products/ProductImageEditor";
 
 export default function Edit({ categories, product }) {
     const { errors } = usePage().props;
 
     const { data, setData, post, processing } = useForm({
-        image: "",
+        image: null,
+        image_crop: null,
+        remove_image: false,
         barcode: product.barcode,
         sku: product.sku,
         title: product.title,
@@ -31,7 +34,7 @@ export default function Edit({ categories, product }) {
     });
 
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [imagePreview, setImagePreview] = useState(
+    const [imagePreview] = useState(
         product.image ? getProductImageUrl(product.image) : null
     );
 
@@ -48,12 +51,10 @@ export default function Edit({ categories, product }) {
         setData("category_id", value?.id || "");
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setData("image", file);
-            setImagePreview(URL.createObjectURL(file));
-        }
+    const handleImageChange = ({ file, crop, remove }) => {
+        setData("image", file);
+        setData("image_crop", crop ? JSON.stringify(crop) : null);
+        setData("remove_image", remove);
     };
 
     const submit = (e) => {
@@ -92,32 +93,7 @@ export default function Edit({ categories, product }) {
                                 <IconPhoto size={18} />
                                 Product Image
                             </h3>
-                            <div className="aspect-square rounded-xl bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center overflow-hidden mb-4">
-                                {imagePreview ? (
-                                    <img
-                                        src={imagePreview}
-                                        alt="Preview"
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="text-center p-6">
-                                        <IconPhoto
-                                            size={48}
-                                            className="mx-auto text-slate-400 mb-2"
-                                        />
-                                        <p className="text-sm text-slate-500">
-                                            No image yet
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                            <Input
-                                type="file"
-                                label="Replace Image"
-                                onChange={handleImageChange}
-                                errors={errors.image}
-                                accept="image/*"
-                            />
+                            <ProductImageEditor value={data.image} existingPreview={imagePreview} onChange={handleImageChange} error={errors.image} />
                         </div>
                     </div>
 

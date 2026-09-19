@@ -11,6 +11,8 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $appends = ['image_variants'];
+
     protected $casts = [
         'id' => 'integer',
         'category_id' => 'integer',
@@ -26,6 +28,7 @@ class Product extends Model
         'cloudinary_bytes' => 'integer',
         'cloudinary_width' => 'integer',
         'cloudinary_height' => 'integer',
+        'image_crop' => 'array',
     ];
 
     protected $fillable = [
@@ -50,6 +53,7 @@ class Product extends Model
         'cloudinary_bytes',
         'cloudinary_width',
         'cloudinary_height',
+        'image_crop',
     ];
 
     public function category()
@@ -155,7 +159,32 @@ class Product extends Model
         return Attribute::make(
             get: fn ($value) => $value === 'default.jpg'
                 ? asset('/images/icon-512.png')
-                : ($this->cloudinary_public_id ? $value : asset('/storage/products/'.$value)),
+                : ($this->cloudinary_public_id
+                    ? app(\App\Services\ImageService::class)->getImageUrl(
+                        $this->cloudinary_public_id,
+                        800,
+                        800,
+                        $this->image_crop
+                    )
+                    : asset('/storage/products/'.$value)),
+        );
+    }
+
+    protected function imageVariants(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->cloudinary_public_id) {
+                    $url = $this->image;
+
+                    return ['thumb' => $url, 'card' => $url, 'display' => $url, 'large' => $url];
+                }
+
+                return app(\App\Services\ImageService::class)->getProductVariants(
+                    $this->cloudinary_public_id,
+                    $this->image_crop
+                );
+            },
         );
     }
 }

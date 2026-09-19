@@ -68,7 +68,7 @@ function ProductCard({
                 </div>
                 {product.image ? (
                     <img
-                        src={getProductImageUrl(product.image)}
+                        src={getProductImageUrl(product.image_variants || product.image, "card")}
                         alt={product.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
@@ -411,7 +411,7 @@ export default function Index({ products }) {
                                                 <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                                                     {product.image ? (
                                                         <img
-                                                            src={getProductImageUrl(product.image)}
+                                                            src={getProductImageUrl(product.image_variants || product.image, "thumb")}
                                                             alt={product.title}
                                                             className="w-full h-full object-cover"
                                                         />

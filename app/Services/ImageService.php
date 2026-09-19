@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use Cloudinary\Cloudinary;
+use Cloudinary\Transformation\Transformation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,8 +19,11 @@ final class ImageService
         'image/jpeg',
         'image/png',
         'image/webp',
-        'image/gif',
     ];
+
+    private const MIN_DIMENSION = 300;
+
+    private const MAX_PIXELS = 40000000;
 
     public function __construct(private readonly Cloudinary $cloudinary) {}
 
@@ -69,26 +73,26 @@ final class ImageService
         }
     }
 
-    public function attachProductImage(Product $product, UploadedFile $file): void
+    public function attachProductImage(Product $product, UploadedFile $file, ?array $crop = null): void
     {
         $uploaded = $this->uploadImage($file, 'products/'.$product->id);
 
         try {
-            $this->saveProductImage($product, $uploaded);
+            $this->saveProductImage($product, $uploaded, $this->normalizeCrop($crop, $uploaded));
         } catch (Throwable $exception) {
             $this->tryDelete($uploaded->publicId);
             throw new RuntimeException('Product image could not be associated.', 0, $exception);
         }
     }
 
-    public function replaceProductImage(Product $product, UploadedFile $file): void
+    public function replaceProductImage(Product $product, UploadedFile $file, ?array $crop = null): void
     {
         $oldPublicId = $product->cloudinary_public_id;
         $oldImage = $product->image;
         $uploaded = $this->uploadImage($file, 'products/'.$product->id);
 
         try {
-            $this->saveProductImage($product, $uploaded);
+            $this->saveProductImage($product, $uploaded, $this->normalizeCrop($crop, $uploaded));
         } catch (Throwable $exception) {
             $this->tryDelete($uploaded->publicId);
             throw new RuntimeException('Product image could not be replaced.', 0, $exception);
@@ -117,23 +121,62 @@ final class ImageService
         }
     }
 
-    public function getImageUrl(string $publicId, int $width = 1200, ?int $height = null): string
+    public function removeProductImage(Product $product): void
+    {
+        $this->deleteProductImage($product);
+        $product->forceFill([
+            'image' => 'default.jpg',
+            'cloudinary_public_id' => null,
+            'cloudinary_version' => null,
+            'cloudinary_format' => null,
+            'cloudinary_resource_type' => null,
+            'cloudinary_bytes' => null,
+            'cloudinary_width' => null,
+            'cloudinary_height' => null,
+            'image_crop' => null,
+        ])->saveOrFail();
+    }
+
+    public function getImageUrl(string $publicId, int $width = 1200, ?int $height = null, ?array $crop = null): string
     {
         $this->validateDimensions($width, $height ?? $width);
 
-        return (string) $this->cloudinary->image($this->safePublicId($publicId))->toUrl([
+        $resize = [
             'width' => $width,
             'height' => $height ?? $width,
             'crop' => 'fill',
             'gravity' => 'auto',
             'quality' => 'auto',
             'fetch_format' => 'auto',
-        ]);
+        ];
+
+        $transformation = $crop
+            ? Transformation::fromParams([
+                'x' => $crop['x'],
+                'y' => $crop['y'],
+                'width' => $crop['width'],
+                'height' => $crop['height'],
+                'crop' => 'crop',
+                'angle' => (int) ($crop['rotation'] ?? 0),
+            ])->addTransformation(Transformation::fromParams($resize))
+            : Transformation::fromParams($resize);
+
+        return (string) $this->cloudinary->image($this->safePublicId($publicId))->toUrl($transformation);
     }
 
     public function getThumbnailUrl(string $publicId, int $size = 320): string
     {
         return $this->getImageUrl($publicId, $size, $size);
+    }
+
+    public function getProductVariants(string $publicId, ?array $crop = null): array
+    {
+        return [
+            'thumb' => $this->getImageUrl($publicId, 150, 150, $crop),
+            'card' => $this->getImageUrl($publicId, 400, 400, $crop),
+            'display' => $this->getImageUrl($publicId, 800, 800, $crop),
+            'large' => $this->getImageUrl($publicId, 1000, 1000, $crop),
+        ];
     }
 
     private function uploadRemoteImage(UploadedFile $file, string $folder): ImageResult
@@ -169,11 +212,20 @@ final class ImageService
     private function validateFile(UploadedFile $file): void
     {
         if (! $file->isValid() || ! in_array($file->getMimeType(), self::MIME_TYPES, true)) {
-            throw new RuntimeException('Unsupported image. Use JPEG, PNG, WEBP, or GIF.');
+            throw new RuntimeException('Unsupported image. Use JPEG, PNG, or WEBP.');
         }
 
         if ($file->getSize() > self::MAX_KILOBYTES * 1024) {
             throw new RuntimeException('Image exceeds the 5 MB limit.');
+        }
+
+        $dimensions = @getimagesize($file->getRealPath());
+        if (! is_array($dimensions) || ($dimensions[0] ?? 0) < self::MIN_DIMENSION || ($dimensions[1] ?? 0) < self::MIN_DIMENSION) {
+            throw new RuntimeException('Image must be at least 300 by 300 pixels.');
+        }
+
+        if (($dimensions[0] * $dimensions[1]) > self::MAX_PIXELS) {
+            throw new RuntimeException('Image dimensions are too large to process safely.');
         }
     }
 
@@ -213,7 +265,7 @@ final class ImageService
         }
     }
 
-    private function saveProductImage(Product $product, ImageResult $image): void
+    private function saveProductImage(Product $product, ImageResult $image, ?array $crop = null): void
     {
         $product->forceFill([
             'image' => $image->secureUrl,
@@ -224,6 +276,23 @@ final class ImageService
             'cloudinary_bytes' => $image->bytes,
             'cloudinary_width' => $image->width,
             'cloudinary_height' => $image->height,
+            'image_crop' => $crop,
         ])->saveOrFail();
+    }
+
+    private function normalizeCrop(?array $crop, ImageResult $image): ?array
+    {
+        if ($crop === null) {
+            return null;
+        }
+
+        $sourceWidth = max(1, (int) $image->width);
+        $sourceHeight = max(1, (int) $image->height);
+        $x = max(0, min($sourceWidth - 1, (int) round($crop['x'] ?? 0)));
+        $y = max(0, min($sourceHeight - 1, (int) round($crop['y'] ?? 0)));
+        $size = max(1, (int) round($crop['size'] ?? min($sourceWidth - $x, $sourceHeight - $y)));
+        $size = min($size, $sourceWidth - $x, $sourceHeight - $y);
+
+        return ['x' => $x, 'y' => $y, 'width' => $size, 'height' => $size];
     }
 }

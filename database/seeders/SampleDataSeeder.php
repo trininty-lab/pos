@@ -344,6 +344,14 @@ class SampleDataSeeder extends Seeder
         return $products->map(function ($product) use ($categories) {
             $category = $categories->get($product['category']);
 
+            if (! $category) {
+                $category = Category::firstOrCreate(
+                    ['name' => $product['category']],
+                    ['description' => 'Auto-created sample category for seeded products.', 'image' => 'default.jpg']
+                );
+                $categories->put($product['category'], $category);
+            }
+
             // Download product image
             $slug = Str::slug($product['title']);
             $image = $this->downloadImage(
@@ -353,7 +361,7 @@ class SampleDataSeeder extends Seeder
             );
 
             return Product::create([
-                'category_id' => $category?->id,
+                'category_id' => $category->id,
                 'image' => $image ?? 'default.jpg',
                 'barcode' => $product['barcode'],
                 'title' => $product['title'],

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Warehouse;
@@ -11,7 +13,6 @@ use App\Services\ImageService;
 use App\Services\StockMutationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -62,51 +63,30 @@ class ProductController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         /**
          * validate
          */
-        $request->validate([
-            'barcode' => 'nullable|unique:products,barcode',
-            'sku' => 'nullable|unique:products,sku',
-            'title' => 'required',
-            'description' => 'required',
-            'category_id' => 'required',
-            'buy_price' => 'required',
-            'sell_price' => 'required',
-            'stock' => 'required|integer|min:0',
-            'min_stock' => 'nullable|integer|min:0',
-            'max_stock' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
         // create product
         $product = Product::create([
             'image' => 'default.jpg',
-            'barcode' => $request->barcode,
-            'sku' => $request->sku,
-            'title' => $request->title,
-            'description' => $request->description,
-            'category_id' => $request->category_id,
-            'buy_price' => $request->buy_price,
-            'sell_price' => $request->sell_price,
-            'stock' => $request->stock,
-            'min_stock' => $request->min_stock ?? 0,
-            'max_stock' => $request->max_stock ?? 0,
+            'barcode' => $validated['barcode'] ?? null,
+            'sku' => $validated['sku'] ?? null,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
+            'buy_price' => $validated['buy_price'],
+            'sell_price' => $validated['sell_price'],
+            'stock' => $validated['stock'],
+            'min_stock' => $validated['min_stock'] ?? 0,
+            'max_stock' => $validated['max_stock'] ?? 0,
         ]);
 
         if ($request->file('image')) {
             try {
-                $image = $this->imageService->uploadImage($request->file('image'), 'products/'.$product->id);
-                $product->forceFill([
-                    'image' => $image->secureUrl,
-                    'cloudinary_public_id' => $image->publicId,
-                    'cloudinary_version' => $image->version,
-                    'cloudinary_format' => $image->format,
-                    'cloudinary_resource_type' => $image->resourceType,
-                    'cloudinary_bytes' => $image->bytes,
-                    'cloudinary_width' => $image->width,
-                    'cloudinary_height' => $image->height,
-                ])->save();
+                $this->imageService->attachProductImage($product, $request->file('image'));
             } catch (\Throwable $exception) {
                 $product->delete();
                 throw $exception;
@@ -149,52 +129,29 @@ class ProductController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         $before = $this->productAuditPayload($product);
 
         /**
          * validate
          */
-        $request->validate([
-            'barcode' => 'nullable|unique:products,barcode,'.$product->id,
-            'sku' => 'nullable|unique:products,sku,'.$product->id,
-            'title' => 'required',
-            'description' => 'required',
-            'category_id' => 'required',
-            'buy_price' => 'required',
-            'sell_price' => 'required',
-            'min_stock' => 'nullable|integer|min:0',
-            'max_stock' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         // check image update
         if ($request->file('image')) {
 
-            $image = $request->file('image');
-            $uploaded = $this->imageService->replaceImage($image, 'products/'.$product->id, $product->cloudinary_public_id);
-
-            if (! $product->cloudinary_public_id) {
-                Storage::disk('local')->delete('public/products/'.basename($product->image));
-            }
+            $this->imageService->replaceProductImage($product, $request->file('image'));
 
             // update product with new image
             $product->update([
-                'image' => $uploaded->secureUrl,
-                'cloudinary_public_id' => $uploaded->publicId,
-                'cloudinary_version' => $uploaded->version,
-                'cloudinary_format' => $uploaded->format,
-                'cloudinary_resource_type' => $uploaded->resourceType,
-                'cloudinary_bytes' => $uploaded->bytes,
-                'cloudinary_width' => $uploaded->width,
-                'cloudinary_height' => $uploaded->height,
-                'barcode' => $request->barcode,
-                'sku' => $request->sku,
-                'title' => $request->title,
-                'description' => $request->description,
-                'category_id' => $request->category_id,
-                'buy_price' => $request->buy_price,
-                'sell_price' => $request->sell_price,
+                'barcode' => $validated['barcode'] ?? null,
+                'sku' => $validated['sku'] ?? null,
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category_id'],
+                'buy_price' => $validated['buy_price'],
+                'sell_price' => $validated['sell_price'],
             ]);
 
             $this->logProductUpdate($product, $before);
@@ -204,13 +161,13 @@ class ProductController extends Controller
 
         // update product without image
         $product->update([
-            'barcode' => $request->barcode,
-            'sku' => $request->sku,
-            'title' => $request->title,
-            'description' => $request->description,
-            'category_id' => $request->category_id,
-            'buy_price' => $request->buy_price,
-            'sell_price' => $request->sell_price,
+            'barcode' => $validated['barcode'] ?? null,
+            'sku' => $validated['sku'] ?? null,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
+            'buy_price' => $validated['buy_price'],
+            'sell_price' => $validated['sell_price'],
         ]);
 
         $this->logProductUpdate($product, $before);
@@ -231,11 +188,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $before = $this->productAuditPayload($product);
 
-        if ($product->cloudinary_public_id) {
-            $this->imageService->deleteImage($product->cloudinary_public_id);
-        } else {
-            Storage::disk('local')->delete('public/products/'.basename($product->image));
-        }
+        $this->imageService->deleteProductImage($product);
 
         // delete
         $product->delete();

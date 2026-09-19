@@ -159,7 +159,7 @@ function ProductCard({
                     {/* Buy Price - Subtle */}
                     <div className="flex items-center justify-between mt-1">
                         <p className="text-xs text-slate-400 dark:text-slate-500">
-                            Modal: {formatCurrency(product.buy_price)}
+                            Cost: {formatCurrency(product.buy_price)}
                         </p>
                         {/* Profit Indicator */}
                         {product.sell_price > product.buy_price && (
@@ -305,7 +305,7 @@ export default function Index({ products }) {
                     <div className="w-full sm:w-80">
                         <Search
                             url={route("products.index")}
-                            placeholder="Cari produk..."
+                            placeholder="Search products..."
                         />
                     </div>
                     {/* Select All Checkbox */}

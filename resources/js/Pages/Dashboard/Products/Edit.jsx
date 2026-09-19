@@ -126,7 +126,7 @@ export default function Edit({ categories, product }) {
                         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                             <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
                                 <IconBarcode size={18} />
-                                Informasi Dasar
+                                Basic Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
@@ -258,7 +258,7 @@ export default function Edit({ categories, product }) {
                             >
                                 <IconDeviceFloppy size={18} />
                                 {processing
-                                    ? "Menyimpan..."
+                                    ? "Saving..."
                                     : "Save Changes"}
                             </button>
                         </div>

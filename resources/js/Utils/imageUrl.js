@@ -8,11 +8,7 @@ export function getImageUrl(image, folder = "products") {
     if (!image) return null;
 
     // If already a full URL, return as-is
-    if (
-        image.startsWith("http://") ||
-        image.startsWith("https://") ||
-        image.startsWith("/storage/")
-    ) {
+    if (/^(https?:)?\/\//i.test(image) || image.startsWith("/")) {
         return image;
     }
 

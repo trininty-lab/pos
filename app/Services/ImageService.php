@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use Cloudinary\Cloudinary;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Throwable;
@@ -64,6 +66,54 @@ final class ImageService
         $result = $response['result'] ?? null;
         if ($result !== null && ! in_array($result, ['ok', 'not found'], true)) {
             throw new RuntimeException('Cloudinary did not confirm image deletion.');
+        }
+    }
+
+    public function attachProductImage(Product $product, UploadedFile $file): void
+    {
+        $uploaded = $this->uploadImage($file, 'products/'.$product->id);
+
+        try {
+            $this->saveProductImage($product, $uploaded);
+        } catch (Throwable $exception) {
+            $this->tryDelete($uploaded->publicId);
+            throw new RuntimeException('Product image could not be associated.', 0, $exception);
+        }
+    }
+
+    public function replaceProductImage(Product $product, UploadedFile $file): void
+    {
+        $oldPublicId = $product->cloudinary_public_id;
+        $oldImage = $product->image;
+        $uploaded = $this->uploadImage($file, 'products/'.$product->id);
+
+        try {
+            $this->saveProductImage($product, $uploaded);
+        } catch (Throwable $exception) {
+            $this->tryDelete($uploaded->publicId);
+            throw new RuntimeException('Product image could not be replaced.', 0, $exception);
+        }
+
+        try {
+            if ($oldPublicId) {
+                $this->deleteImage($oldPublicId);
+            } elseif ($oldImage) {
+                Storage::disk('local')->delete('public/products/'.basename($oldImage));
+            }
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+    }
+
+    public function deleteProductImage(Product $product): void
+    {
+        if ($product->cloudinary_public_id) {
+            $this->deleteImage($product->cloudinary_public_id);
+            return;
+        }
+
+        if ($product->image) {
+            Storage::disk('local')->delete('public/products/'.basename($product->image));
         }
     }
 
@@ -161,5 +211,19 @@ final class ImageService
             $this->deleteImage($publicId);
         } catch (Throwable) {
         }
+    }
+
+    private function saveProductImage(Product $product, ImageResult $image): void
+    {
+        $product->forceFill([
+            'image' => $image->secureUrl,
+            'cloudinary_public_id' => $image->publicId,
+            'cloudinary_version' => $image->version,
+            'cloudinary_format' => $image->format,
+            'cloudinary_resource_type' => $image->resourceType,
+            'cloudinary_bytes' => $image->bytes,
+            'cloudinary_width' => $image->width,
+            'cloudinary_height' => $image->height,
+        ])->saveOrFail();
     }
 }

@@ -153,15 +153,9 @@ class Product extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: function ($value) {
-                if ($this->cloudinary_public_id) {
-                    return app(\App\Services\ImageService::class)->getImageUrl($this->cloudinary_public_id);
-                }
-
-                return $value === 'default.jpg'
-                    ? asset('/images/icon-512.png')
-                    : asset('/storage/products/'.$value);
-            },
+            get: fn ($value) => $value === 'default.jpg'
+                ? asset('/images/icon-512.png')
+                : ($this->cloudinary_public_id ? $value : asset('/storage/products/'.$value)),
         );
     }
 }

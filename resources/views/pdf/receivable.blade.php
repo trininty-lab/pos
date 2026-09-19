@@ -46,7 +46,7 @@
                 <div class="store-info">
                     <div class="store-name">{{ $store['name'] }}</div>
                     @if($store['address'])<div class="muted">{{ $store['address'] }}</div>@endif
-                    <div class="muted">{{ $store['phone'] ? 'Telp: '.$store['phone'].' • ' : '' }}{{ $store['email'] }}</div>
+                    <div class="muted">{{ $store['phone'] ? 'Phone: '.$store['phone'].' • ' : '' }}{{ $store['email'] }}</div>
                 </div>
             </div>
             <div class="doc">
@@ -58,8 +58,8 @@
 
         <div class="section grid-2">
             <div>
-                <div class="section-title">Pelanggan</div>
-                <div style="font-weight:700; font-size:14px;">{{ $receivable->customer->name ?? 'Umum' }}</div>
+                <div class="section-title">Customer</div>
+                <div style="font-weight:700; font-size:14px;">{{ $receivable->customer->name ?? 'General' }}</div>
                 @if($receivable->customer?->phone)<div class="muted">{{ $receivable->customer->phone }}</div>@endif
             </div>
             <div class="grid-2" style="gap:10px;">
@@ -68,11 +68,11 @@
                     <div class="stat-value">{{ number_format($receivable->total,0,',','.') }}</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-label">Terbayar</div>
+                    <div class="stat-label">Paid</div>
                     <div class="stat-value stat-positive">{{ number_format($receivable->paid,0,',','.') }}</div>
                 </div>
                 <div class="stat" style="grid-column: span 2;">
-                    <div class="stat-label">Sisa</div>
+                    <div class="stat-label">Remaining</div>
                     <div class="stat-value stat-warning">
                         {{ number_format(max(0, $receivable->total - $receivable->paid),0,',','.') }}
                     </div>
@@ -86,7 +86,7 @@
                 <thead>
                     <tr>
                         <th style="width:35%;">Date</th>
-                        <th style="width:35%;">Metode</th>
+                        <th style="width:35%;">Method</th>
                         <th style="text-align:right;">Amount</th>
                     </tr>
                 </thead>
@@ -105,7 +105,7 @@
         </div>
 
         <div class="footer">
-            <div class="muted" style="font-size:11px;">Dicetak pada {{ now()->format('d M Y') }}</div>
+            <div class="muted" style="font-size:11px;">Printed on {{ now()->format('d M Y') }}</div>
             <div class="barcode" style="text-align:right;">
                 <img src="{{ $barcode }}" alt="barcode">
                 <div style="font-size:10px; text-align:right;">{{ $receivable->invoice }}</div>

@@ -156,6 +156,36 @@ class TransactionFlowTest extends TestCase
             );
     }
 
+    public function test_positive_cash_below_total_becomes_automatic_discount(): void
+    {
+        $cashier = $this->createCashier();
+        $this->openShiftFor($cashier);
+        $product = $this->createProduct();
+
+        Cart::create([
+            'cashier_id' => $cashier->id,
+            'product_id' => $product->id,
+            'qty' => 1,
+            'price' => $product->sell_price,
+        ]);
+
+        $response = $this
+            ->actingAs($cashier)
+            ->post(route('transactions.store'), [
+                'discount' => 0,
+                'grand_total' => $product->sell_price,
+                'cash' => 55000,
+            ]);
+
+        $transaction = Transaction::latest('id')->first();
+
+        $response->assertRedirect(route('transactions.print', $transaction->invoice));
+        $this->assertSame(55000, (int) $transaction->grand_total);
+        $this->assertSame(5000, (int) $transaction->discount);
+        $this->assertSame(55000, (int) $transaction->cash);
+        $this->assertSame(0, (int) $transaction->change);
+    }
+
     public function test_cashier_discount_cannot_reduce_price_below_product_minimum(): void
     {
         $cashier = $this->createCashier();

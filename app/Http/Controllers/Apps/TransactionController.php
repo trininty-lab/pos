@@ -189,7 +189,6 @@ class TransactionController extends Controller
         $validated = $request->validate([
             'customer_id' => ['nullable', 'exists:customers,id'],
             'discount' => ['nullable', 'integer', 'min:0'],
-            'shipping_cost' => ['nullable', 'integer', 'min:0'],
             'redeem_points' => ['nullable', 'integer', 'min:0'],
             'customer_voucher_id' => ['nullable', 'integer', 'exists:customer_vouchers,id'],
         ]);
@@ -213,7 +212,7 @@ class TransactionController extends Controller
             'success' => true,
             'data' => $this->loyaltyService->previewCheckout($pricingPreview, $customer, [
                 'manual_discount' => (int) ($validated['discount'] ?? 0),
-                'shipping_cost' => (int) ($validated['shipping_cost'] ?? 0),
+                'shipping_cost' => 0,
                 'redeem_points' => (int) ($validated['redeem_points'] ?? 0),
                 'voucher' => $voucher,
             ]),
@@ -563,7 +562,7 @@ class TransactionController extends Controller
         $invoice = 'TRX-'.Str::upper($random);
         $isCashPayment = empty($paymentGateway) && ! $isPayLater;
         $manualDiscount = max(0, (int) $request->input('discount', 0));
-        $shippingCost = max(0, (int) $request->input('shipping_cost', 0));
+        $shippingCost = 0;
         $requestedRedeemPoints = max(0, (int) $request->input('redeem_points', 0));
         $cashAmount = $isCashPayment ? max(0, (int) $request->cash) : 0;
         $customer = $request->filled('customer_id')
@@ -601,17 +600,39 @@ class TransactionController extends Controller
             }
 
             $pricingPreview = $this->pricingService->previewCart($carts, $customer);
-            $checkoutPreview = $this->loyaltyService->previewCheckout($pricingPreview, $customer, [
+            $checkoutOptions = [
                 'manual_discount' => $manualDiscount,
                 'shipping_cost' => $shippingCost,
                 'redeem_points' => $requestedRedeemPoints,
                 'voucher' => $voucher,
-            ]);
+            ];
+            $checkoutPreview = $this->loyaltyService->previewCheckout($pricingPreview, $customer, $checkoutOptions);
+            $automaticDiscount = 0;
+
+            // A positive cash amount below the total is treated as the final sale price.
+            if ($isCashPayment && $cashAmount > 0) {
+                for ($attempt = 0; $attempt < 3; $attempt++) {
+                    $shortfall = (int) data_get($checkoutPreview, 'summary.grand_total', 0) - $cashAmount;
+                    if ($shortfall <= 0) {
+                        break;
+                    }
+
+                    $automaticDiscount += $shortfall;
+                    $checkoutOptions['manual_discount'] = $manualDiscount + $automaticDiscount;
+                    $checkoutPreview = $this->loyaltyService->previewCheckout($pricingPreview, $customer, $checkoutOptions);
+                }
+            }
             $pricingItems = collect($pricingPreview['items']);
             $voucherDiscount = (int) data_get($checkoutPreview, 'summary.voucher_discount_total', 0);
             $loyaltyDiscount = (int) data_get($checkoutPreview, 'summary.loyalty_discount_total', 0);
             $appliedManualDiscount = (int) data_get($checkoutPreview, 'summary.manual_discount_total', 0);
             $grandTotal = (int) data_get($checkoutPreview, 'summary.grand_total', 0);
+            if ($isCashPayment && $cashAmount <= 0 && $grandTotal > 0) {
+                abort(422, 'Cash payment amount is required.');
+            }
+            if ($isCashPayment && $cashAmount < $grandTotal) {
+                abort(422, 'The automatic discount cannot reduce the total to the cash amount.');
+            }
             $netLineItems = collect(data_get($checkoutPreview, 'summary.net_line_items', []))->keyBy('cart_id');
             $changeAmount = $isCashPayment ? max(0, $cashAmount - $grandTotal) : 0;
 

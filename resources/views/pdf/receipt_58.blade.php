@@ -78,7 +78,6 @@
         $subtotal = ($transaction->grand_total ?? 0) + ($transaction->discount ?? 0) - ($transaction->shipping_cost ?? 0) - ($transaction->tax_total ?? 0) + $promoDiscount + $voucherDiscount + $loyaltyDiscount;
         $discount = $transaction->discount ?? 0;
         $total = $transaction->grand_total ?? 0;
-        $shipping = $transaction->shipping_cost ?? 0;
         $taxTotal = $transaction->tax_total ?? 0;
         $taxRate = $transaction->tax_rate ?? 0;
         $cash = $transaction->cash ?? 0;
@@ -113,12 +112,6 @@
             <div style="display:flex; justify-content:space-between;">
                 <span>Redeem Points</span>
                 <span>-{{ $formatPrice($loyaltyDiscount) }}</span>
-            </div>
-        @endif
-        @if($shipping > 0)
-            <div style="display:flex; justify-content:space-between;">
-                <span>Shipping</span>
-                <span>{{ $formatPrice($shipping) }}</span>
             </div>
         @endif
         @if($taxTotal > 0)

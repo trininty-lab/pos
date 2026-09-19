@@ -46,14 +46,12 @@ export default function ThermalReceipt({
     const subtotal =
         (transaction?.grand_total || 0) +
         (transaction?.discount || 0) -
-        (transaction?.shipping_cost || 0) -
         (transaction?.tax_total || 0) +
         promoDiscount +
         loyaltyDiscount +
         voucherDiscount;
     const discount = transaction?.discount || 0;
     const total = transaction?.grand_total || 0;
-    const shipping = transaction?.shipping_cost || 0;
     const cash = transaction?.cash || 0;
     const change = transaction?.change || 0;
 
@@ -193,12 +191,6 @@ export default function ThermalReceipt({
                     <div className="flex justify-between">
                         <span>Redeem Points</span>
                         <span>-{formatPrice(loyaltyDiscount)}</span>
-                    </div>
-                )}
-                {shipping > 0 && (
-                    <div className="flex justify-between">
-                        <span>Shipping</span>
-                        <span>{formatPrice(shipping)}</span>
                     </div>
                 )}
                 {Number(transaction?.tax_total || 0) > 0 && (

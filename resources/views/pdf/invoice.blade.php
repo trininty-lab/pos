@@ -181,7 +181,7 @@
                         <div style="font-size:12px;color:#475569; margin-top:2px;">{{ $store['address'] }}</div>
                     @endif
                     <div style="font-size:12px;color:#475569; margin-top:2px;">
-                        {{ $store['phone'] ? 'Telp: ' . $store['phone'] . ' • ' : '' }}{{ $store['email'] }}
+                        {{ $store['phone'] ? 'Phone: ' . $store['phone'] . ' • ' : '' }}{{ $store['email'] }}
                     </div>
                 </div>
             </div>
@@ -199,7 +199,7 @@
         <tr>
             <td style="width:50%; vertical-align:top; font-size:13px;">
                 <div style="color:#64748b;font-weight:600;">Customer</div>
-                <div style="font-weight:700; margin-top:2px;">{{ $transaction->customer->name ?? 'Umum' }}</div>
+                <div style="font-weight:700; margin-top:2px;">{{ $transaction->customer->name ?? 'General' }}</div>
                 @if ($transaction->customer?->no_telp)
                     <div style="color:#475569; margin-top:2px;">{{ $transaction->customer->no_telp }}</div>
                 @endif
@@ -217,11 +217,11 @@
                 @endif
             </td>
             <td style="width:50%; vertical-align:top; font-size:13px; text-align:right;">
-                <div style="color:#64748b;font-weight:600;">Kasir</div>
+                <div style="color:#64748b;font-weight:600;">Cashier</div>
                 <div style="font-weight:700; margin-top:2px;">{{ $transaction->cashier->name ?? '-' }}</div>
                 <div style="margin-top:6px;">
                     <div><strong>Status:</strong> {{ $transaction->payment_status }}</div>
-                    <div><strong>Metode:</strong> {{ $transaction->payment_method }}</div>
+                    <div><strong>Method:</strong> {{ $transaction->payment_method }}</div>
                     @if ($transaction->receivable && $transaction->receivable->due_date)
                         <div><strong>Due date:</strong> {{ $transaction->receivable->due_date }}</div>
                     @endif
@@ -233,7 +233,7 @@
     <table>
         <thead>
             <tr>
-                <th class="produk">Nama Produk</th>
+                <th class="produk">Product Name</th>
                 <th class="qty">Qty</th>
                 <th class="right">Price</th>
                 <th class="right">Subtotal</th>
@@ -270,9 +270,8 @@
         $discount = $transaction->discount ?? 0;
         $voucherDiscount = $transaction->customer_voucher_discount ?? 0;
         $loyaltyDiscount = $transaction->loyalty_discount_total ?? 0;
-        $shipping = $transaction->shipping_cost ?? 0;
         $grandTotal = $transaction->grand_total ?? 0;
-        $subtotal = $grandTotal + $discount - $shipping + $promoDiscount + $voucherDiscount + $loyaltyDiscount;
+        $subtotal = $grandTotal + $discount + $promoDiscount + $voucherDiscount + $loyaltyDiscount;
     @endphp
 
     <table style="width:100%; margin-top:8px;">
@@ -287,7 +286,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="color:#475569;">Promo Otomatis</td>
+                            <td style="color:#475569;">Automatic Promo</td>
                         <td class="right" style="font-weight:600;">
                             - {{ number_format($promoDiscount, 0, ',', '.') }}
                         </td>
@@ -314,12 +313,6 @@
                             </td>
                         </tr>
                     @endif
-                    <tr>
-                        <td style="color:#475569;">Ongkir</td>
-                        <td class="right" style="font-weight:600;">
-                            + {{ number_format($shipping, 0, ',', '.') }}
-                        </td>
-                    </tr>
                     @if (($transaction->tax_total ?? 0) > 0)
                         <tr>
                             <td style="color:#475569;">PPN {{ number_format($transaction->tax_rate ?? 11, 0) }}%</td>
@@ -345,7 +338,7 @@
             <div style="font-size:10px;color:#475569;margin-top: 5px;">{{ $transaction->invoice }}</div>
         </div>
         <div style="font-size:11px;color:#94a3b8; text-align:center; margin-top: 20px;">
-            Terima kasih atas kepercayaan Anda.
+            Thank you for your trust.
         </div>
     </div>
 </body>

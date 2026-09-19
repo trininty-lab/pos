@@ -46,11 +46,11 @@
                 <div class="store-info">
                     <div class="store-name">{{ $store['name'] }}</div>
                     @if($store['address'])<div class="muted">{{ $store['address'] }}</div>@endif
-                    <div class="muted">{{ $store['phone'] ? 'Telp: '.$store['phone'].' • ' : '' }}{{ $store['email'] }}</div>
+                    <div class="muted">{{ $store['phone'] ? 'Phone: '.$store['phone'].' • ' : '' }}{{ $store['email'] }}</div>
                 </div>
             </div>
             <div class="doc">
-                <div class="badge">Hutang</div>
+                <div class="badge">Payable</div>
                 <div class="doc-number">{{ $payable->document_number }}</div>
                 <div class="muted">Due date: {{ $payable->due_date ?? '-' }}</div>
             </div>
@@ -68,11 +68,11 @@
                     <div class="stat-value">{{ number_format($payable->total,0,',','.') }}</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-label">Terbayar</div>
+                    <div class="stat-label">Paid</div>
                     <div class="stat-value stat-positive">{{ number_format($payable->paid,0,',','.') }}</div>
                 </div>
                 <div class="stat" style="grid-column: span 2;">
-                    <div class="stat-label">Sisa</div>
+                    <div class="stat-label">Remaining</div>
                     <div class="stat-value stat-warning">
                         {{ number_format(max(0, $payable->total - $payable->paid),0,',','.') }}
                     </div>
@@ -86,7 +86,7 @@
                 <thead>
                     <tr>
                         <th style="width:35%;">Date</th>
-                        <th style="width:35%;">Metode</th>
+                        <th style="width:35%;">Method</th>
                         <th style="text-align:right;">Amount</th>
                     </tr>
                 </thead>
@@ -105,7 +105,7 @@
         </div>
 
         <div class="footer">
-            <div class="muted" style="font-size:11px;">Dicetak pada {{ now()->format('d M Y') }}</div>
+            <div class="muted" style="font-size:11px;">Printed on {{ now()->format('d M Y') }}</div>
             <div class="barcode" style="text-align:right;">
                 <img src="{{ $barcode }}" alt="barcode">
                 <div style="font-size:10px; text-align:right;">{{ $payable->document_number }}</div>

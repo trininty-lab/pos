@@ -188,8 +188,8 @@
             <tr>
                 <td style="padding-right: 5pt; width: 65%;">
                     <div class="section-box">
-                        <div class="title-label">Penerima</div>
-                        <div class="text-bold">{{ $transaction->customer->name ?? 'Umum' }}</div>
+                        <div class="title-label">Recipient</div>
+                        <div class="text-bold">{{ $transaction->customer->name ?? 'General' }}</div>
                         <div class="text-small text-muted" style="margin-top: 5px; margin-bottom: 5px;">
                             {{ $transaction->customer->no_telp ?? '-' }}</div>
                         <div class="text-small text-muted">
@@ -210,11 +210,11 @@
                 </td>
                 <td style="padding-left: 5pt; width: 35%;">
                     <div class="section-box">
-                        <div class="title-label">Ringkasan Pesanan</div>
+                        <div class="title-label">Order Summary</div>
                         <table class="text-small">
                             <tr>
                                 <td>Item</td>
-                                <td style="text-align: right;">{{ $transaction->details->count() }} unit</td>
+                                <td style="text-align: right;">{{ $transaction->details->count() }} units</td>
                             </tr>
                             <tr>
                                 <td style="padding-top: 15pt;" class="text-bold">Total</td>
@@ -241,7 +241,7 @@
                 <tr>
                     <td class="text-muted" style="vertical-align: bottom; padding-bottom: 2pt;line-height: 1.5;">
                         Admin: <strong>{{ $transaction->cashier->name ?? '-' }}</strong><br>
-                        Dicetak: {{ now()->format('d/m/Y H:i') }}
+                        Printed: {{ now()->format('d/m/Y H:i') }}
                     </td>
 
                     <td style="text-align: right; width: 150pt;">

@@ -34,7 +34,7 @@ export default function Print({ transaction }) {
         });
 
     const formatDateTime = (value) =>
-        new Date(value).toLocaleString("id-ID", {
+        new Date(value).toLocaleString("en-KE", {
             day: "2-digit",
             month: "short",
             year: "numeric",
@@ -79,29 +79,29 @@ export default function Print({ transaction }) {
     );
 
     const paymentLabels = {
-        cash: "Tunai",
-        bank_transfer: "Transfer Bank",
+        cash: "Cash",
+        bank_transfer: "Bank Transfer",
         midtrans: "Midtrans",
         xendit: "Xendit",
-        pay_later: "Piutang",
+        pay_later: "Receivable",
     };
     const paymentMethodKey = (
         transaction?.payment_method || "cash"
     ).toLowerCase();
-    const paymentMethodLabel = paymentLabels[paymentMethodKey] ?? "Tunai";
+    const paymentMethodLabel = paymentLabels[paymentMethodKey] ?? "Cash";
 
     const paymentStatuses = {
-        paid: "Lunas",
-        pending: transaction?.payment_method === "pay_later" ? "Belum Lunas" : "Menunggu",
-        failed: "Gagal",
-        expired: "Kedaluwarsa",
-        unpaid: "Belum Lunas",
-        partial: "Parsial",
+        paid: "Paid",
+        pending: transaction?.payment_method === "pay_later" ? "Unpaid" : "Pending",
+        failed: "Failed",
+        expired: "Expired",
+        unpaid: "Unpaid",
+        partial: "Partial",
     };
     const paymentStatusKey = (transaction?.payment_status || "").toLowerCase();
     const paymentStatusLabel =
         paymentStatuses[paymentStatusKey] ??
-        (paymentMethodKey === "cash" ? "Lunas" : "Menunggu");
+        (paymentMethodKey === "cash" ? "Paid" : "Pending");
 
     const statusColors = {
         paid: "bg-success-100 text-success-700 dark:bg-success-900/50 dark:text-success-400",
@@ -152,7 +152,7 @@ export default function Print({ transaction }) {
 
     return (
         <>
-            <Head title="Invoice Penjualan" />
+            <Head title="Sales Invoice" />
 
             <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-8 px-4 print:bg-white print:p-0">
                 <div className="max-w-4xl mx-auto space-y-6">
@@ -163,7 +163,7 @@ export default function Print({ transaction }) {
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                         >
                             <IconArrowLeft size={18} />
-                            Kembali ke kasir
+                            Back to cashier
                         </Link>
 
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
@@ -195,7 +195,7 @@ export default function Print({ transaction }) {
                                         size={16}
                                         className="inline mr-1"
                                     />
-                                    Struk 80mm
+                                    Receipt 80mm
                                 </button>
                                 <button
                                     onClick={() => setPrintMode("thermal58")}
@@ -209,7 +209,7 @@ export default function Print({ transaction }) {
                                         size={16}
                                         className="inline mr-1"
                                     />
-                                    Struk 58mm
+                                    Receipt 58mm
                                 </button>
                                 <button
                                     onClick={() => setPrintMode("shipping")}
@@ -223,7 +223,7 @@ export default function Print({ transaction }) {
                                         size={16}
                                         className="inline mr-1"
                                     />
-                                    Resi
+                                    Shipping Label
                                 </button>
                             </div>
 
@@ -237,7 +237,7 @@ export default function Print({ transaction }) {
                                         const url = URL.createObjectURL(blob);
                                         window.open(url, "_blank", "width=400,height=600");
                                     } catch (e) {
-                                        alert("Gagal cetak thermal: " + e.message);
+                                        alert("Thermal print failed: " + e.message);
                                     }
                                 }}
                                 className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full sm:w-auto"
@@ -254,7 +254,7 @@ export default function Print({ transaction }) {
                                     className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-primary-200 dark:border-primary-800 text-sm font-semibold text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/50 transition-colors w-full sm:w-auto"
                                 >
                                     <IconExternalLink size={18} />
-                                    Pembayaran
+                                    Payment
                                 </a>
                             )}
 
@@ -400,7 +400,7 @@ export default function Print({ transaction }) {
                                                 <p className="text-[11px] sm:text-xs opacity-90 space-x-2 leading-snug flex flex-wrap justify-center sm:justify-start gap-x-2 gap-y-1">
                                                     {store.phone && (
                                                         <span>
-                                                            Telp: {store.phone}
+                                                            Phone: {store.phone}
                                                         </span>
                                                     )}
                                                     {store.email && (
@@ -441,10 +441,10 @@ export default function Print({ transaction }) {
                             <div className="grid md:grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 py-4 sm:py-6 border-b border-slate-100 dark:border-slate-800">
                                 <div className="bg-slate-50/60 dark:bg-slate-800/40 rounded-xl p-3 sm:p-4">
                                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
-                                        Pelanggan
+                                        Customer
                                     </p>
                                     <p className="text-base font-semibold text-slate-900 dark:text-white">
-                                        {transaction.customer?.name ?? "Umum"}
+                                        {transaction.customer?.name ?? "General"}
                                     </p>
                                     {transaction.customer?.address && (
                                         <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -459,7 +459,7 @@ export default function Print({ transaction }) {
                                 </div>
                                 <div className="bg-slate-50/60 dark:bg-slate-800/40 rounded-xl p-3 sm:p-4">
                                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
-                                        Kasir
+                                        Cashier
                                     </p>
                                     <div className="flex items-start justify-between gap-3">
                                         <p className="text-base font-semibold text-slate-900 dark:text-white">
@@ -683,7 +683,7 @@ export default function Print({ transaction }) {
                                                 </span>
                                             </div>
                                             <div className="flex justify-between text-success-600 dark:text-success-400 font-medium">
-                                                <span>Kembali</span>
+                                                <span>Change</span>
                                                 <span>
                                                     {formatPrice(
                                                         transaction.change
@@ -703,7 +703,7 @@ export default function Print({ transaction }) {
                                 <SimpleBarcode value={transaction.invoice} />
                                 <div className="text-center mt-4">
                                     <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                                        Terima kasih telah berbelanja
+                                        Thank you for shopping
                                     </p>
                                 </div>
                             </div>
@@ -733,7 +733,7 @@ export default function Print({ transaction }) {
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold">
-                                        Konfirmasi Pembayaran
+                                        Confirm Payment
                                     </h3>
                                     <p className="text-sm opacity-90">
                                         Transfer Bank
@@ -756,10 +756,10 @@ export default function Print({ transaction }) {
                                 </div>
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-sm text-slate-500 dark:text-slate-400">
-                                        Pelanggan
+                                        Customer
                                     </span>
                                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                                        {transaction.customer?.name ?? "Umum"}
+                                        {transaction.customer?.name ?? "General"}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center">
@@ -781,8 +781,8 @@ export default function Print({ transaction }) {
                                     className="text-warning-600 dark:text-warning-400 flex-shrink-0 mt-0.5"
                                 />
                                 <p className="text-sm text-warning-800 dark:text-warning-300">
-                                    Pastikan dana sudah diterima sebelum
-                                    mengkonfirmasi pembayaran ini. Tindakan ini
+                                    Make sure the funds have been received before
+                                    confirming this payment. This action
                                     tidak dapat dibatalkan.
                                 </p>
                             </div>
@@ -846,7 +846,7 @@ export default function Print({ transaction }) {
                                 ) : (
                                     <>
                                         <IconCheck size={18} />
-                                        Konfirmasi Lunas
+                                        Confirm Paid
                                     </>
                                 )}
                             </button>

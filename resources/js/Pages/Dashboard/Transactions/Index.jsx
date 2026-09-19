@@ -77,7 +77,6 @@ export default function Index({
     const [discountInput, setDiscountInput] = useState("");
     const [redeemPointsInput, setRedeemPointsInput] = useState("");
     const [cashInput, setCashInput] = useState("");
-    const [shippingInput, setShippingInput] = useState("");
     const [paymentMethod, setPaymentMethod] = useState(
         defaultPaymentGateway ?? "cash"
     );
@@ -154,10 +153,6 @@ export default function Index({
         () => Math.max(0, Number(discountInput) || 0),
         [discountInput]
     );
-    const shipping = useMemo(
-        () => Math.max(0, Number(shippingInput) || 0),
-        [shippingInput]
-    );
     const baseSubtotal = useMemo(
         () => Number(pricingPreview?.summary?.base_subtotal ?? carts_total ?? 0),
         [pricingPreview, carts_total]
@@ -191,6 +186,11 @@ export default function Index({
         () => (isCashPayment ? Math.max(0, Number(cashInput) || 0) : payable),
         [cashInput, isCashPayment, payable]
     );
+    const automaticCashDiscount = useMemo(
+        () => (isCashPayment && cash > 0 ? Math.max(0, payable - cash) : 0),
+        [cash, isCashPayment, payable]
+    );
+    const checkoutPayable = Math.max(0, payable - automaticCashDiscount);
     const cartCount = useMemo(
         () => carts.reduce((total, item) => total + Number(item.qty), 0),
         [carts]
@@ -227,7 +227,6 @@ export default function Index({
             .post(route("transactions.pricing-preview"), {
                 customer_id: selectedCustomer?.id ?? null,
                 discount,
-                shipping_cost: shipping,
                 redeem_points: Number(redeemPointsInput || 0),
                 customer_voucher_id: selectedVoucherId || null,
             })
@@ -254,7 +253,6 @@ export default function Index({
         selectedCustomer?.id,
         pricingDependency,
         discount,
-        shipping,
         redeemPointsInput,
         selectedVoucherId,
     ]);
@@ -471,8 +469,8 @@ export default function Index({
             return;
         }
 
-        if (!payLater && isCashPayment && cash < payable) {
-            toast.error("Payment amount is less than the total");
+        if (!payLater && isCashPayment && cash <= 0) {
+            toast.error("Enter a positive cash amount");
             return;
         }
 
@@ -491,9 +489,8 @@ export default function Index({
                 discount,
                 redeem_points: Number(redeemPointsInput || 0),
                 customer_voucher_id: selectedVoucherId || null,
-                shipping_cost: shipping,
-                grand_total: payable,
-                cash: isCashPayment ? cash : payable,
+                grand_total: checkoutPayable,
+                cash: isCashPayment ? cash : checkoutPayable,
                 payment_gateway: payLater ? null : isCashPayment ? null : paymentMethod,
                 pay_later: payLater,
                 due_date: payLater ? dueDate : null,
@@ -515,10 +512,9 @@ export default function Index({
                 discount,
                 redeem_points: Number(redeemPointsInput || 0),
                 customer_voucher_id: selectedVoucherId || null,
-                shipping_cost: shipping,
                 grand_total: payable,
-                cash: isCashPayment ? cash : payable,
-                change: isCashPayment ? Math.max(cash - payable, 0) : 0,
+                cash: isCashPayment ? cash : checkoutPayable,
+                change: isCashPayment ? Math.max(cash - checkoutPayable, 0) : 0,
                 payment_gateway: payLater ? null : isCashPayment ? null : paymentMethod,
                 bank_account_id: isBankTransfer
                     ? selectedBankAccount?.id
@@ -531,7 +527,6 @@ export default function Index({
                     setDiscountInput("");
                     setRedeemPointsInput("");
                     setCashInput("");
-                    setShippingInput("");
                     setSelectedCustomer(null);
                     setSelectedBankAccount(null);
                     setSelectedVoucherId("");
@@ -1246,52 +1241,6 @@ export default function Index({
                                 </div>
                             </div>
 
-                            {/* Shipping Cost Input */}
-                            <div>
-                                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">
-                                    Shipping Cost (KSh)
-                                </label>
-                                <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-                                        KSh
-                                    </span>
-                                    <input
-                                        type="text"
-                                        inputMode="numeric"
-                                        value={shippingInput}
-                                        onChange={(e) =>
-                                            setShippingInput(
-                                                e.target.value.replace(
-                                                    /[^\d]/g,
-                                                    ""
-                                                )
-                                            )
-                                        }
-                                        placeholder="0"
-                                        className="w-full h-10 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-                                    />
-                                </div>
-                                {/* Quick Shipping Amounts */}
-                                <div className="grid grid-cols-4 gap-2 mt-2">
-                                    {[10000, 15000, 20000, 25000].map((amt) => (
-                                        <button
-                                            key={amt}
-                                            type="button"
-                                            onClick={() =>
-                                                setShippingInput(String(amt))
-                                            }
-                                            className={`py-1.5 px-1 rounded-lg text-xs font-medium transition-all ${
-                                                Number(shippingInput) === amt
-                                                    ? "bg-primary-500 text-white"
-                                                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200"
-                                            }`}
-                                        >
-                                            {formatPrice(amt)}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
                             {/* Cash Input - Only for cash */}
                             {paymentMethod === "cash" && (
                                 <div>
@@ -1392,11 +1341,11 @@ export default function Index({
                                 </span>
                             </div>
                         )}
-                        {shipping > 0 && (
+                        {automaticCashDiscount > 0 && (
                             <div className="flex justify-between items-center mb-2 text-sm">
-                                <span className="text-slate-500">Shipping</span>
-                                <span className="font-medium">
-                                    +{formatPrice(shipping)}
+                                <span className="text-slate-500">Automatic cash discount</span>
+                                <span className="text-danger-500">
+                                    -{formatPrice(automaticCashDiscount)}
                                 </span>
                             </div>
                         )}
@@ -1413,20 +1362,20 @@ export default function Index({
                                 Total
                             </span>
                             <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                                {formatPrice(payable)}
+                                {formatPrice(checkoutPayable)}
                             </span>
                         </div>
 
                         {paymentMethod === "cash" &&
                             !payLater &&
-                            cash >= payable &&
-                            payable > 0 && (
+                            cash >= checkoutPayable &&
+                            checkoutPayable > 0 && (
                                 <div className="flex justify-between items-center mb-3 p-2 rounded-lg bg-success-50 dark:bg-success-950/30">
                                     <span className="text-sm text-success-700 dark:text-success-400">
                                         Change
                                     </span>
                                     <span className="font-bold text-success-600">
-                                        {formatPrice(cash - payable)}
+                                        {formatPrice(cash - checkoutPayable)}
                                     </span>
                                 </div>
                             )}
@@ -1438,13 +1387,13 @@ export default function Index({
                                 !carts.length ||
                                 (!payLater &&
                                     paymentMethod === "cash" &&
-                                    cash < payable) ||
+                                        cash <= 0) ||
                                 isLoadingPricing ||
                                 isSubmitting
                             }
                             className={`w-full h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
                                 carts.length &&
-                                (paymentMethod !== "cash" || cash >= payable)
+                                (paymentMethod !== "cash" || cash > 0)
                                     && !isLoadingPricing
                                     ? "bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg shadow-primary-500/30"
                                     : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
@@ -1459,9 +1408,9 @@ export default function Index({
                                         {!carts.length
                                             ? "Cart is empty"
                                                                                         : paymentMethod === "cash" &&
-                                              cash < payable
-                                            ? `Short ${formatPrice(
-                                                  payable - cash
+                                                                                            automaticCashDiscount > 0
+                                                                                        ? `Apply ${formatPrice(
+                                                                                                    automaticCashDiscount
                                               )}`
                                             : isLoadingPricing
                                             ? "Calculating Promo..."

@@ -17,7 +17,7 @@ export default function NumpadModal({
     isOpen,
     onClose,
     onConfirm,
-    title = "Masukkan Angka",
+    title = "Enter Amount",
     initialValue = 0,
     minValue = 0,
     maxValue = 999999999,
@@ -207,7 +207,7 @@ export default function NumpadModal({
                         }`}
                     >
                         <IconCheck size={22} />
-                        Konfirmasi
+                        Confirm
                     </button>
                 </div>
             </div>

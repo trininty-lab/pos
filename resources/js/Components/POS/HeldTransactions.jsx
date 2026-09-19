@@ -35,9 +35,7 @@ export default function HeldTransactions({
 
     const handleResume = (holdId) => {
         if (hasActiveCart) {
-            toast.error(
-                "Selesaikan atau tahan transaksi aktif terlebih dahulu"
-            );
+            toast.error("Finish or hold the active transaction first");
             return;
         }
 
@@ -49,14 +47,12 @@ export default function HeldTransactions({
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success("Transaksi dilanjutkan");
+                    toast.success("Transaction resumed");
                     setResumingId(null);
                     setIsExpanded(false);
                 },
                 onError: (errors) => {
-                    toast.error(
-                        errors.message || "Gagal melanjutkan transaksi"
-                    );
+                    toast.error(errors.message || "Failed to resume transaction");
                     setResumingId(null);
                 },
             }
@@ -64,18 +60,18 @@ export default function HeldTransactions({
     };
 
     const handleDelete = (holdId) => {
-        if (!confirm("Hapus transaksi yang ditahan ini?")) return;
+        if (!confirm("Delete this held transaction?")) return;
 
         setDeletingId(holdId);
 
         router.delete(route("transactions.clearHold", holdId), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success("Transaksi dihapus");
+                toast.success("Transaction deleted");
                 setDeletingId(null);
             },
             onError: () => {
-                toast.error("Gagal menghapus transaksi");
+                toast.error("Failed to delete transaction");
                 setDeletingId(null);
             },
         });
@@ -98,7 +94,7 @@ export default function HeldTransactions({
                         {heldCarts.length}
                     </div>
                     <span className="text-sm font-medium text-amber-700 dark:text-amber-300">
-                        Transaksi Ditahan
+                        Held Transactions
                     </span>
                     <span className="text-xs text-amber-600 dark:text-amber-400">
                         • {formatPrice(totalHeldAmount)}
@@ -119,7 +115,7 @@ export default function HeldTransactions({
                         {heldCarts.length}
                     </div>
                     <span className="text-sm font-medium text-amber-700 dark:text-amber-300">
-                        Transaksi Ditahan
+                        Held Transactions
                     </span>
                 </div>
                 <button
@@ -155,8 +151,8 @@ export default function HeldTransactions({
                                 className="px-2 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium disabled:opacity-50 flex items-center gap-1"
                                 title={
                                     hasActiveCart
-                                        ? "Kosongkan keranjang dulu"
-                                        : "Lanjutkan"
+                                        ? "Clear the cart first"
+                                        : "Resume"
                                 }
                             >
                                 {resumingId === hold.hold_id ? (
@@ -202,7 +198,7 @@ export function HoldButton({ hasItems = false, onHold, isHolding = false }) {
                     type="text"
                     value={label}
                     onChange={(e) => setLabel(e.target.value)}
-                    placeholder="Label (opsional)"
+                    placeholder="Label (optional)"
                     className="flex-1 h-8 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
                     autoFocus
                     onKeyDown={(e) => {
@@ -233,7 +229,7 @@ export function HoldButton({ hasItems = false, onHold, isHolding = false }) {
             className="flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-lg border border-dashed border-amber-400 dark:border-amber-700 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 text-xs font-medium transition-colors"
         >
             <IconClock size={14} />
-            Tahan
+            Hold
         </button>
     );
 }

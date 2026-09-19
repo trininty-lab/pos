@@ -43,9 +43,9 @@ export default function AddCustomerModal({
 
         // Basic validation
         const newErrors = {};
-        if (!form.name.trim()) newErrors.name = "Nama wajib diisi";
-        if (!form.no_telp.trim()) newErrors.no_telp = "No. telepon wajib diisi";
-        if (!form.address.trim()) newErrors.address = "Alamat wajib diisi";
+        if (!form.name.trim()) newErrors.name = "Name is required";
+        if (!form.no_telp.trim()) newErrors.no_telp = "Phone number is required";
+        if (!form.address.trim()) newErrors.address = "Address is required";
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -61,7 +61,7 @@ export default function AddCustomerModal({
             );
 
             if (response.data.success) {
-                toast.success("Pelanggan berhasil ditambahkan");
+                toast.success("Customer added successfully");
                 setForm({
                     name: "",
                     no_telp: "",
@@ -75,7 +75,7 @@ export default function AddCustomerModal({
             } else {
                 setErrors(response.data.errors || {});
                 toast.error(
-                    response.data.message || "Gagal menambahkan pelanggan"
+                    response.data.message || "Failed to add customer"
                 );
                 setIsSubmitting(false);
             }
@@ -85,7 +85,7 @@ export default function AddCustomerModal({
                 setErrors(err.response.data.errors);
             }
             toast.error(
-                err.response?.data?.message || "Gagal menambahkan pelanggan"
+                err.response?.data?.message || "Failed to add customer"
             );
             setIsSubmitting(false);
         }
@@ -116,10 +116,10 @@ export default function AddCustomerModal({
                         </div>
                         <div>
                             <h3 className="font-semibold text-lg">
-                                Tambah Pelanggan
+                                Add Customer
                             </h3>
                             <p className="text-sm text-white/80">
-                                Daftarkan pelanggan baru atau aktifkan sebagai member
+                                Register a new customer or activate a member account
                             </p>
                         </div>
                     </div>
@@ -136,7 +136,7 @@ export default function AddCustomerModal({
                     {/* Name */}
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                            Nama Pelanggan{" "}
+                            Customer Name{" "}
                             <span className="text-danger-500">*</span>
                         </label>
                         <input
@@ -144,7 +144,7 @@ export default function AddCustomerModal({
                             name="name"
                             value={form.name}
                             onChange={handleChange}
-                            placeholder="Masukkan nama lengkap"
+                            placeholder="Enter full name"
                             className={`w-full h-11 px-4 rounded-xl border ${
                                 errors.name
                                     ? "border-danger-500 focus:ring-danger-500/20"
@@ -162,7 +162,7 @@ export default function AddCustomerModal({
                     {/* Phone */}
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                            No. Telepon{" "}
+                            Phone Number{" "}
                             <span className="text-danger-500">*</span>
                         </label>
                         <input
@@ -170,7 +170,7 @@ export default function AddCustomerModal({
                             name="no_telp"
                             value={form.no_telp}
                             onChange={handleChange}
-                            placeholder="Contoh: 08123456789"
+                            placeholder="Example: 08123456789"
                             className={`w-full h-11 px-4 rounded-xl border ${
                                 errors.no_telp
                                     ? "border-danger-500 focus:ring-danger-500/20"
@@ -187,13 +187,13 @@ export default function AddCustomerModal({
                     {/* Address */}
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                            Alamat <span className="text-danger-500">*</span>
+                            Address <span className="text-danger-500">*</span>
                         </label>
                         <textarea
                             name="address"
                             value={form.address}
                             onChange={handleChange}
-                            placeholder="Masukkan alamat lengkap"
+                            placeholder="Enter full address"
                             rows={3}
                             className={`w-full px-4 py-3 rounded-xl border ${
                                 errors.address
@@ -216,10 +216,10 @@ export default function AddCustomerModal({
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                                        Registrasi Member
+                                        Member Registration
                                     </p>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                                        Aktifkan jika pelanggan perlu langsung menerima benefit harga dan poin member.
+                                        Enable this if the customer should immediately receive member pricing and points.
                                     </p>
                                 </div>
                             </div>
@@ -243,7 +243,7 @@ export default function AddCustomerModal({
                         {form.is_loyalty_member ? (
                             <div className="mt-4">
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                                    Tier Awal
+                                    Initial Tier
                                 </label>
                                 <select
                                     value={form.loyalty_tier}
@@ -275,7 +275,7 @@ export default function AddCustomerModal({
                             onClick={handleClose}
                             className="flex-1 h-11 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                         >
-                            Batal
+                            Cancel
                         </button>
                         <button
                             type="submit"
@@ -288,12 +288,12 @@ export default function AddCustomerModal({
                                         size={18}
                                         className="animate-spin"
                                     />
-                                    Menyimpan...
+                                    Saving...
                                 </>
                             ) : (
                                 <>
                                     <IconCheck size={18} />
-                                    Simpan
+                                    Save
                                 </>
                             )}
                         </button>
@@ -315,10 +315,10 @@ export function AddCustomerButton({ onClick, className = "" }) {
             className={`h-12 px-4 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700
                 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/30
                 font-medium flex items-center gap-2 transition-colors ${className}`}
-            title="Tambah pelanggan baru"
+            title="Add new customer"
         >
             <IconUserPlus size={18} />
-            <span className="hidden sm:inline">Tambah</span>
+            <span className="hidden sm:inline">Add</span>
         </button>
     );
 }

@@ -1377,7 +1377,7 @@ export default function Index({
                         {loyaltyDiscount > 0 && (
                             <div className="flex justify-between items-center mb-2 text-sm">
                                 <span className="text-slate-500">
-                                    Redeem Poin
+                                    Redeem Points
                                 </span>
                                 <span className="text-primary-600">
                                     -{formatPrice(loyaltyDiscount)}
@@ -1402,7 +1402,7 @@ export default function Index({
                         )}
                         {taxTotal > 0 && (
                             <div className="flex justify-between items-center mb-2 text-sm">
-                                <span className="text-slate-500">PPN</span>
+                                <span className="text-slate-500">VAT</span>
                                 <span className="font-medium">
                                     +{formatPrice(taxTotal)}
                                 </span>
@@ -1457,7 +1457,7 @@ export default function Index({
                                     <IconReceipt size={18} />
                                     <span>
                                         {!carts.length
-                                            ? "Keranjang Kosong"
+                                            ? "Cart is empty"
                                                                                         : paymentMethod === "cash" &&
                                               cash < payable
                                             ? `Short ${formatPrice(

@@ -18,27 +18,42 @@ class UserSeeder extends Seeder
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $admin = User::updateOrCreate(
+        $owner = User::updateOrCreate(
             ['email' => 'cybertrinity6@gmail.com'],
             [
-                'name' => 'Cyber Trinity',
+                'name' => 'POS Owner',
                 'password' => Hash::make('password'),
             ]
         );
 
         $ownerRole = Role::where('name', 'owner')->first();
-        $permissions = Permission::all();
 
         if ($ownerRole) {
-            $admin->syncRoles([$ownerRole->name]);
+            $owner->syncRoles([$ownerRole->name]);
         }
 
-        $admin->syncPermissions($permissions);
+        $owner->syncPermissions([]);
+
+        $superAdmin = User::updateOrCreate(
+            ['email' => 'superadmin@pos.test'],
+            [
+                'name' => 'POS Super Admin',
+                'password' => Hash::make('password'),
+            ]
+        );
+
+        $superAdminRole = Role::where('name', 'super-admin')->first();
+
+        if ($superAdminRole) {
+            $superAdmin->syncRoles([$superAdminRole->name]);
+        }
+
+        $superAdmin->syncPermissions([]);
 
         $cashier = User::updateOrCreate(
-            ['email' => 'charitymainda@gmail.com'],
+            ['email' => 'cashier@gmail.com'],
             [
-                'name' => 'Charity Mainda',
+                'name' => 'POS Cashier',
                 'password' => Hash::make('Cheri@2026'),
             ]
         );

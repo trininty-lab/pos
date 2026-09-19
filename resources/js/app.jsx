@@ -12,7 +12,28 @@ const appName = import.meta.env.VITE_APP_NAME || 'FAY COLLECTION';
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
+        if (import.meta.env.PROD) {
+            navigator.serviceWorker.register('/sw.js');
+            return;
+        }
+
+        // A cache-first service worker can keep serving an outdated page or
+        // bundle while Vite is providing newer modules during development.
+        // Remove registrations and this app's old caches so local changes are
+        // always loaded from the development server.
+        navigator.serviceWorker
+            .getRegistrations()
+            .then((registrations) =>
+                Promise.all(registrations.map((registration) => registration.unregister()))
+            )
+            .then(() => caches.keys())
+            .then((keys) =>
+                Promise.all(
+                    keys
+                        .filter((key) => key.startsWith('pos-cache-'))
+                        .map((key) => caches.delete(key))
+                )
+            );
     });
 }
 

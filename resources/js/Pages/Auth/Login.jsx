@@ -44,10 +44,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                     <div className="w-full max-w-md">
                         {/* Logo */}
                         <div className="mb-8">
-                            <Link
-                                href="/"
-                                className="inline-flex items-center gap-3 mb-6"
-                            >
+                            <div className="inline-flex items-center gap-3 mb-6">
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
                                     <IconShoppingCart
                                         size={24}
@@ -57,7 +54,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                                 <span className="text-2xl font-bold text-slate-900 dark:text-white">
                                     {t("auth.login.appName")}
                                 </span>
-                            </Link>
+                            </div>
                             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                                 {t("auth.login.subtitle")}
                             </h1>

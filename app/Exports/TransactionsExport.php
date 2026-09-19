@@ -20,7 +20,7 @@ class TransactionsExport implements FromCollection, ShouldAutoSize, WithHeadings
 
     public function collection()
     {
-        return Transaction::with(['customer:id,name', 'cashier:id,name'])
+        return Transaction::with(['customer:id,name', 'cashier:id,name', 'details:id,transaction_id,price,discount_total'])
             ->when($this->request->start_date, fn ($q, $d) => $q->whereDate('created_at', '>=', $d))
             ->when($this->request->end_date, fn ($q, $d) => $q->whereDate('created_at', '<=', $d))
             ->when($this->request->warehouse_id, fn ($q, $id) => $q->where('warehouse_id', $id))
@@ -35,6 +35,16 @@ class TransactionsExport implements FromCollection, ShouldAutoSize, WithHeadings
 
     public function map($transaction): array
     {
+        $subtotal = $transaction->details->sum(fn ($detail) =>
+            (int) $detail->price + (int) ($detail->discount_total ?? 0)
+        );
+
+        if ($transaction->details->isEmpty()) {
+            $subtotal = (int) $transaction->grand_total
+                - (int) ($transaction->shipping_cost ?? 0)
+                - (int) ($transaction->tax_total ?? 0);
+        }
+
         return [
             $transaction->invoice,
             $transaction->created_at->format('Y-m-d H:i:s'),
@@ -42,7 +52,10 @@ class TransactionsExport implements FromCollection, ShouldAutoSize, WithHeadings
             $transaction->customer?->name ?? 'Umum',
             $transaction->payment_method ?? '',
             $transaction->payment_status ?? '',
-            (int) ($transaction->grand_total - $transaction->discount + ($transaction->shipping_cost ?? 0) - ($transaction->tax_total ?? 0)),
+            $subtotal
+                + (int) ($transaction->discount ?? 0)
+                + (int) ($transaction->loyalty_discount_total ?? 0)
+                + (int) ($transaction->customer_voucher_discount ?? 0),
             (int) ($transaction->discount ?? 0),
             (int) ($transaction->shipping_cost ?? 0),
             (int) ($transaction->tax_total ?? 0),

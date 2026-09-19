@@ -66,6 +66,19 @@ class PaginationTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    public function test_products_page_renders_when_catalog_is_empty(): void
+    {
+        $response = $this->actingAs($this->adminUser())
+            ->get('/dashboard/products');
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('Dashboard/Products/Index')
+            ->where('products.total', 0)
+            ->where('products.data', [])
+        );
+    }
+
     public function test_products_page_2_keeps_search_query_string(): void
     {
         for ($i = 1; $i <= 23; $i++) {

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
 
 export default defineConfig({
     plugins: [
@@ -10,6 +11,22 @@ export default defineConfig({
         }),
         react(),
     ],
+    resolve: {
+        alias: [
+            {
+                find: '@tabler/icons-react',
+                replacement: '@tabler/icons-react/dist/cjs/tabler-icons-react.cjs',
+            },
+            {
+                find: /^react-aria\/private\/(.*)$/,
+                replacement: resolve('node_modules/react-aria/dist/private/$1.js'),
+            },
+            {
+                find: /^react-aria\/(.*)$/,
+                replacement: resolve('node_modules/react-aria/dist/exports/$1.js'),
+            },
+        ],
+    },
     server: {
         host: '0.0.0.0',
         port: 5173,

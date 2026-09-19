@@ -559,11 +559,11 @@ class PosApiController extends Controller
                     'voucher' => $voucher,
                 ]);
                 $pricingItems = collect($pricingPreview['items']);
-                $subtotalAfterPromo = (int) data_get($pricingPreview, 'summary.subtotal_after_promo', 0);
                 $voucherDiscount = (int) data_get($checkoutPreview, 'summary.voucher_discount_total', 0);
                 $loyaltyDiscount = (int) data_get($checkoutPreview, 'summary.loyalty_discount_total', 0);
                 $appliedManualDiscount = (int) data_get($checkoutPreview, 'summary.manual_discount_total', 0);
                 $grandTotal = (int) data_get($checkoutPreview, 'summary.grand_total', 0);
+                $netLineItems = collect(data_get($checkoutPreview, 'summary.net_line_items', []))->keyBy('cart_id');
                 $changeAmount = $isCashPayment ? max(0, $cashAmount - $grandTotal) : 0;
 
                 $transaction = Transaction::create([
@@ -614,10 +614,11 @@ class PosApiController extends Controller
                         'pricing_group_label' => data_get($pricingItem, 'pricing_group_label'),
                     ]);
 
-                    $totalBuyPrice = $cart->product->buy_price * $cart->qty;
-                    $lineShare = $subtotalAfterPromo > 0 ? $lineTotal / $subtotalAfterPromo : 0;
-                    $allocatedManualDiscount = (int) round($appliedManualDiscount * $lineShare);
-                    $netSellPrice = max(0, $lineTotal - $allocatedManualDiscount);
+                    $netSellPrice = (int) data_get($netLineItems->get($cart->id), 'net_line_total', $lineTotal);
+                    $unitBuyPrice = $cart->unit_id
+                        ? $this->unitConversionService->getBuyPrice($cart->product, (int) $cart->unit_id)
+                        : (int) $cart->product->buy_price;
+                    $totalBuyPrice = (int) round($unitBuyPrice * (float) $cart->qty);
                     $transaction->profits()->create([
                         'transaction_id' => $transaction->id,
                         'total' => $netSellPrice - $totalBuyPrice,

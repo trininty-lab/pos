@@ -156,7 +156,7 @@ class PricingService
     private function buildPreview(Collection $carts, ?Customer $customer, Collection $rules): array
     {
         $items = $carts->map(function (Cart $cart) {
-            $baseUnitPrice = (int) $cart->product->sell_price;
+            $baseUnitPrice = (int) round($cart->price / max(1, (int) $cart->qty));
 
             return [
                 'cart_id' => $cart->id,

@@ -208,23 +208,42 @@ class LoyaltyService
         $productIds = collect($items)->pluck('product_id')->filter()->unique()->values();
         $productTaxes = Product::whereIn('id', $productIds)->pluck('tax_rate', 'id');
         $productTaxTypes = Product::whereIn('id', $productIds)->pluck('tax_type', 'id');
+        $defaultTaxRate = $taxService->getDefaultRate();
+        $postPromotionDiscount = $voucherDiscount + $pointsDiscount + $manualDiscountApplied;
+        $remainingDiscount = $postPromotionDiscount;
+        $remainingSubtotal = $subtotalAfterPromo;
 
         $effectiveRate = 0;
         $taxTotal = 0;
         $taxableItems = [];
 
-        foreach ($items as $item) {
+        foreach (array_values($items) as $index => $item) {
             $pid = $item['product_id'] ?? null;
             $lineTotal = (int) ($item['line_total'] ?? 0);
             if ($pid && $lineTotal > 0) {
-                $rate = (float) ($productTaxes[$pid] ?? 11.00);
+                $isLastItem = $index === count($items) - 1;
+                $lineDiscount = $isLastItem
+                    ? $remainingDiscount
+                    : min($remainingDiscount, (int) round($postPromotionDiscount * $lineTotal / max(1, $subtotalAfterPromo)));
+                $lineDiscount = min($lineDiscount, $lineTotal, $remainingSubtotal);
+                $netLineTotal = max(0, $lineTotal - $lineDiscount);
+                $remainingDiscount -= $lineDiscount;
+                $remainingSubtotal -= $lineTotal;
+
+                $rate = (float) ($productTaxes[$pid] ?? $defaultTaxRate);
                 $type = $productTaxTypes[$pid] ?? 'exclusive';
-                $taxResult = $taxService->calculateLineItem($lineTotal, $type, $rate);
+                $taxResult = $taxService->calculateLineItem($netLineTotal, $type, $rate);
                 $taxTotal += $taxResult['tax_amount'];
                 if ($rate > 0) {
                     $effectiveRate = $rate;
                 }
-                $taxableItems[] = ['product_id' => $pid, 'line_total' => $lineTotal, 'tax_amount' => $taxResult['tax_amount']];
+                $taxableItems[] = [
+                    'cart_id' => $item['cart_id'] ?? null,
+                    'product_id' => $pid,
+                    'line_total' => $lineTotal,
+                    'net_line_total' => $netLineTotal,
+                    'tax_amount' => $taxResult['tax_amount'],
+                ];
             }
         }
 
@@ -257,6 +276,7 @@ class LoyaltyService
                 'tax_total' => $taxTotal,
                 'tax_rate' => $effectiveRate ?: null,
                 'grand_total' => $grandTotal,
+                'net_line_items' => $taxableItems,
                 'available_loyalty_points' => $availablePoints,
                 'requested_redeem_points' => $requestedRedeemPoints,
                 'applied_redeem_points' => $appliedRedeemPoints,

@@ -11,6 +11,7 @@ use App\Models\Warehouse;
 use App\Services\AuditLogService;
 use App\Services\ImageService;
 use App\Services\StockMutationService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
@@ -188,10 +189,15 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $before = $this->productAuditPayload($product);
 
-        $this->imageService->deleteProductImage($product);
+        try {
+            $product->delete();
+        } catch (QueryException $exception) {
+            report($exception);
 
-        // delete
-        $product->delete();
+            return back()->with('error', 'Product cannot be deleted because it is referenced by existing records.');
+        }
+
+        $this->imageService->deleteProductImage($product);
 
         $this->auditLogService->log(
             event: 'product.deleted',

@@ -43,7 +43,11 @@ class ProfitReportController extends Controller
             ? Profit::whereIn('transaction_id', $transactionIds)->sum('total')
             : 0;
 
-        $revenueTotal = (clone $baseQuery)->sum('grand_total');
+        $revenueTotal = (clone $baseQuery)->get()->sum(fn (Transaction $transaction) =>
+            (int) $transaction->grand_total
+                - (int) ($transaction->tax_total ?? 0)
+                - (int) ($transaction->shipping_cost ?? 0)
+        );
 
         $ordersCount = (clone $baseQuery)->count();
 

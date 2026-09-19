@@ -57,6 +57,10 @@ class AuthenticatedSessionController extends Controller
             ],
         );
 
+        if ($user?->isSuperAdmin()) {
+            return redirect()->intended(route('platform.dashboard', absolute: false));
+        }
+
         $routePriority = [
             'transactions-access' => 'transactions.index',
             'receivables-access' => 'receivables.index',

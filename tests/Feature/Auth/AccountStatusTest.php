@@ -42,4 +42,21 @@ class AccountStatusTest extends TestCase
 
         $this->assertNotNull($user->fresh()->last_login_at);
     }
+
+    public function test_super_admin_login_opens_platform_dashboard(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'platform-admin@example.com',
+            'password' => 'password',
+            'is_active' => true,
+        ]);
+        \Spatie\Permission\Models\Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
+        $user->assignRole('super-admin');
+
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ] + $this->botGuardPayload())
+            ->assertRedirect(route('platform.dashboard', absolute: false));
+    }
 }

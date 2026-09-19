@@ -6,6 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'minimum_sell_price' => $this->input('minimum_sell_price', $this->input('sell_price')),
+        ]);
+    }
+
     public function authorize(): bool
     {
         return true;

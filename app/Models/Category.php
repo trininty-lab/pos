@@ -59,9 +59,15 @@ class Category extends Model
                     return app(\App\Services\ImageService::class)->getImageUrl($this->cloudinary_public_id);
                 }
 
+                if (! $value) {
+                    return null;
+                }
+
                 return $value === 'default.jpg'
                     ? asset('/images/icon-512.png')
-                    : asset('/storage/category/'.$value);
+                    : (filter_var($value, FILTER_VALIDATE_URL)
+                        ? $value
+                        : asset('/storage/categories/'.ltrim($value, '/')));
             },
         );
     }

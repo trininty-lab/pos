@@ -24,6 +24,7 @@ class ProductResource extends JsonResource
             ]),
             'buy_price' => (float) $this->buy_price,
             'sell_price' => (float) $this->sell_price,
+                'minimum_sell_price' => (float) $this->minimum_sell_price,
             'stock' => (int) $this->stock,
             'min_stock' => (int) $this->min_stock,
             'max_stock' => (int) $this->max_stock,

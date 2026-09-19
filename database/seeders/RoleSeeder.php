@@ -63,6 +63,10 @@ class RoleSeeder extends Seeder
         $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
         $superAdminRole->syncPermissions(Permission::all());
 
+        // Owner manages the complete business operation within this POS.
+        $ownerRole = Role::firstOrCreate(['name' => 'owner']);
+        $ownerRole->syncPermissions(Permission::all());
+
         // Create cashier role with basic permissions for public registration
         $cashierRole = Role::firstOrCreate(['name' => 'cashier']);
         $cashierPermissions = Permission::whereIn('name', [

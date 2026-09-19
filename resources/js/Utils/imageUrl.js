@@ -39,7 +39,7 @@ export function getProductImageUrl(image, variant = "display") {
 export function getCategoryImageUrl(image) {
     return image === "default.jpg"
         ? "/images/icon-512.png"
-        : getImageUrl(image, "category");
+        : getImageUrl(image, "categories");
 }
 
 export default { getImageUrl, getProductImageUrl, getCategoryImageUrl };

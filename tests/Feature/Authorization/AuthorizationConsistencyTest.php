@@ -57,6 +57,38 @@ class AuthorizationConsistencyTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_super_admin_can_access_existing_user_management_pages(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole(Role::create([
+            'name' => 'super-admin',
+            'guard_name' => 'web',
+        ]));
+
+        foreach ([
+            'permissions.index',
+            'roles.index',
+            'users.index',
+            'audit-logs.index',
+        ] as $routeName) {
+            $this->actingAs($user)
+                ->get(route($routeName))
+                ->assertOk();
+        }
+    }
+
+    public function test_owner_can_access_business_permission_guarded_route_without_direct_permission_assignment(): void
+    {
+        $this->seed(RoleSeeder::class);
+
+        $user = User::factory()->create();
+        $user->assignRole(Role::findByName('owner'));
+
+        $response = $this->actingAs($user)->get(route('permissions.index'));
+
+        $response->assertOk();
+    }
+
     public function test_non_super_admin_still_gets_403_without_permission(): void
     {
         $user = User::factory()->create();
@@ -75,7 +107,7 @@ class AuthorizationConsistencyTest extends TestCase
         $response
             ->assertForbidden()
             ->assertJson([
-                'message' => 'Anda tidak memiliki izin untuk mengakses halaman tersebut.',
+                'message' => 'You do not have permission to access this page.',
             ]);
     }
 

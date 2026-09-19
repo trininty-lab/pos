@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IconPhoto } from "@tabler/icons-react";
+import { getCategoryImageUrl, getProductImageUrl } from "@/Utils/imageUrl";
 
 /**
  * LazyImage - Image component with lazy loading and placeholder
@@ -113,7 +114,7 @@ export function ProductImage({
         full: "w-full aspect-square",
     };
 
-    const src = image ? `/storage/products/${image}` : null;
+    const src = getProductImageUrl(image);
 
     return (
         <LazyImage
@@ -136,7 +137,7 @@ export function ProductImage({
  * CategoryImage - Specialized lazy image for categories
  */
 export function CategoryImage({ image, name = "Category", className = "" }) {
-    const src = image ? `/storage/categories/${image}` : null;
+    const src = getCategoryImageUrl(image);
 
     return (
         <LazyImage

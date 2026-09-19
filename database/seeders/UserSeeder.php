@@ -26,11 +26,11 @@ class UserSeeder extends Seeder
             ]
         );
 
-        $superAdminRole = Role::where('name', 'super-admin')->first();
+        $ownerRole = Role::where('name', 'owner')->first();
         $permissions = Permission::all();
 
-        if ($superAdminRole) {
-            $admin->syncRoles([$superAdminRole->name]);
+        if ($ownerRole) {
+            $admin->syncRoles([$ownerRole->name]);
         }
 
         $admin->syncPermissions($permissions);

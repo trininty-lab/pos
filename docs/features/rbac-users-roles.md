@@ -6,6 +6,14 @@ Kembali ke indeks dokumentasi: `docs/README.md`
 
 Mengatur kontrol akses berbasis role dan permission untuk semua modul dashboard.
 
+## Role Utama
+
+- `super-admin`: administrator platform POS. Role ini dipisahkan dari akun bisnis dan dipertahankan untuk kebutuhan platform-wide.
+- `owner`: pemilik bisnis dengan akses penuh ke seluruh operasi bisnis yang tersedia saat ini, termasuk user, role, permission, produk, inventory, transaksi, purchasing, finance, reports, settings, dan audit logs.
+- `cashier`: operator kasir dengan akses operasional terbatas.
+
+Pada implementasi saat ini belum ada model business/tenant atau permission khusus platform. Karena itu, pemisahan platform Super Admin dan Business Owner masih direpresentasikan melalui role; dukungan multi-business dan pembatasan data per business memerlukan tenant boundary tersendiri.
+
 ## Fitur Saat Ini
 
 - user management
@@ -45,6 +53,8 @@ Setiap modul memakai permission sendiri, contohnya:
 - seeder juga menyinkronkan permission ke user admin default
 - cache permission Spatie harus di-reset saat seeding agar permission baru terbaca konsisten
 - role lama `permission-access` dinormalisasi ke `permissions-access` saat seeding agar naming RBAC tidak ambigu
+
+User bisnis default dibuat sebagai `owner`, bukan `super-admin`.
 
 ## Integrasi Frontend
 

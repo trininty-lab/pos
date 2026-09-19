@@ -6,6 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $product = $this->route('product');
+        $minimumSellPrice = $this->input('minimum_sell_price');
+
+        if ($minimumSellPrice === null || $minimumSellPrice === '') {
+            $minimumSellPrice = $this->input('sell_price', $product?->minimum_sell_price ?: $product?->sell_price);
+        }
+
+        $this->merge(['minimum_sell_price' => $minimumSellPrice]);
+    }
+
     public function authorize(): bool
     {
         return true;

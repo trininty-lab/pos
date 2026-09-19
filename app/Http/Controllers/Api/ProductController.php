@@ -10,6 +10,7 @@ use App\Models\Warehouse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -44,6 +45,10 @@ class ProductController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        if (! $request->filled('minimum_sell_price')) {
+            $request->merge(['minimum_sell_price' => $request->input('sell_price')]);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -51,7 +56,8 @@ class ProductController extends Controller
             'sku' => ['nullable', 'string', 'max:255', Rule::unique('products', 'sku')],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'buy_price' => ['required', 'numeric', 'min:0'],
-            'sell_price' => ['required', 'numeric', 'min:0'],
+            'sell_price' => ['required', 'numeric', 'min:0', 'gte:minimum_sell_price'],
+            'minimum_sell_price' => ['nullable', 'numeric', 'min:0', 'gte:buy_price'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'min_stock' => ['nullable', 'integer', 'min:0'],
             'max_stock' => ['nullable', 'integer', 'min:0'],
@@ -71,6 +77,7 @@ class ProductController extends Controller
             'tax_type' => $validated['tax_type'] ?? 'exclusive',
             'tax_rate' => $validated['tax_rate'] ?? 0,
             'is_composite' => $validated['is_composite'] ?? false,
+            'minimum_sell_price' => $validated['minimum_sell_price'] ?? $validated['sell_price'],
         ]);
 
         // Attach to default warehouse (or first) if none given
@@ -106,6 +113,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): JsonResponse
     {
+        if (! $request->filled('minimum_sell_price')
+            && $request->filled('sell_price')
+            && ((float) $product->minimum_sell_price <= 0
+                || (float) $product->minimum_sell_price >= (float) $product->sell_price)
+        ) {
+            $request->merge(['minimum_sell_price' => $request->input('sell_price')]);
+        }
+
         $validated = $request->validate([
             'title' => ['sometimes', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -114,6 +129,7 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'buy_price' => ['sometimes', 'numeric', 'min:0'],
             'sell_price' => ['sometimes', 'numeric', 'min:0'],
+            'minimum_sell_price' => ['sometimes', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'min_stock' => ['nullable', 'integer', 'min:0'],
             'max_stock' => ['nullable', 'integer', 'min:0'],
@@ -122,6 +138,15 @@ class ProductController extends Controller
             'image' => ['nullable', 'string', 'max:255'],
             'is_composite' => ['nullable', 'boolean'],
         ]);
+
+        $buyPrice = (float) ($validated['buy_price'] ?? $product->buy_price);
+        $sellPrice = (float) ($validated['sell_price'] ?? $product->sell_price);
+        $minimumSellPrice = (float) ($validated['minimum_sell_price'] ?? $product->minimum_sell_price);
+        if ($minimumSellPrice < $buyPrice || $minimumSellPrice > $sellPrice) {
+            throw ValidationException::withMessages([
+                'minimum_sell_price' => 'The minimum selling price must be between the purchase price and selling price.',
+            ]);
+        }
 
         $product->update($validated);
 

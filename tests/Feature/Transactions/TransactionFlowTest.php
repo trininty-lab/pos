@@ -156,6 +156,38 @@ class TransactionFlowTest extends TestCase
             );
     }
 
+    public function test_cashier_discount_cannot_reduce_price_below_product_minimum(): void
+    {
+        $cashier = $this->createCashier();
+        $this->openShiftFor($cashier);
+        $product = $this->createProduct();
+        $product->update(['minimum_sell_price' => 55000]);
+
+        $cart = Cart::create([
+            'cashier_id' => $cashier->id,
+            'product_id' => $product->id,
+            'qty' => 1,
+            'price' => $product->sell_price,
+        ]);
+
+        $response = $this
+            ->actingAs($cashier)
+            ->post(route('transactions.store'), [
+                'discount' => 20000,
+                'grand_total' => 40000,
+                'cash' => 55000,
+                'change' => 0,
+            ]);
+
+        $transaction = Transaction::with('profits')->latest('id')->first();
+
+        $response->assertRedirect(route('transactions.print', $transaction->invoice));
+        $this->assertSame(55000, (int) $transaction->grand_total);
+        $this->assertSame(5000, (int) $transaction->discount);
+        $this->assertSame(10000, (int) $transaction->profits->first()->total);
+        $this->assertDatabaseMissing('carts', ['id' => $cart->id]);
+    }
+
     public function test_transaction_page_serializes_product_and_category_numeric_fields_as_integers(): void
     {
         $cashier = $this->createCashier();

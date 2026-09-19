@@ -188,6 +188,23 @@ class LoyaltyService
             ? $this->calculateVoucherDiscount($validatedVoucher, $subtotalAfterPromo)
             : 0;
 
+        $items = data_get($pricingPreview, 'items', []);
+        $productIds = collect($items)->pluck('product_id')->filter()->unique()->values();
+        $productMinimumPrices = Product::whereIn('id', $productIds)->pluck('minimum_sell_price', 'id');
+        $minimumSubtotal = collect($items)->sum(function (array $item) use ($productMinimumPrices): int {
+            $minimumPrice = (int) ($productMinimumPrices[$item['product_id'] ?? 0] ?? 0);
+            $conversionFactor = (float) ($item['conversion_factor'] ?? 1);
+
+            return $minimumPrice > 0
+                ? (int) round($minimumPrice * (int) ($item['qty'] ?? 0) * $conversionFactor)
+                : 0;
+        });
+        $minimumSubtotal = min($minimumSubtotal, $subtotalAfterPromo);
+        $baseSubtotal = (int) data_get($pricingPreview, 'summary.base_subtotal', 0);
+        $promoDiscountTotal = (int) data_get($pricingPreview, 'summary.promo_discount_total', 0);
+        $maximumAdditionalDiscount = max(0, $baseSubtotal - $minimumSubtotal - $promoDiscountTotal);
+        $voucherDiscount = min($voucherDiscount, $maximumAdditionalDiscount);
+
         $afterVoucher = max(0, $subtotalAfterPromo - $voucherDiscount);
         $redeemPointValue = (int) $settings['redeem_point_value'];
         $maxRedeemPoints = $settings['enable_redeem']
@@ -199,12 +216,14 @@ class LoyaltyService
         $pointsDiscount = $appliedRedeemPoints * $redeemPointValue;
 
         $afterLoyalty = max(0, $afterVoucher - $pointsDiscount);
-        $manualDiscountApplied = min($manualDiscountRequested, $afterLoyalty);
+        $manualDiscountApplied = min(
+            $manualDiscountRequested,
+            max(0, $maximumAdditionalDiscount - $voucherDiscount - $pointsDiscount)
+        );
         $baseGrandTotal = max(0, $afterLoyalty - $manualDiscountApplied + $shippingCost);
 
         // Calculate tax
         $taxService = app(TaxService::class);
-        $items = data_get($pricingPreview, 'items', []);
         $productIds = collect($items)->pluck('product_id')->filter()->unique()->values();
         $productTaxes = Product::whereIn('id', $productIds)->pluck('tax_rate', 'id');
         $productTaxTypes = Product::whereIn('id', $productIds)->pluck('tax_type', 'id');

@@ -30,6 +30,7 @@ export default function Edit({ categories, product }) {
         description: product.description,
         buy_price: product.buy_price,
         sell_price: product.sell_price,
+        minimum_sell_price: product.minimum_sell_price ?? product.sell_price,
         _method: "PUT",
     });
 
@@ -170,6 +171,16 @@ export default function Edit({ categories, product }) {
                                     }
                                     errors={errors.sell_price}
                                     placeholder="0"
+                                />
+                                <Input
+                                    type="number"
+                                    label="Minimum Selling Price"
+                                    value={data.minimum_sell_price}
+                                    onChange={(e) =>
+                                        setData("minimum_sell_price", e.target.value)
+                                    }
+                                    errors={errors.minimum_sell_price}
+                                    placeholder="Minimum cashier price"
                                 />
                             </div>
 

@@ -163,6 +163,7 @@ class PricingService
                 'product_id' => $cart->product_id,
                 'product_title' => $cart->product?->title,
                 'qty' => (int) $cart->qty,
+                'conversion_factor' => (float) ($cart->conversion_factor ?? 1),
                 'base_unit_price' => $baseUnitPrice,
                 'effective_unit_price' => $baseUnitPrice,
                 'line_base_total' => $baseUnitPrice * (int) $cart->qty,

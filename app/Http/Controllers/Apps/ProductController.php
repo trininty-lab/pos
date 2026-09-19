@@ -81,6 +81,7 @@ class ProductController extends Controller
             'category_id' => $validated['category_id'],
             'buy_price' => $validated['buy_price'],
             'sell_price' => $validated['sell_price'],
+            'minimum_sell_price' => $validated['minimum_sell_price'] ?? $validated['sell_price'],
             'stock' => $validated['stock'],
             'min_stock' => $validated['min_stock'] ?? 0,
             'max_stock' => $validated['max_stock'] ?? 0,
@@ -161,6 +162,7 @@ class ProductController extends Controller
                 'category_id' => $validated['category_id'],
                 'buy_price' => $validated['buy_price'],
                 'sell_price' => $validated['sell_price'],
+                'minimum_sell_price' => $validated['minimum_sell_price'] ?? $validated['sell_price'],
             ]);
 
             $this->logProductUpdate($product, $before);
@@ -181,6 +183,7 @@ class ProductController extends Controller
             'category_id' => $validated['category_id'],
             'buy_price' => $validated['buy_price'],
             'sell_price' => $validated['sell_price'],
+            'minimum_sell_price' => $validated['minimum_sell_price'] ?? $validated['sell_price'],
         ]);
 
         $this->logProductUpdate($product, $before);

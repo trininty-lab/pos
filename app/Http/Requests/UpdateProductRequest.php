@@ -22,8 +22,9 @@ class UpdateProductRequest extends FormRequest
             'title' => 'required',
             'description' => 'required',
             'category_id' => 'required',
-            'buy_price' => 'required',
-            'sell_price' => 'required',
+            'buy_price' => 'required|integer|min:0',
+            'sell_price' => 'required|integer|min:0|gte:minimum_sell_price',
+            'minimum_sell_price' => 'nullable|integer|min:0|gte:buy_price',
             'min_stock' => 'nullable|integer|min:0',
             'max_stock' => 'nullable|integer|min:0',
         ];

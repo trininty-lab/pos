@@ -11,8 +11,12 @@ Mengatur kontrol akses berbasis role dan permission untuk semua modul dashboard.
 - `super-admin`: administrator platform POS. Role ini dipisahkan dari akun bisnis dan dipertahankan untuk kebutuhan platform-wide.
 - `owner`: pemilik bisnis dengan akses penuh ke seluruh operasi bisnis yang tersedia saat ini, termasuk user, role, permission, produk, inventory, transaksi, purchasing, finance, reports, settings, dan audit logs.
 - `cashier`: operator kasir dengan akses operasional terbatas.
+- `admin`: administrator operasional bisnis.
+- `manager`: pengelola operasi dan laporan bisnis.
+- `accountant`: pengelola transaksi keuangan dan laporan.
+- `storekeeper`: pengelola produk, gudang, dan pergerakan stok.
 
-Pada implementasi saat ini belum ada model business/tenant atau permission khusus platform. Karena itu, pemisahan platform Super Admin dan Business Owner masih direpresentasikan melalui role; dukungan multi-business dan pembatasan data per business memerlukan tenant boundary tersendiri.
+Platform administration now has a `businesses` registry and assigns users through `users.business_id`. The `/platform` dashboard and business management routes are restricted to `super-admin`. Operational tables created before this boundary are still global; product, inventory, and transaction tenant isolation requires the next migration phase.
 
 ## Fitur Saat Ini
 

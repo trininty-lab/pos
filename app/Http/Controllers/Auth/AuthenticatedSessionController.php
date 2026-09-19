@@ -43,6 +43,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->put('security.session_started_at', now()->timestamp);
 
         $user = $request->user();
+        $user?->forceFill(['last_login_at' => now()])->save();
 
         $this->auditLogService->log(
             event: 'auth.login_succeeded',

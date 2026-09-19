@@ -30,6 +30,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'avatar',
         'locale',
+        'business_id',
+        'is_active',
+        'last_login_at',
+        'suspended_at',
+        'force_password_reset',
     ];
 
     /**
@@ -52,7 +57,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'business_id' => 'integer',
+            'is_active' => 'boolean',
+            'last_login_at' => 'datetime',
+            'suspended_at' => 'datetime',
+            'force_password_reset' => 'boolean',
         ];
+    }
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class);
     }
 
     /**

@@ -32,6 +32,7 @@ use App\Http\Controllers\Apps\SupplierController;
 use App\Http\Controllers\Apps\SupplierReturnController;
 use App\Http\Controllers\Apps\TransactionController;
 use App\Http\Controllers\Apps\WarehouseController;
+use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DineMenuController;
 use App\Http\Controllers\DineOrderController;
@@ -46,6 +47,7 @@ use App\Http\Controllers\Reports\AdvancedSalesInsightsController;
 use App\Http\Controllers\Reports\ProfitReportController;
 use App\Http\Controllers\Reports\SalesReportController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -76,6 +78,15 @@ Route::get('/kontribusi', fn () => Inertia::render('Public/Contributing'))->name
 Route::get('/dashboard/access', function () {
     return Inertia::render('Dashboard/Access');
 })->middleware('auth')->name('dashboard.access');
+
+Route::middleware(['auth', 'role:super-admin'])->prefix('platform')->name('platform.')->group(function () {
+    Route::get('/', [PlatformController::class, 'index'])->name('dashboard');
+    Route::get('/businesses', [BusinessController::class, 'index'])->name('businesses.index');
+    Route::post('/businesses', [BusinessController::class, 'store'])->name('businesses.store');
+    Route::get('/businesses/{business}', [BusinessController::class, 'show'])->name('businesses.show');
+    Route::put('/businesses/{business}', [BusinessController::class, 'update'])->name('businesses.update');
+    Route::patch('/businesses/{business}/status', [BusinessController::class, 'status'])->name('businesses.status');
+});
 
 // Public share routes (no login)
 Route::get('/share/transactions/{invoice}', [DocumentController::class, 'publicInvoice'])

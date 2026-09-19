@@ -67,6 +67,17 @@ class RoleSeeder extends Seeder
         $ownerRole = Role::firstOrCreate(['name' => 'owner']);
         $ownerRole->syncPermissions(Permission::all());
 
+        $this->createRoleWithPermissionPatterns('admin', ['%']);
+        $this->createRoleWithPermissionPatterns('manager', [
+            '%transactions%', '%products%', '%customers%', '%reports%', '%inventory%', '%cashier-shifts%',
+        ]);
+        $this->createRoleWithPermissionPatterns('accountant', [
+            '%transactions%', '%receivables%', '%payables%', '%reports%', '%profits%', '%audit-logs%',
+        ]);
+        $this->createRoleWithPermissionPatterns('storekeeper', [
+            '%products%', '%categories%', '%warehouses%', '%stock%', '%purchase-orders%', '%goods-receivings%', '%supplier-returns%', '%stock-transfers%',
+        ]);
+
         // Create cashier role with basic permissions for public registration
         $cashierRole = Role::firstOrCreate(['name' => 'cashier']);
         $cashierPermissions = Permission::whereIn('name', [
@@ -121,5 +132,18 @@ class RoleSeeder extends Seeder
         $permissions = Permission::where('name', 'like', $permissionNamePattern)->get();
         $role = Role::firstOrCreate(['name' => $roleName]);
         $role->syncPermissions($permissions);
+    }
+
+    private function createRoleWithPermissionPatterns(string $roleName, array $patterns): void
+    {
+        $permissions = Permission::query()
+            ->where(function ($query) use ($patterns) {
+                foreach ($patterns as $pattern) {
+                    $query->orWhere('name', 'like', $pattern);
+                }
+            })
+            ->get();
+
+        Role::firstOrCreate(['name' => $roleName])->syncPermissions($permissions);
     }
 }

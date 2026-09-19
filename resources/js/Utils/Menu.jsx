@@ -46,9 +46,33 @@ export default function Menu() {
     const { t } = useTranslation();
     const page = usePage();
     const url = page.url ?? page.props?.url ?? "";
+    const isSuperAdmin = page.props?.auth?.super === true;
 
     // define menu navigations
     const menuNavigation = [
+        ...(isSuperAdmin
+            ? [
+                  {
+                      title: "Platform",
+                      details: [
+                          {
+                              title: "Super Admin Dashboard",
+                              href: route("platform.dashboard"),
+                              active: url.startsWith("/platform"),
+                              icon: <IconCrown size={20} strokeWidth={1.5} />,
+                              permissions: true,
+                          },
+                          {
+                              title: "Businesses",
+                              href: route("platform.businesses.index"),
+                              active: url.startsWith("/platform/businesses"),
+                              icon: <IconBuildingStore size={20} strokeWidth={1.5} />,
+                              permissions: true,
+                          },
+                      ],
+                  },
+              ]
+            : []),
         {
             title: t("sidebar.sections.overview"),
             details: [

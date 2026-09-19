@@ -64,6 +64,26 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+        if (! $user->is_active || $user->suspended_at) {
+            Auth::logout();
+
+            app(AuditLogService::class)->log(
+                event: 'auth.login_blocked',
+                module: 'auth',
+                auditable: $user,
+                description: 'Login diblokir karena akun tidak aktif.',
+                meta: [
+                    'severity' => 'warning',
+                    'route' => $this->route()?->getName(),
+                ],
+            );
+
+            throw ValidationException::withMessages([
+                'email' => 'This account is inactive or suspended.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

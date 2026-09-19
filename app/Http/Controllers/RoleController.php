@@ -47,6 +47,12 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
+        abort_if(
+            ! $request->user()->isSuperAdmin()
+                && in_array($request->name, ['super-admin', 'owner'], true),
+            403
+        );
+
         // create new role data
         $role = Role::create(['name' => $request->name]);
 
@@ -73,6 +79,8 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
+        $this->guardProtectedRole($role, $request->user());
+
         $beforePermissions = $role->permissions()->pluck('name')->all();
         $before = [
             'name' => $role->name,
@@ -119,6 +127,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->guardProtectedRole($role, request()->user());
+
         $before = [
             'name' => $role->name,
             'permissions' => $role->permissions()->pluck('name')->all(),
@@ -137,5 +147,11 @@ class RoleController extends Controller
 
         // render view
         return back();
+    }
+
+    private function guardProtectedRole(Role $role, $actor): void
+    {
+        abort_if($role->name === 'super-admin' && ! $actor->isSuperAdmin(), 403);
+        abort_if($role->name === 'owner' && ! $actor->isSuperAdmin(), 403);
     }
 }

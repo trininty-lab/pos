@@ -58,6 +58,8 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $this->guardProtectedRoles($request->selectedRoles, $request->user());
+
         $avatarPath = null;
 
         if ($request->file('avatar')) {
@@ -117,6 +119,9 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
+        $this->guardProtectedUser($user, $request->user());
+        $this->guardProtectedRoles($request->selectedRoles, $request->user());
+
         $beforeRoles = $user->roles()->pluck('name')->all();
         $before = $this->userPayload($user, $beforeRoles, false);
         $avatarPath = $user->getRawOriginal('avatar');
@@ -187,6 +192,10 @@ class UserController extends Controller
         $users = User::query()->with('roles')->whereIn('id', $ids)->get();
 
         foreach ($users as $user) {
+            $this->guardProtectedUser($user, request()->user());
+        }
+
+        foreach ($users as $user) {
             $this->auditLogService->log(
                 event: 'user.deleted',
                 module: 'users',
@@ -210,5 +219,23 @@ class UserController extends Controller
             'avatar_changed' => $avatarChanged,
             'roles' => array_values($roles),
         ];
+    }
+
+    private function guardProtectedRoles(array|string|null $roles, User $actor): void
+    {
+        $roleNames = is_array($roles) ? $roles : [$roles];
+
+        if (! $actor->isSuperAdmin() && array_intersect($roleNames, ['super-admin', 'owner'])) {
+            abort(403);
+        }
+    }
+
+    private function guardProtectedUser(User $user, User $actor): void
+    {
+        if ($actor->isSuperAdmin()) {
+            return;
+        }
+
+        abort_if($user->hasAnyRole(['super-admin', 'owner']), 403);
     }
 }

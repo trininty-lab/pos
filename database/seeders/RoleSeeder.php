@@ -60,11 +60,17 @@ class RoleSeeder extends Seeder
         $this->createRoleWithPermissions('dine-tables-access', '%dine-tables%');
         $this->createRoleWithPermissions('dine-orders-access', '%dine-orders%');
 
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdminRole = Role::updateOrCreate(
+            ['name' => 'super-admin', 'guard_name' => 'web'],
+            ['scope' => 'system'],
+        );
         $superAdminRole->syncPermissions(Permission::all());
 
-        // Owner manages the complete business operation within this POS.
-        $ownerRole = Role::firstOrCreate(['name' => 'owner']);
+        // Owner manages one or more businesses, never system administration.
+        $ownerRole = Role::updateOrCreate(
+            ['name' => 'owner', 'guard_name' => 'web'],
+            ['scope' => 'business'],
+        );
         $ownerRole->syncPermissions(Permission::all());
 
         $this->createRoleWithPermissionPatterns('admin', ['%']);
@@ -95,6 +101,8 @@ class RoleSeeder extends Seeder
             'suppliers-access',
         ])->get();
         $cashierRole->syncPermissions($cashierPermissions);
+
+        $this->removeSystemPermissionsFromBusinessRoles();
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
@@ -130,7 +138,10 @@ class RoleSeeder extends Seeder
     private function createRoleWithPermissions($roleName, $permissionNamePattern)
     {
         $permissions = Permission::where('name', 'like', $permissionNamePattern)->get();
-        $role = Role::firstOrCreate(['name' => $roleName]);
+        $role = Role::updateOrCreate(
+            ['name' => $roleName, 'guard_name' => 'web'],
+            ['scope' => 'business'],
+        );
         $role->syncPermissions($permissions);
     }
 
@@ -144,6 +155,20 @@ class RoleSeeder extends Seeder
             })
             ->get();
 
-        Role::firstOrCreate(['name' => $roleName])->syncPermissions($permissions);
+        Role::updateOrCreate(
+            ['name' => $roleName, 'guard_name' => 'web'],
+            ['scope' => 'business'],
+        )->syncPermissions($permissions);
+    }
+
+    private function removeSystemPermissionsFromBusinessRoles(): void
+    {
+        $systemPermissions = Permission::whereIn('name', [
+            'permissions-access',
+        ])->get();
+
+        Role::where('scope', '!=', 'system')->get()->each(function (Role $role) use ($systemPermissions): void {
+            $role->revokePermissionTo($systemPermissions);
+        });
     }
 }

@@ -52,4 +52,22 @@ class PlatformAdministrationTest extends TestCase
             'status' => 'suspended',
         ]);
     }
+
+    public function test_business_owner_assignment_requires_an_owner_role(): void
+    {
+        $superAdmin = User::factory()->create();
+        $candidate = User::factory()->create();
+        Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
+        Role::create(['name' => 'owner', 'guard_name' => 'web']);
+        $superAdmin->assignRole('super-admin');
+
+        $this->actingAs($superAdmin)
+            ->post(route('platform.businesses.store'), [
+                'name' => 'Invalid Owner Business',
+                'country' => 'KE',
+                'currency' => 'KES',
+                'owner_id' => $candidate->id,
+            ])
+            ->assertSessionHasErrors('owner_id');
+    }
 }

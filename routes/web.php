@@ -101,7 +101,7 @@ Route::post('/language/switch', [LanguageController::class, 'switch'])->name('la
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'permission:dashboard-access'])->name('dashboard');
-    Route::get('/permissions', [PermissionController::class, 'index'])->middleware('permission:permissions-access')->name('permissions.index');
+    Route::get('/permissions', [PermissionController::class, 'index'])->middleware(['role:super-admin', 'permission:permissions-access'])->name('permissions.index');
     // roles route
     Route::resource('/roles', RoleController::class)
         ->except(['create', 'edit', 'show'])

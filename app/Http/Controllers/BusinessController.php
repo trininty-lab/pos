@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use App\Models\Transaction;
+use App\Models\User;
+use App\Services\AuditLogService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class BusinessController extends Controller
 {
+    public function __construct(
+        private readonly AuditLogService $auditLogService
+    ) {}
+
     public function index(Request $request)
     {
         $filters = [
@@ -64,12 +71,30 @@ class BusinessController extends Controller
     {
         $business = Business::create($this->validated($request));
 
+        $this->auditLogService->log(
+            event: 'business.created',
+            module: 'platform',
+            auditable: $business,
+            description: 'Business created by Super Admin.',
+            after: $business->only(['name', 'owner_id', 'status']),
+        );
+
         return to_route('platform.businesses.show', $business)->with('success', 'Business created.');
     }
 
     public function update(Request $request, Business $business)
     {
+        $before = $business->only(['name', 'owner_id', 'status']);
         $business->update($this->validated($request, $business));
+
+        $this->auditLogService->log(
+            event: 'business.updated',
+            module: 'platform',
+            auditable: $business,
+            description: 'Business updated by Super Admin.',
+            before: $before,
+            after: $business->fresh()->only(['name', 'owner_id', 'status']),
+        );
 
         return back()->with('success', 'Business updated.');
     }
@@ -80,18 +105,28 @@ class BusinessController extends Controller
             'status' => ['required', Rule::in(['pending', 'active', 'suspended', 'inactive', 'archived'])],
         ]);
 
+        $before = $business->only(['status', 'suspended_at', 'archived_at']);
         $business->update([
             'status' => $validated['status'],
             'suspended_at' => $validated['status'] === 'suspended' ? now() : null,
             'archived_at' => $validated['status'] === 'archived' ? now() : null,
         ]);
 
+        $this->auditLogService->log(
+            event: 'business.status_changed',
+            module: 'platform',
+            auditable: $business,
+            description: 'Business status changed by Super Admin.',
+            before: $before,
+            after: $business->fresh()->only(['status', 'suspended_at', 'archived_at']),
+        );
+
         return back()->with('success', 'Business status updated.');
     }
 
     private function validated(Request $request, ?Business $business = null): array
     {
-        return $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'registration_number' => ['nullable', 'string', 'max:100', Rule::unique('businesses', 'registration_number')->ignore($business?->id)],
             'tax_pin' => ['nullable', 'string', 'max:100'],
@@ -103,5 +138,15 @@ class BusinessController extends Controller
             'owner_id' => ['nullable', 'exists:users,id'],
             'status' => ['nullable', Rule::in(['pending', 'active', 'suspended', 'inactive', 'archived'])],
         ]);
+
+        if (filled($validated['owner_id'] ?? null)
+            && ! User::whereKey($validated['owner_id'])->whereHas('roles', fn ($query) => $query->where('name', 'owner'))->exists()
+        ) {
+            throw ValidationException::withMessages([
+                'owner_id' => 'The selected user must have the Owner role.',
+            ]);
+        }
+
+        return $validated;
     }
 }

@@ -19,11 +19,18 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // get all users data
         $users = User::query()
             ->with('roles')
+            ->when(! $request->user()->isSuperAdmin(), function ($query) use ($request) {
+                $businessId = $request->user()->business_id;
+
+                return $businessId
+                    ? $query->where('business_id', $businessId)
+                    : $query->whereKey($request->user()->id);
+            })
             ->when(request()->search, fn ($query) => $query->where('name', 'like', '%'.request()->search.'%'))
             ->select('id', 'name', 'avatar', 'email')
             ->latest()
@@ -39,10 +46,11 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         // get all role data
         $roles = Role::query()
+            ->when(! $request->user()->isSuperAdmin(), fn ($query) => $query->where('scope', '!=', 'system'))
             ->select('id', 'name')
             ->orderBy('name')
             ->get();
@@ -58,6 +66,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        abort_if(! $request->user()->isSuperAdmin() && $request->user()->business_id === null, 403);
         $this->guardProtectedRoles($request->selectedRoles, $request->user());
 
         $avatarPath = null;
@@ -72,6 +81,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'avatar' => $avatarPath,
+            'business_id' => $request->user()->isSuperAdmin() ? null : $request->user()->business_id,
         ]);
 
         // assign role to user
@@ -96,10 +106,13 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(Request $request, User $user)
     {
+        $this->guardManagedUser($user, $request->user());
+
         // get all role data
         $roles = Role::query()
+            ->when(! $request->user()->isSuperAdmin(), fn ($query) => $query->where('scope', '!=', 'system'))
             ->select('id', 'name')
             ->orderBy('name')
             ->get();
@@ -119,7 +132,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $this->guardProtectedUser($user, $request->user());
+        $this->guardManagedUser($user, $request->user());
         $this->guardProtectedRoles($request->selectedRoles, $request->user());
 
         $beforeRoles = $user->roles()->pluck('name')->all();
@@ -189,10 +202,16 @@ class UserController extends Controller
         abort_if(request()->user()->hasRole('cashier'), 403);
 
         $ids = explode(',', $id);
-        $users = User::query()->with('roles')->whereIn('id', $ids)->get();
+        $usersQuery = User::query()->with('roles')->whereIn('id', $ids);
+        if (! request()->user()->isSuperAdmin()) {
+            $usersQuery->where('business_id', request()->user()->business_id);
+        }
+
+        $users = $usersQuery->get();
 
         foreach ($users as $user) {
-            $this->guardProtectedUser($user, request()->user());
+            abort_if($user->is(request()->user()), 403);
+            $this->guardManagedUser($user, request()->user());
         }
 
         foreach ($users as $user) {
@@ -228,14 +247,19 @@ class UserController extends Controller
         if (! $actor->isSuperAdmin() && array_intersect($roleNames, ['super-admin', 'owner'])) {
             abort(403);
         }
+
+        if (! $actor->isSuperAdmin() && Role::whereIn('name', $roleNames)->where('scope', 'system')->exists()) {
+            abort(403);
+        }
     }
 
-    private function guardProtectedUser(User $user, User $actor): void
+    private function guardManagedUser(User $user, User $actor): void
     {
         if ($actor->isSuperAdmin()) {
             return;
         }
 
+        abort_if($actor->business_id === null || $user->business_id !== $actor->business_id, 403);
         abort_if($user->hasAnyRole(['super-admin', 'owner']), 403);
     }
 }

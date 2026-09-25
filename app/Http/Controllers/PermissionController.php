@@ -13,6 +13,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        abort_unless(request()->user()?->isSuperAdmin(), 403);
+
         $permissions = Permission::query()
             ->when(request()->search, fn ($query) => $query->where('name', 'like', '%'.request()->search.'%'))
             ->select('id', 'name')

@@ -77,7 +77,7 @@ class AuthorizationConsistencyTest extends TestCase
         }
     }
 
-    public function test_owner_can_access_business_permission_guarded_route_without_direct_permission_assignment(): void
+    public function test_owner_cannot_access_system_permission_management(): void
     {
         $this->seed(RoleSeeder::class);
 
@@ -86,7 +86,19 @@ class AuthorizationConsistencyTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('permissions.index'));
 
-        $response->assertOk();
+        $response->assertForbidden();
+        $this->assertFalse($user->fresh()->can('permissions-access'));
+    }
+
+    public function test_owner_role_is_business_scoped(): void
+    {
+        $this->seed(RoleSeeder::class);
+
+        $owner = Role::findByName('owner');
+        $superAdmin = Role::findByName('super-admin');
+
+        $this->assertSame('business', $owner->scope);
+        $this->assertSame('system', $superAdmin->scope);
     }
 
     public function test_non_super_admin_still_gets_403_without_permission(): void

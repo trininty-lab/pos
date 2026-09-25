@@ -6,6 +6,7 @@ use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DashboardNavigationTest extends TestCase
@@ -70,6 +71,11 @@ class DashboardNavigationTest extends TestCase
     public function test_every_sidebar_destination_loads_for_a_user_with_its_required_permission(): void
     {
         $user = User::factory()->create();
+        $user->assignRole(Role::create([
+            'name' => 'super-admin',
+            'guard_name' => 'web',
+            'scope' => 'system',
+        ]));
         $user->givePermissionTo(Permission::all());
 
         foreach (self::MENU_ROUTES as $routeName => $permission) {

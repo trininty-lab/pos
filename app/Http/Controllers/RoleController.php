@@ -23,6 +23,7 @@ class RoleController extends Controller
         // get all role data
         $roles = Role::query()
             ->with('permissions')
+            ->when(! $request->user()->isSuperAdmin(), fn ($query) => $query->where('scope', '!=', 'system'))
             ->when(request()->search, fn ($query) => $query->where('name', 'like', '%'.request()->search.'%'))
             ->select('id', 'name')
             ->latest()
@@ -52,6 +53,7 @@ class RoleController extends Controller
                 && in_array($request->name, ['super-admin', 'owner'], true),
             403
         );
+        $this->guardSystemPermissions($request->selectedPermission, $request->user());
 
         // create new role data
         $role = Role::create(['name' => $request->name]);
@@ -80,6 +82,7 @@ class RoleController extends Controller
     public function update(RoleRequest $request, Role $role)
     {
         $this->guardProtectedRole($role, $request->user());
+        $this->guardSystemPermissions($request->selectedPermission, $request->user());
 
         $beforePermissions = $role->permissions()->pluck('name')->all();
         $before = [
@@ -151,7 +154,21 @@ class RoleController extends Controller
 
     private function guardProtectedRole(Role $role, $actor): void
     {
-        abort_if($role->name === 'super-admin' && ! $actor->isSuperAdmin(), 403);
-        abort_if($role->name === 'owner' && ! $actor->isSuperAdmin(), 403);
+        if (! $actor->isSuperAdmin() && (($role->scope ?? null) === 'system' || in_array($role->name, ['super-admin', 'owner'], true))) {
+            abort(403);
+        }
+    }
+
+    private function guardSystemPermissions(array|string|null $permissionIds, $actor): void
+    {
+        if ($actor->isSuperAdmin() || blank($permissionIds)) {
+            return;
+        }
+
+        $ids = is_array($permissionIds) ? $permissionIds : [$permissionIds];
+        abort_if(
+            Permission::whereIn('id', $ids)->whereIn('name', ['permissions-access'])->exists(),
+            403,
+        );
     }
 }

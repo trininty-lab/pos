@@ -1,5 +1,19 @@
-const CACHE_NAME = 'pos-cache-v2';
+const CACHE_NAME = 'pos-cache-v3';
 const MASTER_API_PATTERNS = ['/products', '/customers', '/pricing', '/categories', '/warehouses'];
+
+const offlineResponse = (request) => {
+    if (request.headers.get('accept')?.includes('text/html')) {
+        return new Response('<!doctype html><title>Offline</title><p>This page is unavailable offline.</p>', {
+            status: 503,
+            headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        });
+    }
+
+    return new Response(JSON.stringify({ offline: true }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' },
+    });
+};
 
 self.addEventListener('install', (event) => {
     self.skipWaiting();
@@ -10,7 +24,7 @@ self.addEventListener('activate', (event) => {
         Promise.all([
             self.clients.claim(),
             caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))),
-        ])
+        ]).catch(() => undefined)
     );
 });
 
@@ -33,8 +47,8 @@ self.addEventListener('fetch', (event) => {
                         }
                         return response;
                     })
-                    .catch(() => cache.match(request))
-            )
+                        .catch(() => cache.match(request).then((cached) => cached || offlineResponse(request)))
+                    ).catch(() => offlineResponse(request))
         );
         return;
     }
@@ -52,6 +66,8 @@ self.addEventListener('fetch', (event) => {
 
     // Cache-first for static assets
     event.respondWith(
-        caches.match(event.request).then((cached) => cached || fetch(event.request))
+        caches.match(event.request)
+            .then((cached) => cached || fetch(event.request))
+            .catch(() => offlineResponse(event.request))
     );
 });

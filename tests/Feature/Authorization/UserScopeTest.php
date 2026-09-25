@@ -102,6 +102,31 @@ class UserScopeTest extends TestCase
         ]);
     }
 
+    public function test_business_owner_can_open_user_creation_without_direct_user_permission_assignments(): void
+    {
+        $owner = User::factory()->create();
+        $owner->assignRole(Role::findByName('owner'));
+        $owner->revokePermissionTo(['users-access', 'users-create']);
+        $business = Business::create(['name' => 'Owner Business', 'status' => 'active', 'owner_id' => $owner->id]);
+        $owner->update(['business_id' => $business->id]);
+
+        $this->actingAs($owner)
+            ->withSession($this->recentlyConfirmedSession())
+            ->get(route('users.create'))
+            ->assertOk();
+
+        $this->actingAs($owner)
+            ->withSession($this->recentlyConfirmedSession())
+            ->post(route('users.store'), [
+                'name' => 'Role Authorized Cashier',
+                'email' => 'role-authorized@example.com',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+                'selectedRoles' => ['cashier'],
+            ])
+            ->assertRedirect(route('users.index'));
+    }
+
     public function test_user_creation_rejects_unknown_roles_without_creating_an_account(): void
     {
         $owner = User::factory()->create();

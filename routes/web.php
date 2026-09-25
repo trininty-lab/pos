@@ -112,8 +112,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     // users route
     Route::resource('/users', UserController::class)
         ->except('show')
-        ->middlewareFor('index', 'permission:users-access')
-        ->middlewareFor(['create', 'store'], 'permission:users-create')
+        ->middlewareFor('index', 'role_or_permission:owner|users-access')
+        ->middlewareFor(['create', 'store'], 'role_or_permission:owner|users-create')
         ->middlewareFor('create', 'step_up')
         ->middlewareFor(['edit', 'update'], 'permission:users-update')
         ->middlewareFor('update', ['permission:users-update', 'step_up'])

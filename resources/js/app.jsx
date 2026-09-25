@@ -27,7 +27,11 @@ router.on('httpException', () => {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         if (import.meta.env.PROD) {
-            navigator.serviceWorker.register(`/sw.js?v=${Date.now()}`);
+            navigator.serviceWorker
+                .register(`/sw.js?v=${Date.now()}`)
+                .catch(() => {
+                    toast.error('Offline support is unavailable.');
+                });
             return;
         }
 
@@ -47,7 +51,10 @@ if ('serviceWorker' in navigator) {
                         .filter((key) => key.startsWith('pos-cache-'))
                         .map((key) => caches.delete(key))
                 )
-            );
+            )
+            .catch(() => {
+                // Service-worker cleanup is best effort during development.
+            });
     });
 }
 

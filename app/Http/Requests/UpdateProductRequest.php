@@ -16,6 +16,12 @@ class UpdateProductRequest extends FormRequest
         }
 
         $this->merge(['minimum_sell_price' => $minimumSellPrice]);
+        $maximumSellPrice = $this->input('maximum_sell_price');
+        if ($maximumSellPrice === null || $maximumSellPrice === '') {
+            $maximumSellPrice = $this->input('sell_price', $product?->maximum_sell_price ?: $product?->sell_price);
+        }
+
+        $this->merge(['maximum_sell_price' => $maximumSellPrice]);
     }
 
     public function authorize(): bool
@@ -37,6 +43,7 @@ class UpdateProductRequest extends FormRequest
             'buy_price' => 'required|integer|min:0',
             'sell_price' => 'required|integer|min:0|gte:minimum_sell_price',
             'minimum_sell_price' => 'nullable|integer|min:0|gte:buy_price',
+            'maximum_sell_price' => 'nullable|integer|min:0|gte:sell_price',
             'min_stock' => 'nullable|integer|min:0',
             'max_stock' => 'nullable|integer|min:0',
         ];

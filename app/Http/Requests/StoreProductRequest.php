@@ -10,6 +10,7 @@ class StoreProductRequest extends FormRequest
     {
         $this->merge([
             'minimum_sell_price' => $this->input('minimum_sell_price', $this->input('sell_price')),
+            'maximum_sell_price' => $this->input('maximum_sell_price', $this->input('sell_price')),
         ]);
     }
 
@@ -32,6 +33,7 @@ class StoreProductRequest extends FormRequest
             'buy_price' => 'required|integer|min:0',
             'sell_price' => 'required|integer|min:0|gte:minimum_sell_price',
             'minimum_sell_price' => 'nullable|integer|min:0|gte:buy_price',
+            'maximum_sell_price' => 'nullable|integer|min:0|gte:sell_price',
             'stock' => 'required|integer|min:0',
             'min_stock' => 'nullable|integer|min:0',
             'max_stock' => 'nullable|integer|min:0',

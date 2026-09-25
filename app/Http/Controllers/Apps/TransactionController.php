@@ -86,7 +86,7 @@ class TransactionController extends Controller
 
         // get products with stock > 0 in active warehouse
         $products = Product::with('category:id,name')
-            ->select('id', 'barcode', 'title', 'description', 'image', 'buy_price', 'sell_price', 'stock', 'category_id')
+            ->select('id', 'barcode', 'title', 'description', 'image', 'buy_price', 'sell_price', 'minimum_sell_price', 'maximum_sell_price', 'stock', 'category_id')
             ->when($warehouseId, function ($q) use ($warehouseId) {
                 $q->whereHas('warehouses', fn ($w) => $w->where('product_warehouse.warehouse_id', $warehouseId)
                     ->where('product_warehouse.stock', '>', 0));

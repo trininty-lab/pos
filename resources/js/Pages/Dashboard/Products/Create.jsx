@@ -31,6 +31,7 @@ export default function Create({ categories }) {
         buy_price: "",
         sell_price: "",
         minimum_sell_price: "",
+        maximum_sell_price: "",
         stock: "",
     });
 
@@ -152,7 +153,7 @@ export default function Create({ categories }) {
                                 <IconCurrencyDollar size={18} />
                                 Pricing & Stock
                             </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <Input
                                     type="number"
                                     label="Purchase Price"
@@ -175,13 +176,23 @@ export default function Create({ categories }) {
                                 />
                                 <Input
                                     type="number"
-                                    label="Minimum Selling Price"
+                                    label="Minimum Price"
                                     value={data.minimum_sell_price}
                                     onChange={(e) =>
                                         setData("minimum_sell_price", e.target.value)
                                     }
                                     errors={errors.minimum_sell_price}
-                                    placeholder="Defaults to selling price"
+                                    placeholder="Defaults to target price"
+                                />
+                                <Input
+                                    type="number"
+                                    label="Maximum Price"
+                                    value={data.maximum_sell_price}
+                                    onChange={(e) =>
+                                        setData("maximum_sell_price", e.target.value)
+                                    }
+                                    errors={errors.maximum_sell_price}
+                                    placeholder="Defaults to target price"
                                 />
                                 <Input
                                     type="number"

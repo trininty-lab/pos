@@ -23,6 +23,9 @@ function ProductCard({ product, onAddToCart, isAdding }) {
     const promoBadge = product.pricing_badge;
     const promoPrice = Number(promoBadge?.promo_price || 0);
     const basePrice = Number(promoBadge?.base_price || product.sell_price || 0);
+    const minimumPrice = Number(product.minimum_sell_price || product.sell_price || 0);
+    const maximumPrice = Number(product.maximum_sell_price || product.sell_price || 0);
+    const hasPriceRange = minimumPrice < maximumPrice;
     const showPromo = promoBadge && promoPrice > 0 && promoPrice < basePrice;
     const showBadge = Boolean(promoBadge?.label);
 
@@ -105,6 +108,14 @@ function ProductCard({ product, onAddToCart, isAdding }) {
                     <p className="text-base font-bold text-primary-600 dark:text-primary-400">
                         {formatPrice(showPromo ? promoPrice : product.sell_price)}
                     </p>
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                        Target price: {formatPrice(product.sell_price)}
+                    </p>
+                    {hasPriceRange && (
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            Range: {formatPrice(minimumPrice)} - {formatPrice(maximumPrice)}
+                        </p>
+                    )}
                     {showBadge && !showPromo && (
                         <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                             {t("transactions.promoAvailable")}

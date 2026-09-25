@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Head, router, Link, usePage } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import Button from "@/Components/Dashboard/Button";
 import Table from "@/Components/Dashboard/Table";
@@ -35,6 +36,7 @@ const formatCurrency = (value = 0) =>
     }).format(value);
 
 const History = ({ transactions, filters, warehouses = [] }) => {
+    const { t } = useTranslation();
     const { can } = useAuthorization();
     const canCreateSalesReturn = can("sales-returns-create");
     const canConfirmPayment = can("transactions-confirm-payment");
@@ -94,7 +96,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
 
     return (
         <>
-            <Head title="Riwayat Transaksi" />
+            <Head title={t("transactionHistory.title")} />
 
             <div className="space-y-6">
                 {/* Header */}
@@ -105,10 +107,10 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 size={28}
                                 className="text-primary-500"
                             />
-                            Riwayat Transaksi
+                            {t("transactionHistory.title")}
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            {transactions?.total || 0} transaksi tercatat
+                            {t("transactionHistory.recordedCount", { count: transactions?.total || 0 })}
                         </p>
                     </div>
                     <div className="flex gap-2">
@@ -121,7 +123,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                             }`}
                         >
                             <IconFilter size={18} />
-                            <span>Filter</span>
+                            <span>{t("transactionHistory.filter")}</span>
                             {hasActiveFilters && (
                                 <span className="w-2 h-2 rounded-full bg-primary-500"></span>
                             )}
@@ -131,7 +133,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors shadow-lg shadow-primary-500/30"
                         >
                             <IconReceipt size={18} />
-                            <span>Transaksi Baru</span>
+                            <span>{t("transactionHistory.newTransaction")}</span>
                         </Link>
                     </div>
                 </div>
@@ -143,7 +145,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Nomor Invoice
+                                        {t("transactionHistory.invoiceNumber")}
                                     </label>
                                     <input
                                         type="text"
@@ -160,7 +162,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Tanggal Mulai
+                                        {t("transactionHistory.startDate")}
                                     </label>
                                     <input
                                         type="date"
@@ -176,7 +178,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Tanggal Akhir
+                                        {t("transactionHistory.endDate")}
                                     </label>
                                     <input
                                         type="date"
@@ -192,14 +194,14 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                        Gudang / Cabang
+                                        {t("transactionHistory.warehouse")}
                                     </label>
                                     <select
                                         value={filterData.warehouse_id}
                                         onChange={(e) => handleChange("warehouse_id", e.target.value)}
                                         className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
                                     >
-                                        <option value="">Semua Gudang</option>
+                                        <option value="">{t("transactionHistory.allWarehouses")}</option>
                                         {warehouses.map((w) => (
                                             <option key={w.id} value={w.id}>{w.code} — {w.name}</option>
                                         ))}
@@ -211,7 +213,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                         className="flex-1 h-11 inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-medium transition-colors"
                                     >
                                         <IconSearch size={18} />
-                                        <span>Cari</span>
+                                        <span>{t("transactionHistory.search")}</span>
                                     </button>
                                     {hasActiveFilters && (
                                         <button
@@ -240,28 +242,28 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                             No
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Invoice
+                                            {t("transactionHistory.invoice")}
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Tanggal
+                                            {t("transactionHistory.date")}
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Kasir
+                                            {t("transactionHistory.cashier")}
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Pelanggan
+                                            {t("transactionHistory.customer")}
                                         </th>
                                         <th className="px-4 py-4 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Item
+                                            {t("transactionHistory.items")}
                                         </th>
                                         <th className="px-4 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Total
+                                            {t("transactionHistory.total")}
                                         </th>
                                         <th className="px-4 py-4 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Status
+                                            {t("transactionHistory.status")}
                                         </th>
                                         <th className="px-4 py-4 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                            Aksi
+                                            {t("transactionHistory.actions")}
                                         </th>
                                     </tr>
                                 </thead>
@@ -291,7 +293,8 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                             <td className="px-4 py-4">
                                                 <span className="px-2 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">
                                                     {transaction.customer
-                                                        ?.name ?? "Umum"}
+                                                        ?.name ??
+                                                        t("transactionHistory.generalCustomer")}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-4 text-center">
@@ -311,13 +314,13 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 transaction.payment_status !==
                                                     "paid" ? (
                                                     <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
-                                                        Piutang
+                                                        {t("transactionHistory.receivable")}
                                                     </span>
                                                 ) : transaction.payment_status ===
                                                   "paid" ? (
                                                     <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 rounded-full">
                                                         <IconCheck size={12} />
-                                                        Lunas
+                                                        {t("transactionHistory.paid")}
                                                     </span>
                                                 ) : transaction.payment_status ===
                                                       "pending" &&
@@ -331,7 +334,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                         }
                                                         className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400 rounded-full hover:bg-warning-200 dark:hover:bg-warning-900/50 transition-colors"
                                                     >
-                                                        Pending - Konfirmasi
+                                                        {t("transactionHistory.pendingConfirm")}
                                                     </button>
                                                 ) : (
                                                     <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-danger-100 dark:bg-danger-900/30 text-danger-700 dark:text-danger-400 rounded-full">
@@ -350,13 +353,13 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                                 transaction.id
                                                             )}
                                                             className="inline-flex items-center justify-center rounded-lg bg-warning-50 px-3 py-2 text-xs font-semibold text-warning-700 hover:bg-warning-100 dark:bg-warning-950/30 dark:text-warning-300"
-                                                            title="Buat retur"
+                                                            title={t("transactionHistory.createReturn")}
                                                         >
-                                                            Retur
+                                                            {t("transactionHistory.return")}
                                                         </Link>
                                                         ) : (
                                                         <span className="inline-flex items-center justify-center rounded-lg bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-                                                            Retur selesai
+                                                            {t("transactionHistory.returnCompleted")}
                                                         </span>
                                                         )
                                                     ) : null}
@@ -371,7 +374,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 dark:bg-green-900/30 dark:hover:bg-green-900/50 transition-colors"
-                                                        title="Bagikan ke WhatsApp"
+                                                        title={t("transactionHistory.shareWhatsApp")}
                                                     >
                                                         <IconBrandWhatsapp
                                                             size={18}
@@ -386,7 +389,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                             method="post"
                                                             as="button"
                                                             className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-50 text-primary-600 transition-colors hover:bg-primary-100 hover:text-primary-700 dark:bg-primary-950/30 dark:hover:bg-primary-950/50"
-                                                            title="Buat campaign share"
+                                                            title={t("transactionHistory.createCampaign")}
                                                         >
                                                             <IconBuildingBank
                                                                 size={18}
@@ -399,7 +402,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                             transaction.invoice
                                                         )}
                                                         className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/50 transition-colors"
-                                                        title="Cetak Struk"
+                                                        title={t("transactionHistory.printReceipt")}
                                                     >
                                                         <IconPrinter size={18} />
                                                     </Link>
@@ -437,13 +440,13 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 transaction.payment_status !==
                                                     "paid" ? (
                                                     <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
-                                                        Piutang
+                                                        {t("transactionHistory.receivable")}
                                                     </span>
                                                 ) : transaction.payment_status ===
                                                   "paid" ? (
                                                     <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 rounded-full">
                                                         <IconCheck size={12} />
-                                                        Lunas
+                                                        {t("transactionHistory.paid")}
                                                     </span>
                                                 ) : transaction.payment_status ===
                                                       "pending" &&
@@ -477,7 +480,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                     <div className="grid grid-cols-2 gap-2 text-sm text-slate-600 dark:text-slate-300">
                                         <div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Kasir
+                                                {t("transactionHistory.cashier")}
                                             </p>
                                             <p className="font-medium">
                                                 {transaction.cashier?.name ??
@@ -486,16 +489,16 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                         </div>
                                         <div className="text-right">
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Pelanggan
+                                                {t("transactionHistory.customer")}
                                             </p>
                                             <p className="font-medium">
                                                 {transaction.customer?.name ??
-                                                    "Umum"}
+                                                    t("transactionHistory.generalCustomer")}
                                             </p>
                                         </div>
                                         <div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Item
+                                                {t("transactionHistory.items")}
                                             </p>
                                             <p className="font-medium">
                                                 {transaction.total_items ?? 0}
@@ -503,7 +506,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                         </div>
                                         <div className="text-right">
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Pembayaran
+                                                {t("transactionHistory.payment")}
                                             </p>
                                             <p className="font-medium capitalize">
                                                 {transaction.payment_method?.replace("_", " ") ??
@@ -522,11 +525,11 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 )}
                                                 className="inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg bg-warning-50 text-warning-700 hover:bg-warning-100 dark:bg-warning-950/30 dark:text-warning-300"
                                             >
-                                                Retur
+                                                {t("transactionHistory.return")}
                                             </Link>
                                             ) : (
                                             <div className="inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-                                                Retur selesai
+                                                {t("transactionHistory.returnCompleted")}
                                             </div>
                                             )
                                         ) : null}
@@ -537,7 +540,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                             )}
                                             className="inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg bg-primary-50 text-primary-700 hover:bg-primary-100 dark:bg-primary-900/30 dark:text-primary-300 dark:hover:bg-primary-900/50"
                                         >
-                                            Detail
+                                            {t("transactionHistory.detail")}
                                         </Link>
                                         <a
                                             href={route(
@@ -548,7 +551,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                                         >
-                                            Invoice
+                                            {t("transactionHistory.invoice")}
                                         </a>
                                         {canCreateCrmCampaign && (
                                             <Link
@@ -560,7 +563,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 as="button"
                                                 className="inline-flex items-center justify-center gap-1 rounded-lg bg-primary-50 px-3 py-2 text-xs font-semibold text-primary-700 hover:bg-primary-100 dark:bg-primary-900/30 dark:text-primary-300 dark:hover:bg-primary-900/50"
                                             >
-                                                Campaign WA
+                                                {t("transactionHistory.whatsappCampaign")}
                                             </Link>
                                         )}
                                         <a
@@ -572,7 +575,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/50"
                                         >
-                                            Resi
+                                            {t("transactionHistory.shippingLabel")}
                                         </a>
                                     </div>
                                 </div>
@@ -590,12 +593,12 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                             />
                         </div>
                         <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1">
-                            Belum Ada Transaksi
+                            {t("transactionHistory.emptyTitle")}
                         </h3>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             {hasActiveFilters
-                                ? "Tidak ada transaksi sesuai filter."
-                                : "Transaksi akan muncul di sini."}
+                                ? t("transactionHistory.noMatching")
+                                : t("transactionHistory.emptyDescription")}
                         </p>
                     </div>
                 )}
@@ -625,10 +628,10 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold">
-                                        Konfirmasi Pembayaran
+                                        {t("transactionHistory.paymentConfirmation")}
                                     </h3>
                                     <p className="text-sm opacity-90">
-                                        Transfer Bank
+                                        {t("transactionHistory.bankTransfer")}
                                     </p>
                                 </div>
                             </div>
@@ -648,11 +651,12 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 </div>
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-sm text-slate-500 dark:text-slate-400">
-                                        Pelanggan
+                                        {t("transactionHistory.customer")}
                                     </span>
                                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                         {confirmModal.transaction.customer
-                                            ?.name ?? "Umum"}
+                                            ?.name ??
+                                            t("transactionHistory.generalCustomer")}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center">
@@ -675,9 +679,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                     className="text-warning-600 dark:text-warning-400 flex-shrink-0 mt-0.5"
                                 />
                                 <p className="text-sm text-warning-800 dark:text-warning-300">
-                                    Pastikan dana sudah diterima sebelum
-                                    mengkonfirmasi pembayaran ini. Tindakan ini
-                                    tidak dapat dibatalkan.
+                                    {t("transactionHistory.confirmationWarning")}
                                 </p>
                             </div>
                         </div>
@@ -694,7 +696,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 disabled={isConfirming}
                                 className="flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
                             >
-                                Batal
+                                {t("transactionHistory.cancel")}
                             </button>
                             <button
                                 onClick={() => {
@@ -743,12 +745,12 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                             />
                                         </svg>
-                                        Memproses...
+                                        {t("transactionHistory.processing")}
                                     </>
                                 ) : (
                                     <>
                                         <IconCheck size={18} />
-                                        Konfirmasi Lunas
+                                        {t("transactionHistory.confirmPaid")}
                                     </>
                                 )}
                             </button>

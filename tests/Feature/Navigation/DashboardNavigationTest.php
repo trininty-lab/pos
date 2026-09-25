@@ -79,7 +79,10 @@ class DashboardNavigationTest extends TestCase
         $user->givePermissionTo(Permission::all());
 
         foreach (self::MENU_ROUTES as $routeName => $permission) {
-            $this->actingAs($user)
+            $request = $this->actingAs($user)
+                ->withSession($this->recentlyConfirmedSession());
+
+            $request
                 ->get(route($routeName))
                 ->assertOk();
         }
@@ -99,7 +102,9 @@ class DashboardNavigationTest extends TestCase
         ]);
 
         foreach (self::MENU_ROUTES as $routeName => $permission) {
-            $response = $this->actingAs($cashier)->get(route($routeName));
+            $response = $this->actingAs($cashier)
+                ->withSession($this->recentlyConfirmedSession())
+                ->get(route($routeName));
 
             if ($cashier->can($permission)) {
                 $response->assertOk();

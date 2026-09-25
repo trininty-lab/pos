@@ -32,7 +32,10 @@ class UserRequest extends FormRequest
             'password' => [$isCreate ? 'required' : 'nullable', 'string', 'min:8', 'confirmed'],
             'avatar' => ['nullable', 'image', 'max:2048'],
             'selectedRoles' => ['required', 'array', 'min:1'],
-            'selectedRoles.*' => ['string'],
+            'selectedRoles.*' => [
+                'string',
+                Rule::exists('roles', 'name')->where(fn ($query) => $query->where('guard_name', 'web')),
+            ],
         ];
     }
 }

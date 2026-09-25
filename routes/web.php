@@ -114,7 +114,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
         ->except('show')
         ->middlewareFor('index', 'permission:users-access')
         ->middlewareFor(['create', 'store'], 'permission:users-create')
-        ->middlewareFor('store', ['permission:users-create', 'step_up'])
+        ->middlewareFor('create', 'step_up')
         ->middlewareFor(['edit', 'update'], 'permission:users-update')
         ->middlewareFor('update', ['permission:users-update', 'step_up'])
         ->middlewareFor('destroy', ['permission:users-delete', 'step_up']);

@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\AuditLogService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
@@ -75,29 +76,37 @@ class UserController extends Controller
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
         }
 
-        // create new user data
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'avatar' => $avatarPath,
-            'business_id' => $request->user()->isSuperAdmin() ? null : $request->user()->business_id,
-        ]);
+        try {
+            DB::transaction(function () use ($request, $avatarPath): void {
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password),
+                    'avatar' => $avatarPath,
+                    'business_id' => $request->user()->isSuperAdmin() ? null : $request->user()->business_id,
+                ]);
 
-        // assign role to user
-        $user->assignRole($request->selectedRoles);
+                $user->assignRole($request->selectedRoles);
 
-        $this->auditLogService->log(
-            event: 'user.created',
-            module: 'users',
-            auditable: $user,
-            description: 'Pengguna baru dibuat.',
-            after: $this->userPayload(
-                $user,
-                $this->auditLogService->roleNames($request->selectedRoles),
-                $avatarPath !== null
-            ),
-        );
+                $this->auditLogService->log(
+                    event: 'user.created',
+                    module: 'users',
+                    auditable: $user,
+                    description: 'Pengguna baru dibuat.',
+                    after: $this->userPayload(
+                        $user,
+                        $this->auditLogService->roleNames($request->selectedRoles),
+                        $avatarPath !== null
+                    ),
+                );
+            });
+        } catch (\Throwable $exception) {
+            if ($avatarPath) {
+                Storage::disk('public')->delete($avatarPath);
+            }
+
+            throw $exception;
+        }
 
         // render view
         return to_route('users.index');

@@ -6,6 +6,7 @@ use App\Models\Business;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -41,7 +42,7 @@ class UserScopeTest extends TestCase
             ->assertForbidden();
     }
 
-    public function test_owner_created_users_are_assigned_to_the_owners_business(): void
+    public function test_owner_can_create_a_complete_user_account_for_their_business(): void
     {
         $owner = User::factory()->create();
         $owner->assignRole(Role::findByName('owner'));
@@ -59,9 +60,69 @@ class UserScopeTest extends TestCase
             ])
             ->assertRedirect(route('users.index'));
 
+        $createdUser = User::where('email', 'business-cashier@example.com')->firstOrFail();
+
         $this->assertDatabaseHas('users', [
             'email' => 'business-cashier@example.com',
             'business_id' => $business->id,
+        ]);
+        $this->assertTrue(Hash::check('password', $createdUser->password));
+        $this->assertTrue($createdUser->hasRole('cashier'));
+    }
+
+    public function test_owner_confirms_password_before_opening_the_new_user_form(): void
+    {
+        $owner = User::factory()->create();
+        $owner->assignRole(Role::findByName('owner'));
+        $business = Business::create(['name' => 'Owner Business', 'status' => 'active', 'owner_id' => $owner->id]);
+        $owner->update(['business_id' => $business->id]);
+
+        $this->actingAs($owner)
+            ->from(route('users.index'))
+            ->get(route('users.create'))
+            ->assertRedirect(route('password.confirm'));
+
+        $this->actingAs($owner)
+            ->post(route('password.confirm'), ['password' => 'password'])
+            ->assertRedirect(route('users.create'));
+
+        $this->actingAs($owner)
+            ->post(route('users.store'), [
+                'name' => 'Confirmed Cashier',
+                'email' => 'confirmed-cashier@example.com',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+                'selectedRoles' => ['cashier'],
+            ])
+            ->assertRedirect(route('users.index'));
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'confirmed-cashier@example.com',
+            'business_id' => $business->id,
+        ]);
+    }
+
+    public function test_user_creation_rejects_unknown_roles_without_creating_an_account(): void
+    {
+        $owner = User::factory()->create();
+        $owner->assignRole(Role::findByName('owner'));
+        $business = Business::create(['name' => 'Owner Business', 'status' => 'active', 'owner_id' => $owner->id]);
+        $owner->update(['business_id' => $business->id]);
+
+        $this->actingAs($owner)
+            ->withSession($this->recentlyConfirmedSession())
+            ->from(route('users.create'))
+            ->post(route('users.store'), [
+                'name' => 'Invalid Role User',
+                'email' => 'invalid-role@example.com',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+                'selectedRoles' => ['does-not-exist'],
+            ])
+            ->assertSessionHasErrors('selectedRoles.0');
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'invalid-role@example.com',
         ]);
     }
 }

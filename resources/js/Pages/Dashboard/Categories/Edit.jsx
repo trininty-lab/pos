@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head, useForm, usePage, Link } from "@inertiajs/react";
 import Input from "@/Components/Dashboard/Input";
@@ -10,6 +10,7 @@ import {
     IconArrowLeft,
     IconPhoto,
 } from "@tabler/icons-react";
+import useImagePreview from "@/Hooks/useImagePreview";
 
 export default function Edit({ category }) {
     const { errors } = usePage().props;
@@ -22,7 +23,7 @@ export default function Edit({ category }) {
         _method: "PUT",
     });
 
-    const [imagePreview, setImagePreview] = useState(
+    const { preview: imagePreview, selectFile } = useImagePreview(
         category.image ? `/storage/categories/${category.image}` : null
     );
 
@@ -30,7 +31,7 @@ export default function Edit({ category }) {
         const file = e.target.files[0];
         if (file) {
             setData("image", file);
-            setImagePreview(URL.createObjectURL(file));
+            selectFile(file);
         }
     };
 

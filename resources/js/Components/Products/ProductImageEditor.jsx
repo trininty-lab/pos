@@ -10,6 +10,7 @@ import {
     IconZoomIn,
     IconZoomOut,
 } from "@tabler/icons-react";
+import useImagePreview from "@/Hooks/useImagePreview";
 
 const CROP_AREA_SIZE = 320;
 const MIN_ZOOM = 1;
@@ -53,7 +54,8 @@ export default function ProductImageEditor({
     const [sourceUrl, setSourceUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [editorOpen, setEditorOpen] = useState(false);
-    const [preview, setPreview] = useState(existingPreview);
+    const { preview, selectFile, setGeneratedPreview, resetPreview } =
+        useImagePreview(existingPreview);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(MIN_ZOOM);
     const [rotation, setRotation] = useState(0);
@@ -66,16 +68,15 @@ export default function ProductImageEditor({
     }, [sourceUrl]);
 
     useEffect(() => {
-        if (!value) setPreview(existingPreview);
+        if (!value) setGeneratedPreview(existingPreview);
     }, [existingPreview, value]);
 
     const openFile = (file) => {
         if (!file || !file.type.startsWith("image/")) return;
         if (sourceUrl) URL.revokeObjectURL(sourceUrl);
 
-        setSourceUrl(URL.createObjectURL(file));
+        setSourceUrl(selectFile(file));
         setSelectedFile(file);
-        setPreview(null);
         setCrop({ x: 0, y: 0 });
         setZoom(MIN_ZOOM);
         setRotation(0);
@@ -87,9 +88,9 @@ export default function ProductImageEditor({
         if (!selectedFile || !croppedAreaPixels) return;
 
         try {
-            setPreview(await createCropPreview(sourceUrl, croppedAreaPixels, rotation));
+            setGeneratedPreview(await createCropPreview(sourceUrl, croppedAreaPixels, rotation));
         } catch {
-            setPreview(sourceUrl);
+            setGeneratedPreview(sourceUrl);
         }
         onChange({
             file: selectedFile,
@@ -109,7 +110,7 @@ export default function ProductImageEditor({
         if (sourceUrl) URL.revokeObjectURL(sourceUrl);
         setSourceUrl(null);
         setSelectedFile(null);
-        setPreview(null);
+        resetPreview();
         setEditorOpen(false);
         onChange({ file: null, crop: null, remove: true });
     };

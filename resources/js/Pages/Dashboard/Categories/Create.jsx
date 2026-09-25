@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head, useForm, usePage, Link } from "@inertiajs/react";
 import Input from "@/Components/Dashboard/Input";
@@ -10,6 +10,7 @@ import {
     IconArrowLeft,
     IconPhoto,
 } from "@tabler/icons-react";
+import useImagePreview from "@/Hooks/useImagePreview";
 
 export default function Create() {
     const { errors } = usePage().props;
@@ -20,13 +21,13 @@ export default function Create() {
         image: "",
     });
 
-    const [imagePreview, setImagePreview] = useState(null);
+    const { preview: imagePreview, selectFile } = useImagePreview();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setData("image", file);
-            setImagePreview(URL.createObjectURL(file));
+            selectFile(file);
         }
     };
 

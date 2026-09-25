@@ -18,6 +18,7 @@ class ProductResource extends JsonResource
             'image' => $this->image
                 ? (str_starts_with($this->image, 'http') ? $this->image : url('storage/'.ltrim($this->image, '/')))
                 : null,
+            'image_variants' => $this->image_variants,
             'category' => $this->whenLoaded('category', fn () => [
                 'id' => $this->category->id,
                 'name' => $this->category->name,

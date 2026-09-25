@@ -29,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
 
             return new Cloudinary($cloudinaryUrl);
         });
+
+        $this->app->singleton(\App\Services\MediaService::class, function () {
+            return new \App\Services\MediaService();
+        });
     }
     /**
      * Bootstrap any application services.

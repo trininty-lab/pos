@@ -27,7 +27,7 @@ router.on('httpException', () => {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         if (import.meta.env.PROD) {
-            navigator.serviceWorker.register('/sw.js');
+            navigator.serviceWorker.register(`/sw.js?v=${Date.now()}`);
             return;
         }
 

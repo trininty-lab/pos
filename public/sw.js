@@ -12,18 +12,25 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    const url = new URL(event.request.url);
+    const request = event.request;
+    const url = new URL(request.url);
+
+    if (request.method !== 'GET') {
+        return;
+    }
 
     // Cache-first for master data API
     if (MASTER_API_PATTERNS.some((p) => url.pathname.includes(p))) {
         event.respondWith(
             caches.open(CACHE_NAME).then((cache) =>
-                fetch(event.request)
+                fetch(request)
                     .then((response) => {
-                        cache.put(event.request, response.clone());
+                        if (response && response.status >= 200 && response.status < 300) {
+                            cache.put(request, response.clone());
+                        }
                         return response;
                     })
-                    .catch(() => cache.match(event.request))
+                    .catch(() => cache.match(request))
             )
         );
         return;

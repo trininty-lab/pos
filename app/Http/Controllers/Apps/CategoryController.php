@@ -159,19 +159,20 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        // find by ID
         $category = Category::findOrFail($id);
+
+        if ($category->products()->exists()) {
+            return back()->with('error', 'Category cannot be deleted because it is assigned to existing products.');
+        }
 
         if ($category->cloudinary_public_id) {
             $this->imageService->deleteImage($category->cloudinary_public_id);
-        } else {
+        } elseif ($category->image) {
             Storage::disk('local')->delete('public/category/'.basename($category->image));
         }
 
-        // delete
         $category->delete();
 
-        // redirect
         return to_route('categories.index');
     }
 }

@@ -654,7 +654,11 @@ class TransactionController extends Controller
                 'grand_total' => $grandTotal,
                 'payment_method' => $isPayLater ? 'pay_later' : ($paymentGateway ?: 'cash'),
                 'payment_status' => $isCashPayment ? 'paid' : ($isPayLater ? 'unpaid' : 'pending'),
-                'bank_account_id' => $paymentGateway === 'bank_transfer' ? $request->bank_account_id : null,
+                'bank_account_id' => in_array($paymentGateway, [
+                    PaymentSetting::GATEWAY_BANK_TRANSFER,
+                    PaymentSetting::GATEWAY_MPESA,
+                    PaymentSetting::GATEWAY_AIRTEL_MONEY,
+                ], true) ? $request->bank_account_id : null,
                 'tax_rate' => data_get($checkoutPreview, 'summary.tax_rate'),
                 'tax_total' => data_get($checkoutPreview, 'summary.tax_total', 0),
                 'customer_npwp' => $request->customer_npwp,

@@ -474,10 +474,14 @@ export default function Index({
             return;
         }
 
-        // Validate bank transfer requires bank selection
-        const isBankTransfer = paymentMethod === "bank_transfer";
-        if (isBankTransfer && !selectedBankAccount) {
-            toast.error("Select the destination bank account");
+        // Kenya bank and mobile-money methods require a configured destination.
+        const requiresDestinationAccount = [
+            "bank_transfer",
+            "mpesa",
+            "airtel_money",
+        ].includes(paymentMethod);
+        if (requiresDestinationAccount && !selectedBankAccount) {
+            toast.error("Select the destination account");
             return;
         }
 
@@ -494,7 +498,7 @@ export default function Index({
                 payment_gateway: payLater ? null : isCashPayment ? null : paymentMethod,
                 pay_later: payLater,
                 due_date: payLater ? dueDate : null,
-                bank_account_id: isBankTransfer ? selectedBankAccount : null,
+                bank_account_id: requiresDestinationAccount ? selectedBankAccount : null,
             };
             queueTransaction(payload).then(() => {
                 setCarts([]);
@@ -516,7 +520,7 @@ export default function Index({
                 cash: isCashPayment ? cash : checkoutPayable,
                 change: isCashPayment ? Math.max(cash - checkoutPayable, 0) : 0,
                 payment_gateway: payLater ? null : isCashPayment ? null : paymentMethod,
-                bank_account_id: isBankTransfer
+                bank_account_id: requiresDestinationAccount
                     ? selectedBankAccount?.id
                     : null,
                 pay_later: payLater,
@@ -984,8 +988,11 @@ export default function Index({
                                             >
                                                 {method.value === "cash" ? (
                                                     <IconCash size={16} />
-                                                ) : method.value ===
-                                                  "bank_transfer" ? (
+                                                                                                ) : [
+                                                                                                            "bank_transfer",
+                                                                                                            "mpesa",
+                                                                                                            "airtel_money",
+                                                                                                    ].includes(method.value) ? (
                                                     <IconBuildingBank
                                                         size={16}
                                                     />
@@ -1010,8 +1017,8 @@ export default function Index({
                                 </div>
                             </div>
 
-                            {/* Bank Selector - Only for bank_transfer */}
-                            {paymentMethod === "bank_transfer" &&
+                            {/* Destination account for Kenyan bank and mobile-money methods */}
+                            {["bank_transfer", "mpesa", "airtel_money"].includes(paymentMethod) &&
                                 bankAccounts.length > 0 &&
                                 !payLater && (
                                     <div>

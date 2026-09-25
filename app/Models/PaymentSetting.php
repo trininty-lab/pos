@@ -15,6 +15,10 @@ class PaymentSetting extends Model
 
     public const GATEWAY_BANK_TRANSFER = 'bank_transfer';
 
+    public const GATEWAY_MPESA = 'mpesa';
+
+    public const GATEWAY_AIRTEL_MONEY = 'airtel_money';
+
     public const SECRET_FIELDS = [
         'midtrans_server_key',
         'xendit_secret_key',
@@ -54,8 +58,18 @@ class PaymentSetting extends Model
         if ($this->isBankTransferReady()) {
             $gateways[] = [
                 'value' => self::GATEWAY_BANK_TRANSFER,
-                'label' => 'Transfer Bank',
-                'description' => 'Pembayaran manual via transfer bank.',
+                'label' => 'Kenya Bank Transfer',
+                'description' => 'Manual confirmation via a Kenyan bank account.',
+            ];
+            $gateways[] = [
+                'value' => self::GATEWAY_MPESA,
+                'label' => 'M-Pesa',
+                'description' => 'Manual confirmation via M-Pesa Paybill or Till.',
+            ];
+            $gateways[] = [
+                'value' => self::GATEWAY_AIRTEL_MONEY,
+                'label' => 'Airtel Money',
+                'description' => 'Manual confirmation via Airtel Money.',
             ];
         }
 
@@ -90,6 +104,7 @@ class PaymentSetting extends Model
     {
         return match ($gateway) {
             self::GATEWAY_BANK_TRANSFER => $this->isBankTransferReady(),
+            self::GATEWAY_MPESA, self::GATEWAY_AIRTEL_MONEY => $this->isBankTransferReady(),
             self::GATEWAY_MIDTRANS => $this->midtrans_enabled
             && filled($this->resolvedSecret('midtrans_server_key'))
             && filled($this->midtrans_client_key),

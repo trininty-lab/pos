@@ -31,7 +31,9 @@ Kembali ke indeks dokumentasi: `docs/README.md`
 Konfigurasi di `dashboard/settings/payments`:
 
 - **Cash** — tanpa konfigurasi
-- **Bank Transfer** — memerlukan rekening bank aktif
+- **Kenya Bank Transfer** — memerlukan rekening bank Kenya aktif
+- **M-Pesa** — gunakan akun tujuan bertipe Paybill atau Till di Bank Accounts
+- **Airtel Money** — gunakan nomor Airtel Money tujuan di Bank Accounts
 - **Midtrans** — memerlukan server key + client key + mode production
 - **Xendit** — memerlukan secret key + public key + callback token + mode production
 
@@ -41,7 +43,8 @@ Detail setup: `docs/features/settings-payments.md`
 
 Konfigurasi di `dashboard/settings/bank-accounts`:
 
-- Digunakan untuk pembayaran transfer manual
+- Digunakan untuk pembayaran manual melalui bank Kenya, M-Pesa Paybill/Till, atau Airtel Money
+- Setiap channel lokal menyimpan transaksi sebagai pending sampai admin mengonfirmasi dana diterima
 - Bisa diatur urutan tampilan
 - Bisa dinonaktifkan tanpa dihapus
 

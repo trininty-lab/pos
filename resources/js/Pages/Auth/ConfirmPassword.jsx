@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { useTranslation } from "react-i18next";
 import {
     IconShoppingCart,
     IconShieldLock,
@@ -11,7 +10,6 @@ import {
 } from "@tabler/icons-react";
 
 export default function ConfirmPassword({ challenge = null }) {
-    const { t } = useTranslation();
     const { data, setData, post, processing, errors, reset } = useForm({
         password: "",
     });
@@ -25,11 +23,11 @@ export default function ConfirmPassword({ challenge = null }) {
 
     const challengeLabel = useMemo(() => {
         if (!challenge?.route) {
-            return t("auth.confirmPassword.sensitiveAction");
+            return "this sensitive action";
         }
 
         return challenge.route.replaceAll(".", " / ");
-    }, [challenge, t]);
+    }, [challenge]);
 
     const submit = (e) => {
         e.preventDefault();
@@ -39,7 +37,7 @@ export default function ConfirmPassword({ challenge = null }) {
 
     return (
         <>
-            <Head title={t("auth.confirmPassword.title")} />
+            <Head title="Confirm Password" />
 
             <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
                 <div className="flex-1 flex items-center justify-center p-8">
@@ -50,17 +48,17 @@ export default function ConfirmPassword({ challenge = null }) {
                                     <IconShoppingCart size={24} className="text-white" />
                                 </div>
                                 <span className="text-2xl font-bold text-slate-900 dark:text-white">
-                                    Aplikasi Kasir
+                                    FAY COLLECTION
                                 </span>
                             </Link>
                             <div className="w-14 h-14 rounded-2xl bg-primary-100 dark:bg-primary-950/50 flex items-center justify-center mb-5">
                                 <IconShieldLock size={28} className="text-primary-600 dark:text-primary-400" />
                             </div>
                             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                                {t("auth.confirmPassword.title")}
+                                Confirm Password
                             </h1>
                             <p className="mt-2 text-slate-600 dark:text-slate-400">
-                                {t("auth.confirmPassword.description", { action: challengeLabel })}
+                                To continue with {challengeLabel}, please enter your account password again.
                             </p>
                         </div>
 
@@ -84,7 +82,7 @@ export default function ConfirmPassword({ challenge = null }) {
                                                 : "border-slate-200 dark:border-slate-700 focus:border-primary-500"
                                         } bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-4 focus:ring-primary-500/20 transition-all`}
                                         autoFocus
-                                        placeholder={t("auth.confirmPassword.placeholder")}
+                                        placeholder="Enter your password"
                                     />
                                     <button
                                         type="button"
@@ -107,10 +105,10 @@ export default function ConfirmPassword({ challenge = null }) {
                                 {processing ? (
                                     <>
                                         <IconLoader2 size={18} className="animate-spin" />
-                                        {t("auth.confirmPassword.processing")}
+                                        Verifying...
                                     </>
                                 ) : (
-                                    t("auth.confirmPassword.continue")
+                                    Continue
                                 )}
                             </button>
                         </form>
@@ -122,9 +120,9 @@ export default function ConfirmPassword({ challenge = null }) {
                         <div className="w-24 h-24 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-8">
                             <IconShieldLock size={48} />
                         </div>
-                        <h2 className="text-3xl font-bold mb-4">{t("auth.confirmPassword.heroTitle")}</h2>
+                        <h2 className="text-3xl font-bold mb-4">Protecting your account</h2>
                         <p className="text-lg opacity-90">
-                            {t("auth.confirmPassword.heroDescription")}
+                            Confirm your password before continuing with this sensitive action.
                         </p>
                     </div>
                 </div>

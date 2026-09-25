@@ -70,6 +70,32 @@ class UserScopeTest extends TestCase
         $this->assertTrue($createdUser->hasRole('cashier'));
     }
 
+    public function test_creating_additional_users_preserves_existing_users(): void
+    {
+        $owner = User::factory()->create();
+        $owner->assignRole(Role::findByName('owner'));
+        $business = Business::create(['name' => 'Owner Business', 'status' => 'active', 'owner_id' => $owner->id]);
+        $owner->update(['business_id' => $business->id]);
+
+        foreach ([
+            ['name' => 'First Cashier', 'email' => 'first-cashier@example.com'],
+            ['name' => 'Second Cashier', 'email' => 'second-cashier@example.com'],
+        ] as $newUser) {
+            $this->actingAs($owner)
+                ->withSession($this->recentlyConfirmedSession())
+                ->post(route('users.store'), $newUser + [
+                    'password' => 'password',
+                    'password_confirmation' => 'password',
+                    'selectedRoles' => ['cashier'],
+                ])
+                ->assertRedirect(route('users.index'));
+        }
+
+        $this->assertDatabaseHas('users', ['email' => 'first-cashier@example.com']);
+        $this->assertDatabaseHas('users', ['email' => 'second-cashier@example.com']);
+        $this->assertSame(3, User::where('business_id', $business->id)->count());
+    }
+
     public function test_owner_confirms_password_before_opening_the_new_user_form(): void
     {
         $owner = User::factory()->create();

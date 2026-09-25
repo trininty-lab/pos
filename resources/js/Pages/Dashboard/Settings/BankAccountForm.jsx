@@ -55,7 +55,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                             {isEdit ? "Edit Bank Account" : "Add Bank Account"}
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                            Enter bank account details for transfer payments.
+                            Enter a Kenyan bank, M-Pesa Paybill/Till, or Airtel Money destination for manual payment confirmation.
                         </p>
                     </div>
                     <Link
@@ -73,16 +73,16 @@ export default function BankAccountForm({ bankAccount = null }) {
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input
-                            label="Bank Name"
-                            placeholder="BCA, Mandiri, BNI..."
+                            label="Institution / Channel"
+                            placeholder="KCB, Equity, M-Pesa Paybill, Airtel Money..."
                             value={data.bank_name}
                             onChange={(e) => setData("bank_name", e.target.value)}
                             errors={errors.bank_name}
                             disabled={!canUpdatePaymentSettings}
                         />
                         <Input
-                            label="Account Number"
-                            placeholder="1234567890"
+                            label="Account / Till / Paybill Number"
+                            placeholder="Kenyan account, Till, or Paybill number"
                             value={data.account_number}
                             onChange={(e) => setData("account_number", e.target.value)}
                             errors={errors.account_number}

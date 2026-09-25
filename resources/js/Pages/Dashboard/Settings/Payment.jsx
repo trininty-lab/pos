@@ -49,6 +49,9 @@ export default function Payment({
 
     const isGatewaySelectable = (gateway) => {
         if (gateway === "cash") return true;
+        if (["bank_transfer", "mpesa", "airtel_money"].includes(gateway)) {
+            return data.bank_transfer_enabled;
+        }
         if (gateway === "midtrans") return data.midtrans_enabled;
         if (gateway === "xendit") return data.xendit_enabled;
         return false;

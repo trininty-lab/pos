@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Business;
 use App\Models\User;
 use App\Services\AuditLogService;
 use Illuminate\Http\Request;
@@ -22,15 +23,16 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $actor = $request->user();
+        $actorBusinessId = $this->resolveOwnerBusinessId($actor);
+
         // get all users data
         $users = User::query()
             ->with('roles')
-            ->when(! $request->user()->isSuperAdmin(), function ($query) use ($request) {
-                $businessId = $request->user()->business_id;
-
-                return $businessId
-                    ? $query->where('business_id', $businessId)
-                    : $query->whereKey($request->user()->id);
+            ->when(! $actor->isSuperAdmin(), function ($query) use ($actorBusinessId, $actor) {
+                return $actorBusinessId !== null
+                    ? $query->where('business_id', $actorBusinessId)
+                    : $query->whereKey($actor->id);
             })
             ->when(request()->search, fn ($query) => $query->where('name', 'like', '%'.request()->search.'%'))
             ->select('id', 'name', 'avatar', 'email')
@@ -67,8 +69,11 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        abort_if(! $request->user()->isSuperAdmin() && $request->user()->business_id === null, 403);
-        $this->guardProtectedRoles($request->selectedRoles, $request->user());
+        $actor = $request->user();
+        $actorBusinessId = $this->resolveOwnerBusinessId($actor);
+
+        abort_if(! $actor->isSuperAdmin() && $actorBusinessId === null, 403);
+        $this->guardProtectedRoles($request->selectedRoles, $actor);
 
         $avatarPath = null;
 
@@ -77,13 +82,13 @@ class UserController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($request, $avatarPath): void {
+            DB::transaction(function () use ($request, $avatarPath, $actor, $actorBusinessId): void {
                 $user = User::create([
                     'name' => $request->name,
                     'email' => $request->email,
                     'password' => bcrypt($request->password),
                     'avatar' => $avatarPath,
-                    'business_id' => $request->user()->isSuperAdmin() ? null : $request->user()->business_id,
+                    'business_id' => $actor->isSuperAdmin() ? null : $actorBusinessId,
                 ]);
 
                 $user->assignRole($request->selectedRoles);
@@ -239,6 +244,21 @@ class UserController extends Controller
         return back();
     }
 
+    private function resolveOwnerBusinessId(User $actor): ?int
+    {
+        if ($actor->isSuperAdmin()) {
+            return null;
+        }
+
+        $businessId = $actor->business_id ?? Business::query()->where('owner_id', $actor->id)->value('id');
+
+        if ($businessId !== null && $actor->business_id !== (int) $businessId) {
+            $actor->forceFill(['business_id' => $businessId])->saveQuietly();
+        }
+
+        return $businessId !== null ? (int) $businessId : null;
+    }
+
     private function userPayload(User $user, array $roles, bool $avatarChanged): array
     {
         return [
@@ -268,7 +288,9 @@ class UserController extends Controller
             return;
         }
 
-        abort_if($actor->business_id === null || $user->business_id !== $actor->business_id, 403);
+        $actorBusinessId = $this->resolveOwnerBusinessId($actor);
+
+        abort_if($actorBusinessId === null || $user->business_id !== $actorBusinessId, 403);
         abort_if($user->hasAnyRole(['super-admin', 'owner']), 403);
     }
 }

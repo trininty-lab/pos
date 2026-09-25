@@ -102,6 +102,31 @@ class UserScopeTest extends TestCase
         ]);
     }
 
+    public function test_owner_can_create_a_user_when_their_business_link_is_missing(): void
+    {
+        $owner = User::factory()->create();
+        $owner->assignRole(Role::findByName('owner'));
+        $business = Business::create(['name' => 'Repair Business Link', 'status' => 'active', 'owner_id' => $owner->id]);
+        $owner->forceFill(['business_id' => null])->saveQuietly();
+
+        $this->actingAs($owner)
+            ->withSession($this->recentlyConfirmedSession())
+            ->post(route('users.store'), [
+                'name' => 'Linked Business Cashier',
+                'email' => 'missing-business-link@example.com',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+                'selectedRoles' => ['cashier'],
+            ])
+            ->assertRedirect(route('users.index'));
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'missing-business-link@example.com',
+            'business_id' => $business->id,
+        ]);
+        $this->assertSame($business->id, $owner->fresh()->business_id);
+    }
+
     public function test_business_owner_can_open_user_creation_without_direct_user_permission_assignments(): void
     {
         $owner = User::factory()->create();

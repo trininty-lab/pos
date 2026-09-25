@@ -11,6 +11,17 @@ class Business extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $business): void {
+            if (! filled($business->owner_id)) {
+                return;
+            }
+
+            $business->owner()->update(['business_id' => $business->id]);
+        });
+    }
+
     protected $fillable = [
         'name',
         'registration_number',

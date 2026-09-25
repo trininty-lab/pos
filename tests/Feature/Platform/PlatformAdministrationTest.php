@@ -70,4 +70,28 @@ class PlatformAdministrationTest extends TestCase
             ])
             ->assertSessionHasErrors('owner_id');
     }
+
+    public function test_business_owner_is_linked_to_their_business_for_user_management(): void
+    {
+        $superAdmin = User::factory()->create();
+        $owner = User::factory()->create();
+        Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
+        Role::create(['name' => 'owner', 'guard_name' => 'web']);
+        $superAdmin->assignRole('super-admin');
+        $owner->assignRole('owner');
+
+        $response = $this->actingAs($superAdmin)
+            ->post(route('platform.businesses.store'), [
+                'name' => 'Owner Linked Business',
+                'country' => 'KE',
+                'currency' => 'KES',
+                'owner_id' => $owner->id,
+                'status' => 'active',
+            ]);
+
+        $response->assertRedirect();
+        $business = Business::where('name', 'Owner Linked Business')->firstOrFail();
+
+        $this->assertSame($business->id, $owner->fresh()->business_id);
+    }
 }

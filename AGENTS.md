@@ -90,7 +90,7 @@ npm run build
 PermissionSeeder → RoleSeeder → UserSeeder → PaymentSettingSeeder → SampleDataSeeder → OperationalCoreSeeder → FeatureCoverageSeeder
 ```
 
-**Default users:** `cybertrinity6@gmail.com` / `password` (admin), `cashier@gmail.com` / `Cheri@2026` (Charity Mainda, cashier)
+**Default users:** See the local seeders and setup documentation. Never commit real or reusable passwords to repository guidance.
 
 ## Critical Gotchas
 

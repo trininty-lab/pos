@@ -28,5 +28,9 @@ whatsapp-service/session/
 planning/
 .opencode/
 
+# Local AI agent skills and assistant state
+.agents/
+.claude/
+
 # dompdf runtime font cache (machine-specific, regenerated at runtime)
 /storage/fonts

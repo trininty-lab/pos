@@ -3,12 +3,26 @@ import '../css/app.css';
 import './i18n';
 
 import { createRoot } from 'react-dom/client';
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { Toaster, toast } from 'react-hot-toast';
 import { ThemeSwitcherProvider } from './Context/ThemeSwitcherContext';
 import { OnlineStatusProvider } from './Context/OnlineStatusContext';
 
 const appName = import.meta.env.VITE_APP_NAME || 'FAY COLLECTION';
+
+// Inertia's progress bar shows that a navigation or action is in progress.
+// These handlers ensure a failed request also gets a visible, actionable
+// message instead of appearing to do nothing.
+router.on('networkError', () => {
+    toast.error('Unable to reach the server. Check your connection and try again.');
+    return false;
+});
+
+router.on('httpException', () => {
+    toast.error('The request could not be completed. Please try again.');
+    return false;
+});
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -47,11 +61,14 @@ createInertiaApp({
             <ThemeSwitcherProvider>
                 <OnlineStatusProvider>
                     <App {...props} />
+                    <Toaster position="top-right" />
                 </OnlineStatusProvider>
             </ThemeSwitcherProvider>
         );
     },
     progress: {
         color: '#4B5563',
+        delay: 0,
+        showSpinner: true,
     },
 });

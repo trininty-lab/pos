@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { usePage } from "@inertiajs/react";
 import Sidebar from "@/Components/Dashboard/Sidebar";
 import Navbar from "@/Components/Dashboard/Navbar";
-import { Toaster } from "react-hot-toast";
 import { useTheme } from "@/Context/ThemeSwitcherContext";
 
 export default function AppLayout({ children }) {
@@ -83,21 +82,6 @@ export default function AppLayout({ children }) {
                                 </ul>
                             </div>
                         )}
-                        <Toaster
-                            position="top-right"
-                            toastOptions={{
-                                className: "text-sm",
-                                duration: 3000,
-                                style: {
-                                    background: darkMode ? "#1e293b" : "#fff",
-                                    color: darkMode ? "#f1f5f9" : "#1e293b",
-                                    border: `1px solid ${
-                                        darkMode ? "#334155" : "#e2e8f0"
-                                    }`,
-                                    borderRadius: "12px",
-                                },
-                            }}
-                        />
                         {children}
                     </div>
                 </main>

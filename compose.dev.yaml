@@ -41,7 +41,7 @@ services:
   frontend:
     image: node:22.14.0-bookworm-slim
     working_dir: /var/www/html
-    command: sh -c "if [ ! -x node_modules/.bin/vite ]; then npm ci --no-audit --no-fund; fi; npm run dev -- --host 0.0.0.0"
+    command: sh -c "if [ ! -x node_modules/.bin/vite ] || [ ! -d node_modules/react-easy-crop ]; then npm ci --no-audit --no-fund; fi; npm run dev -- --host 0.0.0.0"
     ports:
       - "${VITE_PORT:-5173}:5173"
     environment:

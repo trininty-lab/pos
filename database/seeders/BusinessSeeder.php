@@ -10,7 +10,7 @@ class BusinessSeeder extends Seeder
 {
     public function run(): void
     {
-        $owner = User::where('email', 'cybertrinity6@gmail.com')->first();
+        $owner = User::where('email', env('POS_OWNER_EMAIL', 'fayfaithbitokeld@gmail.com'))->first();
         $cashier = User::where('email', 'cashier@gmail.com')->first();
 
         if (! $owner) {
@@ -20,7 +20,7 @@ class BusinessSeeder extends Seeder
         $business = Business::updateOrCreate(
             ['registration_number' => 'POS-DEMO-001'],
             [
-                'name' => 'POS Demo Business',
+                'name' => env('POS_STORE_NAME', 'FAY COLLECTION'),
                 'email' => $owner->email,
                 'country' => 'KE',
                 'currency' => 'KES',

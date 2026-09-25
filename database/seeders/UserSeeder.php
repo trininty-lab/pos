@@ -18,13 +18,16 @@ class UserSeeder extends Seeder
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $owner = User::updateOrCreate(
-            ['email' => 'cybertrinity6@gmail.com'],
-            [
-                'name' => 'POS Owner',
-                'password' => Hash::make('password'),
-            ]
-        );
+        $ownerEmail = env('POS_OWNER_EMAIL', 'fayfaithbitokeld@gmail.com');
+        $owner = User::firstWhere('email', $ownerEmail)
+            ?? User::firstWhere('email', 'cybertrinity6@gmail.com')
+            ?? new User;
+        $owner->fill([
+            'email' => $ownerEmail,
+            'name' => env('POS_OWNER_NAME', 'Faith Bitok'),
+            'password' => Hash::make(env('POS_OWNER_PASSWORD') ?: 'password'),
+        ]);
+        $owner->save();
 
         $ownerRole = Role::where('name', 'owner')->first();
 

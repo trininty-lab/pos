@@ -16,6 +16,12 @@ export function getImageUrl(image, folder = "products") {
     return `/storage/${folder}/${image}`;
 }
 
+export function getStorageImageUrl(image) {
+    if (!image) return null;
+    if (/^(https?:)?\/\//i.test(image) || image.startsWith("/")) return image;
+    return `/storage/${image}`;
+}
+
 /**
  * Get product image URL
  * @param {string} image - Product image
@@ -42,4 +48,4 @@ export function getCategoryImageUrl(image) {
         : getImageUrl(image, "categories");
 }
 
-export default { getImageUrl, getProductImageUrl, getCategoryImageUrl };
+export default { getImageUrl, getProductImageUrl, getCategoryImageUrl, getStorageImageUrl };

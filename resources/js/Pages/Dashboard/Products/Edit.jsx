@@ -14,7 +14,7 @@ import {
     IconCurrencyDollar,
 } from "@tabler/icons-react";
 import { getProductImageUrl } from "@/Utils/imageUrl";
-import ProductImageEditor from "@/Components/Products/ProductImageEditor";
+import ImageUploader from "@/Components/ImageUploader";
 
 export default function Edit({ categories, product }) {
     const { errors } = usePage().props;
@@ -95,7 +95,15 @@ export default function Edit({ categories, product }) {
                                 <IconPhoto size={18} />
                                 Product Image
                             </h3>
-                            <ProductImageEditor value={data.image} existingPreview={imagePreview} onChange={handleImageChange} error={errors.image} />
+                            <ImageUploader
+                                value={data.image}
+                                existingPreview={imagePreview}
+                                onChange={handleImageChange}
+                                error={errors.image}
+                                imageType="PRODUCT_IMAGE"
+                                aspectRatio="square"
+                                label="Product image"
+                            />
                         </div>
                     </div>
 

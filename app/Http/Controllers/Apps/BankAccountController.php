@@ -60,7 +60,7 @@ class BankAccountController extends Controller
             'bank_name' => 'required|string|max:100',
             'account_number' => 'required|string|max:50',
             'account_name' => 'required|string|max:100',
-            'logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:1024',
+            'logo' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:3072',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -101,7 +101,8 @@ class BankAccountController extends Controller
             'bank_name' => 'required|string|max:100',
             'account_number' => 'required|string|max:50',
             'account_name' => 'required|string|max:100',
-            'logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:1024',
+            'logo' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:3072',
+            'remove_logo' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -110,8 +111,14 @@ class BankAccountController extends Controller
                 Storage::disk('public')->delete($bankAccount->logo);
             }
             $validated['logo'] = $request->file('logo')->store('bank-logos', 'public');
+        } elseif ($request->boolean('remove_logo')) {
+            if ($bankAccount->logo) {
+                Storage::disk('public')->delete($bankAccount->logo);
+            }
+            $validated['logo'] = null;
         }
 
+        unset($validated['remove_logo']);
         $validated['is_active'] = $request->boolean('is_active');
 
         $bankAccount->update($validated);

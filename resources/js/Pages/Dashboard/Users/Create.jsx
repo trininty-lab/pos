@@ -10,7 +10,7 @@ import {
 import Input from "@/Components/Dashboard/Input";
 import Checkbox from "@/Components/Dashboard/Checkbox";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import ImageUploader from "@/Components/ImageUploader";
 
 export default function Create() {
     const { roles } = usePage().props;
@@ -22,9 +22,8 @@ export default function Create() {
         password_confirmation: "",
         selectedRoles: [],
         avatar: null,
+        remove_avatar: false,
     });
-
-    const [avatarPreview, setAvatarPreview] = useState(null);
 
     const setSelectedRoles = (e) => {
         let items = [...data.selectedRoles];
@@ -74,39 +73,20 @@ export default function Create() {
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                     Avatar
                                 </label>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-14 h-14 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-slate-600 font-semibold">
-                                        {avatarPreview ? (
-                                            <img
-                                                src={avatarPreview}
-                                                alt="Preview"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <span>
-                                                {data.name
-                                                    ? data.name
-                                                          .charAt(0)
-                                                          .toUpperCase()
-                                                    : "?"}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => {
-                                            const file = e.target.files[0];
-                                            if (file) {
-                                                setData("avatar", file);
-                                                setAvatarPreview(
-                                                    URL.createObjectURL(file)
-                                                );
-                                            }
-                                        }}
-                                        errors={errors.avatar}
-                                    />
-                                </div>
+                                <ImageUploader
+                                    value={data.avatar}
+                                    onChange={({ file, remove }) => {
+                                        setData("avatar", file);
+                                        setData("remove_avatar", remove);
+                                    }}
+                                    error={errors.avatar}
+                                    imageType="USER_AVATAR"
+                                    aspectRatio="square"
+                                    cropShape="circle"
+                                    maxFileSize={2 * 1024 * 1024}
+                                    previewSize={160}
+                                    label="User avatar"
+                                />
                             </div>
                             <Input
                                 type="text"

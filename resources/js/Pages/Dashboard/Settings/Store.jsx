@@ -1,9 +1,10 @@
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head, useForm } from "@inertiajs/react";
 import Input from "@/Components/Dashboard/Input";
+import ImageUploader from "@/Components/ImageUploader";
+import { getStorageImageUrl } from "@/Utils/imageUrl";
 import Textarea from "@/Components/Dashboard/TextArea";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
 import {
     IconBuildingStore,
     IconDeviceFloppy,
@@ -20,6 +21,7 @@ export default function Store({ settings }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         store_name: settings.store_name || "",
         store_logo: null,
+        remove_store_logo: false,
         store_address: settings.store_address || "",
         store_phone: settings.store_phone || "",
         store_email: settings.store_email || "",
@@ -29,16 +31,6 @@ export default function Store({ settings }) {
         store_nib: settings.store_nib || "",
         tax_default_rate: settings.tax_default_rate || "11.00",
     });
-
-    const [logoPreview, setLogoPreview] = useState(settings.store_logo || null);
-
-    useEffect(() => {
-        return () => {
-            if (logoPreview && logoPreview.startsWith("blob:")) {
-                URL.revokeObjectURL(logoPreview);
-            }
-        };
-    }, [logoPreview]);
 
     const submit = (e) => {
         e.preventDefault();
@@ -74,35 +66,20 @@ export default function Store({ settings }) {
                                 <IconPhoto size={18} />
                                 Store Logo
                             </label>
-                            <div className="w-32 h-32 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center overflow-hidden mb-3">
-                                {logoPreview ? (
-                                    <img
-                                        src={logoPreview.startsWith("http") || logoPreview.startsWith("/storage")
-                                            ? logoPreview
-                                            : `/storage/${logoPreview}`}
-                                        alt="Logo"
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <IconBuildingStore size={36} className="text-slate-300" />
-                                )}
-                            </div>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const file = e.target.files[0];
-                                    if (file) {
-                                        setData("store_logo", file);
-                                        setLogoPreview(URL.createObjectURL(file));
-                                    }
+                            <ImageUploader
+                                value={data.store_logo}
+                                existingPreview={getStorageImageUrl(settings.store_logo)}
+                                onChange={({ file, remove }) => {
+                                    setData("store_logo", file);
+                                    setData("remove_store_logo", remove);
                                 }}
+                                error={errors.store_logo}
+                                imageType="STORE_LOGO"
+                                aspectRatio="landscape"
+                                maxFileSize={3 * 1024 * 1024}
+                                previewSize={240}
+                                label="Store logo"
                             />
-                            {errors.store_logo && (
-                                <p className="text-xs text-danger-500 mt-1">
-                                    {errors.store_logo}
-                                </p>
-                            )}
                         </div>
 
                         {/* Info */}

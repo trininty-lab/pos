@@ -25,14 +25,16 @@ class ProfileUpdateRequest extends FormRequest
     {
         if ($this->user()->hasRole('cashier')) {
             return [
-                'avatar' => ['nullable', 'image', 'max:2048'],
+                     'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+                     'remove_avatar' => ['nullable', 'boolean'],
             ];
         }
 
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'avatar' => ['nullable', 'image', 'max:2048'],
+                'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+                'remove_avatar' => ['nullable', 'boolean'],
         ];
     }
 }

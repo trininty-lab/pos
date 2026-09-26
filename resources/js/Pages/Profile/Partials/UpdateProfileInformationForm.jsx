@@ -2,9 +2,10 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import ImageUploader from '@/Components/ImageUploader';
+import { getStorageImageUrl } from '@/Utils/imageUrl';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import { useEffect, useState } from 'react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, isCashier, className = '' }) {
     const user = usePage().props.auth.user;
@@ -13,9 +14,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, isCa
         name: user.name,
         email: user.email,
         avatar: null,
+        remove_avatar: false,
     });
-
-    const [preview, setPreview] = useState(user.avatar || null);
 
     const submit = (e) => {
         e.preventDefault();
@@ -27,14 +27,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, isCa
             preserveScroll: true,
         });
     };
-
-    useEffect(() => {
-        return () => {
-            if (preview && preview.startsWith('blob:')) {
-                URL.revokeObjectURL(preview);
-            }
-        };
-    }, [preview]);
 
     return (
         <section className={className}>
@@ -82,30 +74,21 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, isCa
                 <div>
                     <InputLabel htmlFor="avatar" value="Avatar" />
 
-                    <div className="flex items-center gap-4 mt-2">
-                        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                            {preview ? (
-                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                            ) : (
-                                <span className="text-lg font-semibold text-gray-600">
-                                    {user.name?.charAt(0)?.toUpperCase() || '?'}
-                                </span>
-                            )}
-                        </div>
-                        <input
-                            id="avatar"
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    setData('avatar', file);
-                                    setPreview(URL.createObjectURL(file));
-                                }
-                            }}
-                        />
-                    </div>
-                    <InputError className="mt-2" message={errors.avatar} />
+                    <ImageUploader
+                        value={data.avatar}
+                        existingPreview={getStorageImageUrl(user.avatar)}
+                        onChange={({ file, remove }) => {
+                            setData('avatar', file);
+                            setData('remove_avatar', remove);
+                        }}
+                        error={errors.avatar}
+                        imageType="USER_AVATAR"
+                        aspectRatio="square"
+                        cropShape="circle"
+                        maxFileSize={2 * 1024 * 1024}
+                        previewSize={160}
+                        label="User avatar"
+                    />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

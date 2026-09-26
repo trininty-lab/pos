@@ -15,6 +15,7 @@ use App\Http\Controllers\Apps\DineTableController;
 use App\Http\Controllers\Apps\DiscountApprovalController;
 use App\Http\Controllers\Apps\GoodsReceivingController;
 use App\Http\Controllers\Apps\ImportExportController;
+use App\Http\Controllers\Apps\LayawayController;
 use App\Http\Controllers\Apps\MemberController;
 use App\Http\Controllers\Apps\PayableController;
 use App\Http\Controllers\Apps\PaymentSettingController;
@@ -227,6 +228,13 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
     // route transaction
     Route::get('/transactions', [TransactionController::class, 'index'])->middleware('permission:transactions-access')->name('transactions.index');
+
+    Route::get('/layaways', [LayawayController::class, 'index'])->middleware('permission:layaways-access')->name('layaways.index');
+    Route::get('/layaways/{layaway}', [LayawayController::class, 'show'])->middleware('permission:layaways-access')->name('layaways.show');
+    Route::post('/layaways', [LayawayController::class, 'store'])->middleware(['permission:layaways-create', 'active_shift'])->name('layaways.store');
+    Route::post('/layaways/{layaway}/payments', [LayawayController::class, 'storePayment'])->middleware(['permission:layaways-pay', 'active_shift'])->name('layaways.payments.store');
+    Route::post('/layaways/{layaway}/release', [LayawayController::class, 'release'])->middleware(['permission:layaways-release', 'active_shift'])->name('layaways.release');
+    Route::post('/layaways/{layaway}/cancel', [LayawayController::class, 'cancel'])->middleware(['permission:layaways-cancel', 'active_shift'])->name('layaways.cancel');
 
     // route transaction searchProduct
     Route::post('/transactions/searchProduct', [TransactionController::class, 'searchProduct'])->middleware(['permission:transactions-access', 'active_shift'])->name('transactions.searchProduct');

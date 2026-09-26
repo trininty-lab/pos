@@ -6,7 +6,7 @@ import Input from "@/Components/Dashboard/Input";
 import Textarea from "@/Components/Dashboard/TextArea";
 import InputSelect from "@/Components/Dashboard/InputSelect";
 import toast from "react-hot-toast";
-import ProductImageEditor from "@/Components/Products/ProductImageEditor";
+import ImageUploader from "@/Components/ImageUploader";
 import {
     IconPackage,
     IconDeviceFloppy,
@@ -84,7 +84,14 @@ export default function Create({ categories }) {
                                 <IconPhoto size={18} />
                                 Product Image
                             </h3>
-                            <ProductImageEditor value={data.image} onChange={handleImageChange} error={errors.image} />
+                            <ImageUploader
+                                value={data.image}
+                                onChange={handleImageChange}
+                                error={errors.image}
+                                imageType="PRODUCT_IMAGE"
+                                aspectRatio="square"
+                                label="Product image"
+                            />
                         </div>
                     </div>
 

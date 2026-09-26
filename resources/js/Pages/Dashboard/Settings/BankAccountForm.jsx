@@ -8,6 +8,8 @@ import {
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import Input from "@/Components/Dashboard/Input";
+import ImageUploader from "@/Components/ImageUploader";
+import { getStorageImageUrl } from "@/Utils/imageUrl";
 import { useAuthorization } from "@/Utils/authorization";
 
 export default function BankAccountForm({ bankAccount = null }) {
@@ -21,6 +23,7 @@ export default function BankAccountForm({ bankAccount = null }) {
     account_number: bankAccount?.account_number || "",
     account_name: bankAccount?.account_name || "",
     logo: null,
+    remove_logo: false,
     is_active: bankAccount?.is_active ?? true,
 });
 
@@ -99,25 +102,21 @@ export default function BankAccountForm({ bankAccount = null }) {
                     />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                Bank Logo (optional)
-                            </label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) =>
-                                    setData("logo", e.target.files?.[0] || null)
-                                }
-                                disabled={!canUpdatePaymentSettings}
-                                className="w-full h-11 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-                            />
-                            {errors.logo && (
-                                <p className="text-xs text-danger-500 mt-1">
-                                    {errors.logo}
-                                </p>
-                            )}
-                        </div>
+                        <ImageUploader
+                            value={data.logo}
+                            existingPreview={getStorageImageUrl(bankAccount?.logo)}
+                            onChange={({ file, remove }) => {
+                                setData("logo", file);
+                                setData("remove_logo", remove);
+                            }}
+                            error={errors.logo}
+                            imageType="BANK_LOGO"
+                            aspectRatio="square"
+                            maxFileSize={3 * 1024 * 1024}
+                            previewSize={160}
+                            label="Bank logo"
+                            disabled={!canUpdatePaymentSettings}
+                        />
                         <div className="flex items-end">
                             <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                                 <input

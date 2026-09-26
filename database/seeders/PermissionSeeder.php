@@ -77,6 +77,13 @@ class PermissionSeeder extends Seeder
         $create('transactions-access');
         $create('transactions-confirm-payment');
 
+        // layaway permissions
+        $create('layaways-access');
+        $create('layaways-create');
+        $create('layaways-pay');
+        $create('layaways-release');
+        $create('layaways-cancel');
+
         // permission receivables & payables
         $create('receivables-access');
         $create('receivables-pay');

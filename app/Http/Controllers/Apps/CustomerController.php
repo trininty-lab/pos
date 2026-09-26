@@ -286,6 +286,21 @@ class CustomerController extends Controller
                 'is_used' => (bool) $voucher->is_used,
             ]);
 
+        $layaways = $customer->layaways()
+            ->with(['items.product:id,title', 'payments' => fn ($query) => $query->latest('paid_at')->limit(1)])
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn ($layaway) => [
+                'id' => $layaway->id,
+                'reference' => $layaway->reference,
+                'status' => $layaway->status,
+                'total_amount' => (int) $layaway->total_amount,
+                'paid_amount' => (int) $layaway->paid_amount,
+                'balance_amount' => (int) $layaway->balance_amount,
+                'created_at' => optional($layaway->created_at)?->format('Y-m-d'),
+                'last_payment' => $layaway->payments->first()?->paid_at?->format('Y-m-d') ?? null,
+            ]);
+
         return Inertia::render('Dashboard/Customers/Show', [
             'customer' => $customer,
             'segments' => $this->segmentationService->serializeCustomerSegments($customer),
@@ -300,6 +315,8 @@ class CustomerController extends Controller
             'frequentProducts' => $frequentProducts,
             'rewardHistory' => $rewardHistory,
             'vouchers' => $vouchers,
+            'layaways' => $layaways,
+            'outstanding_layaway_balance' => (int) $customer->layaways()->whereIn('status', ['partial', 'paid'])->sum('balance_amount'),
         ]);
     }
 

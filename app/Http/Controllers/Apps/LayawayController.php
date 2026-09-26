@@ -17,14 +17,67 @@ class LayawayController extends Controller
         protected readonly LayawayService $layawayService,
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        $layaways = Layaway::with(['customer:id,name,no_telp', 'user:id,name', 'items.product:id,title'])
-            ->latest('created_at')
-            ->paginate(20);
+        $filters = [
+            'search' => $request->query('search'),
+            'status' => $request->query('status'),
+            'customer_id' => $request->query('customer_id'),
+            'user_id' => $request->query('user_id'),
+            'date_from' => $request->query('date_from'),
+            'date_to' => $request->query('date_to'),
+            'balance_filter' => $request->query('balance_filter'),
+        ];
+
+        $query = Layaway::with(['customer:id,name,no_telp', 'user:id,name', 'items.product:id,title,sku,barcode'])
+            ->withSum('payments as total_paid', 'amount')
+            ->orderByDesc('created_at');
+
+        $query->when($filters['search'], function ($q, $search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('reference', 'like', '%'.$search.'%')
+                    ->orWhereHas('customer', fn ($customerQuery) => $customerQuery
+                        ->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('no_telp', 'like', '%'.$search.'%'))
+                    ->orWhereHas('items.product', fn ($productQuery) => $productQuery
+                        ->where('title', 'like', '%'.$search.'%')
+                        ->orWhere('sku', 'like', '%'.$search.'%')
+                        ->orWhere('barcode', 'like', '%'.$search.'%'));
+            });
+        })->when($filters['status'], function ($q, $status) {
+            if ($status === 'partially_paid') {
+                $q->where('status', 'partial');
+            } else {
+                $q->where('status', $status);
+            }
+        })->when($filters['customer_id'], fn ($q, $customerId) => $q->where('customer_id', $customerId))
+          ->when($filters['user_id'], fn ($q, $userId) => $q->where('user_id', $userId))
+          ->when($filters['date_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+          ->when($filters['date_to'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
+          ->when($filters['balance_filter'], function ($q, $balanceFilter) {
+              if ($balanceFilter === 'has_balance') {
+                  $q->where('balance_amount', '>', 0);
+              }
+              if ($balanceFilter === 'fully_paid') {
+                  $q->where('balance_amount', 0)->where('status', 'paid');
+              }
+          });
+
+        $layaways = $query->paginate($this->perPage())->withQueryString();
+
+        $summary = [
+            'total' => Layaway::count(),
+            'partially_paid' => Layaway::where('status', 'partial')->count(),
+            'ready_for_release' => Layaway::where('status', 'paid')->count(),
+            'completed' => Layaway::where('status', 'released')->count(),
+            'cancelled' => Layaway::where('status', 'cancelled')->count(),
+            'outstanding_balance' => Layaway::whereIn('status', ['partial', 'paid'])->sum('balance_amount'),
+        ];
 
         return Inertia::render('Dashboard/Layaways/Index', [
             'layaways' => $layaways,
+            'filters' => $filters,
+            'summary' => $summary,
         ]);
     }
 

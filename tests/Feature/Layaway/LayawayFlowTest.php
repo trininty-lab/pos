@@ -114,6 +114,54 @@ class LayawayFlowTest extends TestCase
         $this->assertDatabaseHas('layaway_payments', ['layaway_id' => $layaway->id, 'amount' => $product->sell_price - 20000]);
     }
 
+    public function test_customer_outstanding_balance_is_calculated_from_active_layaways(): void
+    {
+        $cashier = $this->createCashier();
+        $customer = Customer::create([
+            'name' => 'Outstanding Balance Customer',
+            'no_telp' => '08111111111',
+            'address' => 'Jl. Outstanding',
+        ]);
+        $product = $this->createProduct();
+
+        $partialLayaway = Layaway::create([
+            'reference' => 'LAY-000010',
+            'customer_id' => $customer->id,
+            'user_id' => $cashier->id,
+            'status' => 'partial',
+            'total_amount' => 100000,
+            'paid_amount' => 30000,
+            'balance_amount' => 70000,
+        ]);
+
+        $partialLayaway->items()->create([
+            'product_id' => $product->id,
+            'qty' => 1,
+            'unit_price' => 100000,
+            'subtotal' => 100000,
+        ]);
+
+        $paidLayaway = Layaway::create([
+            'reference' => 'LAY-000011',
+            'customer_id' => $customer->id,
+            'user_id' => $cashier->id,
+            'status' => 'paid',
+            'total_amount' => 50000,
+            'paid_amount' => 50000,
+            'balance_amount' => 0,
+        ]);
+
+        $paidLayaway->items()->create([
+            'product_id' => $product->id,
+            'qty' => 1,
+            'unit_price' => 50000,
+            'subtotal' => 50000,
+        ]);
+
+        $this->assertSame(70000, $customer->layaways()->where('status', 'partial')->sum('balance_amount'));
+        $this->assertSame(70000, $customer->layaways()->whereIn('status', ['partial', 'paid'])->sum('balance_amount'));
+    }
+
     protected function createCashier(): User
     {
         $user = User::factory()->create();

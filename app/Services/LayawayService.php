@@ -59,6 +59,7 @@ class LayawayService
 
         return DB::transaction(function () use ($user, $customer, $validatedItems, $initialPayment, $paymentMethod, $paymentReference, $notes, $total) {
             $layaway = Layaway::create([
+                'business_id' => $user->business_id,
                 'customer_id' => $customer->id,
                 'user_id' => $user->id,
                 'status' => 'partial',

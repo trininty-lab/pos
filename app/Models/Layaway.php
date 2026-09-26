@@ -12,6 +12,7 @@ class Layaway extends Model
     use HasFactory;
 
     protected $fillable = [
+        'business_id',
         'reference',
         'customer_id',
         'user_id',
@@ -28,6 +29,7 @@ class Layaway extends Model
     ];
 
     protected $casts = [
+        'business_id' => 'integer',
         'total_amount' => 'integer',
         'paid_amount' => 'integer',
         'balance_amount' => 'integer',
@@ -44,6 +46,11 @@ class Layaway extends Model
                 $layaway->reference = 'LAY-'.str_pad((string) $next, 6, '0', STR_PAD_LEFT);
             }
         });
+    }
+
+    public function business(): BelongsTo
+    {
+        return $this->belongsTo(Business::class);
     }
 
     public function customer(): BelongsTo

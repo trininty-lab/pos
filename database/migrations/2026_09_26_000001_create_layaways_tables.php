@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('layaways', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('business_id')->nullable()->constrained()->nullOnDelete();
             $table->string('reference')->unique();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();

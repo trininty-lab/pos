@@ -333,6 +333,13 @@ export default function Menu() {
                     permissions: hasAnyPermission(["cashier-shifts-access"]),
                 },
                 {
+                    title: "Layaways",
+                    href: route("layaways.index"),
+                    active: url.startsWith("/dashboard/layaways"),
+                    icon: <IconClockHour6 size={20} strokeWidth={1.5} />,
+                    permissions: hasAnyPermission(["layaways-access", "layaways-create", "layaways-pay"]),
+                },
+                {
                     title: "Expenses",
                     href: route("expenses.index"),
                     active: url.startsWith("/dashboard/expenses"),

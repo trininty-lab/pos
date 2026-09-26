@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Layaway;
 
+use App\Models\Business;
 use App\Models\Cart;
 use App\Models\CashierShift;
 use App\Models\Category;
@@ -160,6 +161,68 @@ class LayawayFlowTest extends TestCase
 
         $this->assertSame(70000, $customer->layaways()->where('status', 'partial')->sum('balance_amount'));
         $this->assertSame(70000, $customer->layaways()->whereIn('status', ['partial', 'paid'])->sum('balance_amount'));
+    }
+
+    public function test_owner_sees_only_layaways_for_own_business(): void
+    {
+        $ownerA = User::factory()->create(['business_id' => null]);
+        $ownerB = User::factory()->create(['business_id' => null]);
+
+        $businessA = Business::create([
+            'name' => 'Business A',
+            'country' => 'ID',
+            'currency' => 'KES',
+            'status' => 'active',
+            'owner_id' => $ownerA->id,
+        ]);
+        $businessB = Business::create([
+            'name' => 'Business B',
+            'country' => 'ID',
+            'currency' => 'KES',
+            'status' => 'active',
+            'owner_id' => $ownerB->id,
+        ]);
+
+        $ownerA->givePermissionTo(['layaways-access', 'layaways-create', 'layaways-pay', 'layaways-release', 'layaways-cancel']);
+        $ownerB->givePermissionTo(['layaways-access', 'layaways-create', 'layaways-pay', 'layaways-release', 'layaways-cancel']);
+
+        $ownerA->refresh();
+        $ownerB->refresh();
+
+        $customerA = Customer::create(['name' => 'Customer A', 'no_telp' => '08100000001', 'address' => 'Address A']);
+        $customerB = Customer::create(['name' => 'Customer B', 'no_telp' => '08100000002', 'address' => 'Address B']);
+
+        $layawayA = Layaway::create([
+            'business_id' => $businessA->id,
+            'reference' => 'LAY-100001',
+            'customer_id' => $customerA->id,
+            'user_id' => $ownerA->id,
+            'status' => 'partial',
+            'total_amount' => 150000,
+            'paid_amount' => 50000,
+            'balance_amount' => 100000,
+        ]);
+
+        $layawayB = Layaway::create([
+            'business_id' => $businessB->id,
+            'reference' => 'LAY-100002',
+            'customer_id' => $customerB->id,
+            'user_id' => $ownerB->id,
+            'status' => 'partial',
+            'total_amount' => 90000,
+            'paid_amount' => 20000,
+            'balance_amount' => 70000,
+        ]);
+
+        $response = $this->actingAs($ownerA)
+            ->get(route('layaways.index'));
+
+        $response->assertOk();
+        $this->assertStringContainsString('LAY-100001', $response->getContent());
+        $this->assertStringNotContainsString('LAY-100002', $response->getContent());
+
+        $this->assertTrue(Layaway::where('business_id', $businessA->id)->exists());
+        $this->assertTrue(Layaway::where('business_id', $businessB->id)->exists());
     }
 
     protected function createCashier(): User

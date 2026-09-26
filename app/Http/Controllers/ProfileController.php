@@ -40,9 +40,16 @@ class ProfileController extends Controller
             }
 
             $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        } elseif ($request->boolean('remove_avatar')) {
+            if ($user->getRawOriginal('avatar')) {
+                Storage::disk('public')->delete($user->getRawOriginal('avatar'));
+            }
+
+            $data['avatar'] = null;
         } else {
             unset($data['avatar']);
         }
+        unset($data['remove_avatar']);
 
         $user->fill($data);
 

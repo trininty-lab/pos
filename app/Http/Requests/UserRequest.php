@@ -30,7 +30,8 @@ class UserRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($userId)],
             'password' => [$isCreate ? 'required' : 'nullable', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['nullable', 'image', 'max:2048'],
+                'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+                'remove_avatar' => ['nullable', 'boolean'],
             'selectedRoles' => ['required', 'array', 'min:1'],
             'selectedRoles.*' => [
                 'string',

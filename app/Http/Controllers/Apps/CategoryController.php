@@ -52,9 +52,9 @@ class CategoryController extends Controller
          * validate
          */
         $request->validate([
-            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-            'name' => 'required',
-            'description' => 'required',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:3072',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
         ]);
 
         // create category
@@ -112,22 +112,29 @@ class CategoryController extends Controller
          * validate
          */
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:3072',
+            'remove_image' => 'nullable|boolean',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
         ]);
 
-        // check image update
-        if ($request->file('image')) {
+        $attributes = [
+            'name' => $request->name,
+            'description' => $request->description,
+        ];
 
-            $image = $request->file('image');
-            $uploaded = $this->imageService->replaceImage($image, 'categories/'.$category->id, $category->cloudinary_public_id);
+        if ($request->file('image')) {
+            $uploaded = $this->imageService->replaceImage(
+                $request->file('image'),
+                'categories/'.$category->id,
+                $category->cloudinary_public_id
+            );
 
             if (! $category->cloudinary_public_id) {
-                Storage::disk('local')->delete('public/category/'.basename($category->image));
+                Storage::disk('local')->delete('public/categories/'.basename($category->image));
             }
 
-            // update category with new image
-            $category->update([
+            $attributes += [
                 'image' => $uploaded->secureUrl,
                 'cloudinary_public_id' => $uploaded->publicId,
                 'cloudinary_version' => $uploaded->version,
@@ -136,16 +143,27 @@ class CategoryController extends Controller
                 'cloudinary_bytes' => $uploaded->bytes,
                 'cloudinary_width' => $uploaded->width,
                 'cloudinary_height' => $uploaded->height,
-                'name' => $request->name,
-                'description' => $request->description,
-            ]);
+            ];
+        } elseif ($request->boolean('remove_image')) {
+            if ($category->cloudinary_public_id) {
+                $this->imageService->deleteImage($category->cloudinary_public_id);
+            } elseif ($category->image && $category->image !== 'default.jpg') {
+                Storage::disk('local')->delete('public/categories/'.basename($category->image));
+            }
+
+            $attributes += [
+                'image' => 'default.jpg',
+                'cloudinary_public_id' => null,
+                'cloudinary_version' => null,
+                'cloudinary_format' => null,
+                'cloudinary_resource_type' => null,
+                'cloudinary_bytes' => null,
+                'cloudinary_width' => null,
+                'cloudinary_height' => null,
+            ];
         }
 
-        // update category without image
-        $category->update([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $category->update($attributes);
 
         // redirect
         return to_route('categories.index');

@@ -60,6 +60,11 @@ class Customer extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function layaways()
+    {
+        return $this->hasMany(Layaway::class);
+    }
+
     public function loyaltyPointHistories()
     {
         return $this->hasMany(LoyaltyPointHistory::class);

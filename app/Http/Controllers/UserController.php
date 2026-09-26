@@ -161,6 +161,10 @@ class UserController extends Controller
 
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $avatarChanged = true;
+        } elseif ($request->boolean('remove_avatar') && $avatarPath) {
+            Storage::disk('public')->delete($avatarPath);
+            $avatarPath = null;
+            $avatarChanged = true;
         }
 
         // check if user send request password

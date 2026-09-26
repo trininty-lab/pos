@@ -29,16 +29,20 @@ const DEFAULT_CONFIG = {
     label: "Image",
 };
 
-function createCropPreview(imageUrl, pixels, rotation) {
+function createCropResult(imageUrl, pixels, rotation, aspectRatio, outputSize, selectedName) {
     return new Promise((resolve, reject) => {
         const image = new Image();
         image.onload = () => {
             const canvas = document.createElement("canvas");
-            const targetWidth = 320;
-            const targetHeight = 320;
+            const targetWidth = outputSize;
+            const targetHeight = Math.max(1, Math.round(outputSize / aspectRatio));
             canvas.width = targetWidth;
             canvas.height = targetHeight;
             const context = canvas.getContext("2d");
+            if (!context) {
+                reject(new Error("Unable to create image preview."));
+                return;
+            }
             context.translate(targetWidth / 2, targetHeight / 2);
             context.rotate((rotation * Math.PI) / 180);
             context.drawImage(
@@ -52,7 +56,18 @@ function createCropPreview(imageUrl, pixels, rotation) {
                 targetWidth,
                 targetHeight
             );
-            resolve(canvas.toDataURL("image/webp", 0.85));
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    reject(new Error("Unable to crop image."));
+                    return;
+                }
+
+                const fileName = selectedName.replace(/\.[^.]+$/, "") + ".webp";
+                resolve({
+                    preview: canvas.toDataURL("image/webp", 0.85),
+                    file: new File([blob], fileName, { type: "image/webp" }),
+                });
+            }, "image/webp", 0.85);
         };
         image.onerror = reject;
         image.src = imageUrl;
@@ -94,14 +109,17 @@ export default function ImageUploader({
     required = DEFAULT_CONFIG.required,
     maxImages = DEFAULT_CONFIG.maxImages,
     previewSize = DEFAULT_CONFIG.previewSize,
+    outputSize = 1200,
     label = DEFAULT_CONFIG.label,
     placeholder = "No image yet",
+    disabled = false,
 }) {
     const inputRef = useRef(null);
     const [sourceUrl, setSourceUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [editorOpen, setEditorOpen] = useState(false);
     const [validationError, setValidationError] = useState("");
+    const [removed, setRemoved] = useState(false);
     const { preview, selectFile, setGeneratedPreview, resetPreview } = useImagePreview(existingPreview);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(MIN_ZOOM);
@@ -118,6 +136,7 @@ export default function ImageUploader({
         required,
         maxImages,
         previewSize,
+        outputSize,
         label,
     };
 
@@ -128,10 +147,10 @@ export default function ImageUploader({
     }, [sourceUrl]);
 
     useEffect(() => {
-        if (! value) {
-            setGeneratedPreview(existingPreview);
+        if (!value) {
+            setGeneratedPreview(removed ? null : existingPreview);
         }
-    }, [existingPreview, value]);
+    }, [existingPreview, removed, value]);
 
     const openFile = (file) => {
         if (! file) return;
@@ -144,6 +163,7 @@ export default function ImageUploader({
 
         setSourceUrl(selectFile(file));
         setSelectedFile(file);
+        setRemoved(false);
         setCrop({ x: 0, y: 0 });
         setZoom(MIN_ZOOM);
         setRotation(0);
@@ -155,23 +175,43 @@ export default function ImageUploader({
         if (! selectedFile || ! croppedAreaPixels) return;
 
         try {
-            const generatedPreview = await createCropPreview(sourceUrl, croppedAreaPixels, rotation);
-            setGeneratedPreview(generatedPreview);
+            const cropResult = await createCropResult(
+                sourceUrl,
+                croppedAreaPixels,
+                rotation,
+                config.aspectRatio,
+                config.outputSize,
+                selectedFile.name
+            );
+            setGeneratedPreview(cropResult.preview);
+
+            onChange?.({
+                file: imageType === "PRODUCT_IMAGE" ? selectedFile : cropResult.file,
+                crop: {
+                    x: Math.round(croppedAreaPixels.x),
+                    y: Math.round(croppedAreaPixels.y),
+                    width: Math.round(croppedAreaPixels.width),
+                    height: Math.round(croppedAreaPixels.height),
+                    rotation,
+                },
+                remove: false,
+            });
         } catch {
             setGeneratedPreview(sourceUrl);
+            onChange?.({
+                file: selectedFile,
+                crop: imageType === "PRODUCT_IMAGE" && croppedAreaPixels
+                    ? {
+                        x: Math.round(croppedAreaPixels.x),
+                        y: Math.round(croppedAreaPixels.y),
+                        width: Math.round(croppedAreaPixels.width),
+                        height: Math.round(croppedAreaPixels.height),
+                        rotation,
+                    }
+                    : null,
+                remove: false,
+            });
         }
-
-        onChange?.({
-            file: selectedFile,
-            crop: {
-                x: Math.round(croppedAreaPixels.x),
-                y: Math.round(croppedAreaPixels.y),
-                width: Math.round(croppedAreaPixels.width),
-                height: Math.round(croppedAreaPixels.height),
-                rotation,
-            },
-            remove: false,
-        });
         setEditorOpen(false);
     };
 
@@ -179,17 +219,18 @@ export default function ImageUploader({
         if (sourceUrl) URL.revokeObjectURL(sourceUrl);
         setSourceUrl(null);
         setSelectedFile(null);
+        setRemoved(true);
         resetPreview();
         setEditorOpen(false);
         setValidationError("");
         onChange?.({ file: null, crop: null, remove: true });
     };
 
-    const blockClass = "aspect-square overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-slate-100 dark:border-slate-700 dark:bg-slate-800";
+    const blockClass = "overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-slate-100 dark:border-slate-700 dark:bg-slate-800";
 
     return (
         <div>
-            <div className={`${blockClass} mb-4`} style={{ maxWidth: `${previewSize}px` }}>
+            <div className={`${blockClass} mb-4 w-full`} style={{ maxWidth: `${previewSize}px`, aspectRatio: String(config.aspectRatio) }}>
                 {preview ? (
                     <img src={preview} alt={label} className="h-full w-full object-cover" />
                 ) : (
@@ -206,6 +247,7 @@ export default function ImageUploader({
                 <button
                     type="button"
                     onClick={() => inputRef.current?.click()}
+                    disabled={disabled}
                     className="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-3 py-2 text-sm font-medium text-white hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                     <IconUpload size={17} />
@@ -216,6 +258,7 @@ export default function ImageUploader({
                     <button
                         type="button"
                         onClick={clearImage}
+                        disabled={disabled}
                         className="inline-flex items-center gap-2 rounded-lg border border-danger-200 px-3 py-2 text-sm font-medium text-danger-600 hover:bg-danger-50 focus:outline-none focus:ring-2 focus:ring-danger-500"
                     >
                         <IconX size={17} />
@@ -231,6 +274,7 @@ export default function ImageUploader({
                 accept={config.allowedFormats.join(",")}
                 multiple={multiple}
                 required={required}
+                disabled={disabled}
                 onChange={(event) => {
                     const file = event.target.files?.[0];
                     if (file) openFile(file);
@@ -264,7 +308,7 @@ export default function ImageUploader({
                             </button>
                         </div>
 
-                        <div className="relative mx-auto overflow-hidden rounded-xl bg-slate-950" style={{ width: config.previewSize, height: config.previewSize }}>
+                        <div className="relative mx-auto overflow-hidden rounded-xl bg-slate-950" style={{ width: config.previewSize, height: Math.round(config.previewSize / config.aspectRatio) }}>
                             <Cropper
                                 image={sourceUrl}
                                 crop={crop}
@@ -272,7 +316,7 @@ export default function ImageUploader({
                                 rotation={rotation}
                                 aspect={config.aspectRatio}
                                 cropShape={config.cropShape === "circle" ? "round" : "rect"}
-                                cropSize={{ width: config.previewSize, height: config.previewSize }}
+                                cropSize={{ width: config.previewSize, height: Math.round(config.previewSize / config.aspectRatio) }}
                                 onCropChange={setCrop}
                                 onZoomChange={setZoom}
                                 onCropComplete={(_, pixels) => setCroppedAreaPixels(pixels)}

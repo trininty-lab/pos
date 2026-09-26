@@ -66,8 +66,10 @@ class PaymentSettingController extends Controller
             ],
             'paymentSettingSources' => $setting->paymentSettingSources(),
             'supportedGateways' => [
-                ['value' => 'cash', 'label' => 'Tunai'],
-                ['value' => PaymentSetting::GATEWAY_BANK_TRANSFER, 'label' => 'Transfer Bank'],
+                ['value' => 'cash', 'label' => 'Cash'],
+                ['value' => PaymentSetting::GATEWAY_BANK_TRANSFER, 'label' => 'Kenya Bank Transfer'],
+                ['value' => PaymentSetting::GATEWAY_MPESA, 'label' => 'M-Pesa'],
+                ['value' => PaymentSetting::GATEWAY_AIRTEL_MONEY, 'label' => 'Airtel Money'],
                 ['value' => PaymentSetting::GATEWAY_MIDTRANS, 'label' => 'Midtrans'],
                 ['value' => PaymentSetting::GATEWAY_XENDIT, 'label' => 'Xendit'],
             ],
@@ -89,7 +91,14 @@ class PaymentSettingController extends Controller
         $data = $request->validate([
             'default_gateway' => [
                 'required',
-                Rule::in(['cash', PaymentSetting::GATEWAY_BANK_TRANSFER, PaymentSetting::GATEWAY_MIDTRANS, PaymentSetting::GATEWAY_XENDIT]),
+                Rule::in([
+                    'cash',
+                    PaymentSetting::GATEWAY_BANK_TRANSFER,
+                    PaymentSetting::GATEWAY_MPESA,
+                    PaymentSetting::GATEWAY_AIRTEL_MONEY,
+                    PaymentSetting::GATEWAY_MIDTRANS,
+                    PaymentSetting::GATEWAY_XENDIT,
+                ]),
             ],
             'bank_transfer_enabled' => ['boolean'],
             'midtrans_enabled' => ['boolean'],
@@ -133,9 +142,16 @@ class PaymentSettingController extends Controller
             ])->withInput();
         }
 
+        $manualKenyaGateway = in_array($data['default_gateway'], [
+            PaymentSetting::GATEWAY_BANK_TRANSFER,
+            PaymentSetting::GATEWAY_MPESA,
+            PaymentSetting::GATEWAY_AIRTEL_MONEY,
+        ], true);
+
         if (
             $data['default_gateway'] !== 'cash'
-            && ! (($data['default_gateway'] === PaymentSetting::GATEWAY_MIDTRANS && $midtransEnabled)
+            && ! ($manualKenyaGateway
+                || ($data['default_gateway'] === PaymentSetting::GATEWAY_MIDTRANS && $midtransEnabled)
                 || ($data['default_gateway'] === PaymentSetting::GATEWAY_XENDIT && $xenditEnabled))
         ) {
             return back()->withErrors([

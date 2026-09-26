@@ -13,8 +13,10 @@ use App\Http\Controllers\Apps\CustomerVoucherController;
 use App\Http\Controllers\Apps\DineAreaController;
 use App\Http\Controllers\Apps\DineTableController;
 use App\Http\Controllers\Apps\DiscountApprovalController;
+use App\Http\Controllers\Apps\ExpenseController;
 use App\Http\Controllers\Apps\GoodsReceivingController;
 use App\Http\Controllers\Apps\ImportExportController;
+use App\Http\Controllers\Apps\LayawayController;
 use App\Http\Controllers\Apps\MemberController;
 use App\Http\Controllers\Apps\PayableController;
 use App\Http\Controllers\Apps\PaymentSettingController;
@@ -112,9 +114,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     // users route
     Route::resource('/users', UserController::class)
         ->except('show')
-        ->middlewareFor('index', 'role_or_permission:owner|users-access')
-        ->middlewareFor(['create', 'store'], 'role_or_permission:owner|users-create')
-        ->middlewareFor('create', 'step_up')
+        ->middlewareFor('index', 'user_management:users-access')
+        ->middlewareFor(['create', 'store'], 'user_management:users-create')
+        ->middlewareFor('create', ['user_management:users-create', 'step_up'])
         ->middlewareFor(['edit', 'update'], 'permission:users-update')
         ->middlewareFor('update', ['permission:users-update', 'step_up'])
         ->middlewareFor('destroy', ['permission:users-delete', 'step_up']);
@@ -227,6 +229,20 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
     // route transaction
     Route::get('/transactions', [TransactionController::class, 'index'])->middleware('permission:transactions-access')->name('transactions.index');
+
+    Route::get('/layaways', [LayawayController::class, 'index'])->middleware('permission:layaways-access')->name('layaways.index');
+    Route::get('/layaways/{layaway}', [LayawayController::class, 'show'])->middleware('permission:layaways-access')->name('layaways.show');
+    Route::post('/layaways', [LayawayController::class, 'store'])->middleware(['permission:layaways-create', 'active_shift'])->name('layaways.store');
+    Route::post('/layaways/{layaway}/payments', [LayawayController::class, 'storePayment'])->middleware(['permission:layaways-pay', 'active_shift'])->name('layaways.payments.store');
+    Route::post('/layaways/{layaway}/release', [LayawayController::class, 'release'])->middleware(['permission:layaways-release', 'active_shift'])->name('layaways.release');
+    Route::post('/layaways/{layaway}/cancel', [LayawayController::class, 'cancel'])->middleware(['permission:layaways-cancel', 'active_shift'])->name('layaways.cancel');
+
+    Route::get('/expenses', [ExpenseController::class, 'index'])->middleware('permission:expenses-view')->name('expenses.index');
+    Route::get('/expenses/{expense}', [ExpenseController::class, 'show'])->middleware('permission:expenses-view')->name('expenses.show');
+    Route::post('/expenses', [ExpenseController::class, 'store'])->middleware(['permission:expenses-create', 'permission:expenses-submit'])->name('expenses.store');
+    Route::post('/expenses/{expense}/approve', [ExpenseController::class, 'approve'])->middleware('permission:expenses-approve')->name('expenses.approve');
+    Route::post('/expenses/{expense}/reject', [ExpenseController::class, 'reject'])->middleware('permission:expenses-reject')->name('expenses.reject');
+    Route::post('/expenses/{expense}/cancel', [ExpenseController::class, 'cancel'])->middleware('permission:expenses-cancel')->name('expenses.cancel');
 
     // route transaction searchProduct
     Route::post('/transactions/searchProduct', [TransactionController::class, 'searchProduct'])->middleware(['permission:transactions-access', 'active_shift'])->name('transactions.searchProduct');

@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureActiveCashierShift;
 use App\Http\Middleware\EnsureBotGuard;
 use App\Http\Middleware\EnsurePublicRegistrationEnabled;
 use App\Http\Middleware\EnsureRecentPasswordConfirmation;
+use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SecureHeaders;
 use App\Http\Middleware\SetLocale;
@@ -49,6 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'registration.enabled' => EnsurePublicRegistrationEnabled::class,
             'bot.guard' => EnsureBotGuard::class,
             'step_up' => EnsureRecentPasswordConfirmation::class,
+            'user_management' => EnsureUserManagementAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

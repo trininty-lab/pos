@@ -4,13 +4,13 @@ import { Head, useForm, usePage, Link } from "@inertiajs/react";
 import Input from "@/Components/Dashboard/Input";
 import Textarea from "@/Components/Dashboard/TextArea";
 import toast from "react-hot-toast";
+import ImageUploader from "@/Components/ImageUploader";
 import {
     IconCategory,
     IconDeviceFloppy,
     IconArrowLeft,
     IconPhoto,
 } from "@tabler/icons-react";
-import useImagePreview from "@/Hooks/useImagePreview";
 
 export default function Create() {
     const { errors } = usePage().props;
@@ -18,17 +18,11 @@ export default function Create() {
     const { data, setData, post, processing } = useForm({
         name: "",
         description: "",
-        image: "",
+        image: null,
     });
 
-    const { preview: imagePreview, selectFile } = useImagePreview();
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setData("image", file);
-            selectFile(file);
-        }
+    const handleImageChange = ({ file }) => {
+        setData("image", file);
     };
 
     const submit = (e) => {
@@ -67,25 +61,15 @@ export default function Create() {
                                     <IconPhoto size={16} />
                                     Image
                                 </h3>
-                                <div className="aspect-video rounded-xl bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center overflow-hidden mb-3">
-                                    {imagePreview ? (
-                                        <img
-                                            src={imagePreview}
-                                            alt="Preview"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <IconPhoto
-                                            size={32}
-                                            className="text-slate-400"
-                                        />
-                                    )}
-                                </div>
-                                <Input
-                                    type="file"
+                                <ImageUploader
+                                    value={data.image}
                                     onChange={handleImageChange}
-                                    errors={errors.image}
-                                    accept="image/*"
+                                    error={errors.image}
+                                    imageType="CATEGORY_IMAGE"
+                                    aspectRatio="landscape"
+                                    maxFileSize={3 * 1024 * 1024}
+                                    previewSize={320}
+                                    label="Category image"
                                 />
                             </div>
 

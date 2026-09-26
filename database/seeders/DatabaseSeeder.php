@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             BusinessSeeder::class,
+            StoreProfileSeeder::class,
             PaymentSettingSeeder::class,
             SampleDataSeeder::class,
             OperationalCoreSeeder::class,
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $this->seedDefaultWarehouse();
+        $this->call(FashionCatalogSeeder::class);
     }
 
     private function seedDefaultWarehouse(): void

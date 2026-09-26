@@ -26,6 +26,92 @@ Purchase stock → Receive goods → Manage warehouse inventory
 
 The platform supports multi-warehouse operations, Indonesian tax requirements, thermal printers, payment gateways, a mobile-friendly PWA, and an optional WhatsApp Gateway for automated customer communication.
 
+## Pages by User Type
+
+This application is designed for several kinds of users. The main pages are organized around the work each role performs.
+
+### 1) Store Owner / Business Owner
+
+These users need a high-level overview of the business and operational health.
+
+- Dashboard: summary of sales, inventory, cash flow, recent activity, and alerts
+- Sales Reports: daily, weekly, and monthly sales performance
+- Profit Reports: margin and financial overview by item, category, and time period
+- Receivables and Payables: customer debts and supplier obligations
+- Cashier Shifts: open/close cashier sessions, cash reconciliation, and shift reports
+- Warehouses: location overview and stock distribution
+- Settings: business profile, payment configuration, store preferences, app versioning
+- Audit Logs: system activity for accountability and review
+
+### 2) Cashier / Frontline Sales Staff
+
+These users focus on the point-of-sale flow and transaction completion.
+
+- POS Checkout: add products, search by barcode or keyword, apply discounts, choose payment method
+- Held Carts: save carts temporarily and resume later
+- Transactions History: view recent sales and receipts
+- Customer Lookup: add or check customer information during checkout
+- Cashier Shift: open shift, record cash, and close at the end of the day
+- Sales Returns: handle product returns and refund processing
+- Transaction Printing: print invoices and receipts via thermal printer
+
+### 3) Inventory / Warehouse Staff
+
+These users manage stock movement and product availability.
+
+- Products: create, edit, price, inventory details, and product images
+- Categories: organize products into groups
+- Stock Opnames: count physical inventory and reconcile stock levels
+- Stock Mutations: review stock movement and adjustments
+- Stock Transfers: move items between warehouses or branches
+- Purchase Orders: create and track supplier orders
+- Goods Receiving: receive stock from suppliers and update inventory
+- Supplier Returns: return damaged or incorrect items to suppliers
+
+### 4) Finance / Accounting Team
+
+These users review money movement and control approval flows.
+
+- Receivables and Aging: track customer credit and payment timelines
+- Payables: monitor supplier debts and due dates
+- Bank Accounts: reconcile payment destinations and accounts
+- Expense Management: submit, review, approve, reject, and cancel business expenses
+- Reports: profit, sales, and financial summaries by period
+- Settings and payment gateways: validate payment methods and platform configuration
+
+### 5) CRM / Marketing / Customer Engagement Team
+
+These users work on customer retention and campaigns.
+
+- Customers and Members: customer profiles, membership records, and loyalty tracking
+- Customer Segments: group customers by behavior or attributes
+- Customer Vouchers: manage customer discounts or credits
+- CRM Campaigns: schedule customer programs and outreach
+- CRM Reminders: follow up on customer touchpoints
+- WhatsApp Gateway: send automated messages and reminders through WhatsApp
+
+### 6) Admin / System Manager
+
+These users manage permissions, business configuration, and access control.
+
+- Users and Roles: create users, assign roles, and define permission access
+- Permissions: manage authorization rules and access matrix
+- Audit Logs: track important changes and user actions
+- Business Settings: configure payment settings, language, integrations, and operational rules
+- Warehouse and Store Setup: configure locations and operational structure
+- Import / Export: manage bulk product and customer data operations
+
+### 7) Developers / Integrators
+
+These users work on technical integrations and platform extension.
+
+- API Documentation: OpenAPI and interactive endpoint documentation
+- Public Routes: portal and document sharing pages
+- Health Check: system and service status endpoint
+- WhatsApp Service: separate Node service for message automation
+- Business Rules: inventory, pricing, payments, and reporting logic in Laravel services
+- Integration Points: midtrans, xendit, payment settings, and document export flows
+
 ---
 
 ## Cuplikan Layar

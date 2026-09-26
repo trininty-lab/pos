@@ -36,6 +36,7 @@ import {
     IconAlertCircle,
     IconListDetails,
     IconBrandWhatsapp,
+    IconReceipt,
 } from "@tabler/icons-react";
 import hasAnyPermission from "./Permission";
 import React from "react";
@@ -330,6 +331,13 @@ export default function Menu() {
                     active: url.startsWith("/dashboard/cashier-shifts"),
                     icon: <IconWallet size={20} strokeWidth={1.5} />,
                     permissions: hasAnyPermission(["cashier-shifts-access"]),
+                },
+                {
+                    title: "Expenses",
+                    href: route("expenses.index"),
+                    active: url.startsWith("/dashboard/expenses"),
+                    icon: <IconReceipt size={20} strokeWidth={1.5} />,
+                    permissions: hasAnyPermission(["expenses-view", "expenses-create", "expenses-submit"]),
                 },
                 {
                     title: t("sidebar.items.auditLogs"),

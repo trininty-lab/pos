@@ -84,6 +84,15 @@ class PermissionSeeder extends Seeder
         $create('layaways-release');
         $create('layaways-cancel');
 
+        // expenses permissions
+        $create('expenses-view');
+        $create('expenses-create');
+        $create('expenses-submit');
+        $create('expenses-approve');
+        $create('expenses-reject');
+        $create('expenses-cancel');
+        $create('expenses-report');
+
         // permission receivables & payables
         $create('receivables-access');
         $create('receivables-pay');

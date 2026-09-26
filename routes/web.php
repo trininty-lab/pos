@@ -13,6 +13,7 @@ use App\Http\Controllers\Apps\CustomerVoucherController;
 use App\Http\Controllers\Apps\DineAreaController;
 use App\Http\Controllers\Apps\DineTableController;
 use App\Http\Controllers\Apps\DiscountApprovalController;
+use App\Http\Controllers\Apps\ExpenseController;
 use App\Http\Controllers\Apps\GoodsReceivingController;
 use App\Http\Controllers\Apps\ImportExportController;
 use App\Http\Controllers\Apps\LayawayController;
@@ -235,6 +236,13 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::post('/layaways/{layaway}/payments', [LayawayController::class, 'storePayment'])->middleware(['permission:layaways-pay', 'active_shift'])->name('layaways.payments.store');
     Route::post('/layaways/{layaway}/release', [LayawayController::class, 'release'])->middleware(['permission:layaways-release', 'active_shift'])->name('layaways.release');
     Route::post('/layaways/{layaway}/cancel', [LayawayController::class, 'cancel'])->middleware(['permission:layaways-cancel', 'active_shift'])->name('layaways.cancel');
+
+    Route::get('/expenses', [ExpenseController::class, 'index'])->middleware('permission:expenses-view')->name('expenses.index');
+    Route::get('/expenses/{expense}', [ExpenseController::class, 'show'])->middleware('permission:expenses-view')->name('expenses.show');
+    Route::post('/expenses', [ExpenseController::class, 'store'])->middleware(['permission:expenses-create', 'permission:expenses-submit'])->name('expenses.store');
+    Route::post('/expenses/{expense}/approve', [ExpenseController::class, 'approve'])->middleware('permission:expenses-approve')->name('expenses.approve');
+    Route::post('/expenses/{expense}/reject', [ExpenseController::class, 'reject'])->middleware('permission:expenses-reject')->name('expenses.reject');
+    Route::post('/expenses/{expense}/cancel', [ExpenseController::class, 'cancel'])->middleware('permission:expenses-cancel')->name('expenses.cancel');
 
     // route transaction searchProduct
     Route::post('/transactions/searchProduct', [TransactionController::class, 'searchProduct'])->middleware(['permission:transactions-access', 'active_shift'])->name('transactions.searchProduct');

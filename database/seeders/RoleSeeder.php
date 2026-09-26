@@ -34,6 +34,13 @@ class RoleSeeder extends Seeder
         $this->createRoleWithPermissions('transactions-access', '%transactions%');
         $this->createRoleWithPermissions('transactions-confirm-payment', 'transactions-confirm-payment');
         $this->createRoleWithPermissions('layaways-access', '%layaways%');
+        $this->createRoleWithPermissions('expenses-view', '%expenses%');
+        $this->createRoleWithPermissions('expenses-create', '%expenses%');
+        $this->createRoleWithPermissions('expenses-submit', '%expenses%');
+        $this->createRoleWithPermissions('expenses-approve', '%expenses%');
+        $this->createRoleWithPermissions('expenses-reject', '%expenses%');
+        $this->createRoleWithPermissions('expenses-cancel', '%expenses%');
+        $this->createRoleWithPermissions('expenses-report', '%expenses%');
         $this->createRoleWithPermissions('receivables-access', '%receivables%');
         $this->createRoleWithPermissions('payables-access', '%payables%');
         $this->createRoleWithPermissions('suppliers-access', '%suppliers%');
@@ -100,6 +107,9 @@ class RoleSeeder extends Seeder
             'layaways-pay',
             'layaways-release',
             'layaways-cancel',
+            'expenses-view',
+            'expenses-create',
+            'expenses-submit',
             'receivables-access',
             'receivables-pay',
             'payables-access',

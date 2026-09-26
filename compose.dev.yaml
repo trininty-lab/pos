@@ -13,7 +13,6 @@ services:
       - app-storage:/var/www/html/storage/app
       - app-framework:/var/www/html/storage/framework
       - app-logs:/var/www/html/storage/logs
-      - app-bootstrap-cache:/var/www/html/bootstrap/cache
 
   web:
     volumes:
@@ -27,7 +26,6 @@ services:
       - app-storage:/var/www/html/storage/app
       - app-framework:/var/www/html/storage/framework
       - app-logs:/var/www/html/storage/logs
-      - app-bootstrap-cache:/var/www/html/bootstrap/cache
 
   scheduler:
     volumes:
@@ -36,7 +34,6 @@ services:
       - app-storage:/var/www/html/storage/app
       - app-framework:/var/www/html/storage/framework
       - app-logs:/var/www/html/storage/logs
-      - app-bootstrap-cache:/var/www/html/bootstrap/cache
 
   frontend:
     image: node:22.14.0-bookworm-slim

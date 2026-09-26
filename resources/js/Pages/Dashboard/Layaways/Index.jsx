@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import Pagination from "@/Components/Dashboard/Pagination";
+import { useAuthorization } from "@/Utils/authorization";
 import {
     IconCash,
     IconCheck,
+    IconPlus,
     IconSearch,
     IconShoppingCart,
     IconX,
@@ -45,11 +47,24 @@ const statusBadge = (status) => {
     }
 };
 
-export default function LayawaysIndex({ layaways, filters = {}, summary = {} }) {
-    const { flash } = usePage().props;
+export default function LayawaysIndex({ layaways, customers = [], products = [], filters = {}, summary = {} }) {
+    const { flash, activeCashierShift } = usePage().props;
+    const { can } = useAuthorization();
 
     const [search, setSearch] = useState(filters.search || "");
     const [status, setStatus] = useState(filters.status || "");
+    const [showCreateForm, setShowCreateForm] = useState(false);
+
+    const { data, setData, post, processing, errors, reset, transform } = useForm({
+        customer_id: "",
+        product_id: "",
+        qty: 1,
+        unit_price: "",
+        initial_payment: "",
+        payment_method: "cash",
+        payment_reference: "",
+        notes: "",
+    });
 
     useEffect(() => {
         if (flash?.success) toast.success(flash.success);
@@ -72,6 +87,39 @@ export default function LayawaysIndex({ layaways, filters = {}, summary = {} }) 
         });
     };
 
+    const selectedProduct = products.find((product) => String(product.id) === String(data.product_id));
+
+    const handleProductChange = (event) => {
+        const product = products.find((item) => String(item.id) === event.target.value);
+        setData((current) => ({
+            ...current,
+            product_id: event.target.value,
+            unit_price: product?.sell_price || "",
+        }));
+    };
+
+    const submitLayaway = (event) => {
+        event.preventDefault();
+        transform(() => ({
+            customer_id: data.customer_id,
+            items: [{
+                product_id: data.product_id,
+                qty: Number(data.qty),
+                unit_price: Number(data.unit_price),
+            }],
+            initial_payment: Number(data.initial_payment),
+            payment_method: data.payment_method,
+            payment_reference: data.payment_reference,
+            notes: data.notes,
+        }));
+        post(route("layaways.store"), {
+            onSuccess: () => {
+                reset();
+                setShowCreateForm(false);
+            },
+        });
+    };
+
     const rows = layaways?.data || [];
 
     return (
@@ -85,7 +133,79 @@ export default function LayawaysIndex({ layaways, filters = {}, summary = {} }) 
                             Track installment sales, outstanding balances, and release readiness.
                         </p>
                     </div>
+                    {can("layaways-create") && (
+                        <button
+                            type="button"
+                            onClick={() => setShowCreateForm((visible) => !visible)}
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-600"
+                        >
+                            <IconPlus size={17} />
+                            Add Layaway
+                        </button>
+                    )}
                 </div>
+
+                {showCreateForm && can("layaways-create") && (
+                    <div className="rounded-2xl border border-primary-100 bg-white p-5 shadow-sm dark:border-primary-900/40 dark:bg-slate-900">
+                        <div className="mb-4 flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Create layaway</h2>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">Cashier records the customer and amount received.</p>
+                            </div>
+                            {!activeCashierShift && (
+                                <span className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+                                    Open a cashier shift before saving.
+                                </span>
+                            )}
+                        </div>
+                        <form onSubmit={submitLayaway} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Customer
+                                <select required value={data.customer_id} onChange={(event) => setData("customer_id", event.target.value)} className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800">
+                                    <option value="">Select customer</option>
+                                    {customers.map((customer) => <option key={customer.id} value={customer.id}>{customer.name}{customer.no_telp ? ` - ${customer.no_telp}` : ""}</option>)}
+                                </select>
+                                {errors.customer_id && <span className="text-xs text-rose-600">{errors.customer_id}</span>}
+                            </label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Product
+                                <select required value={data.product_id} onChange={handleProductChange} className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800">
+                                    <option value="">Select product</option>
+                                    {products.map((product) => <option key={product.id} value={product.id}>{product.title} - stock {product.stock}</option>)}
+                                </select>
+                                {errors["items.0.product_id"] && <span className="text-xs text-rose-600">{errors["items.0.product_id"]}</span>}
+                            </label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Quantity
+                                <input required min="1" max={selectedProduct?.stock || undefined} type="number" value={data.qty} onChange={(event) => setData("qty", event.target.value)} className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800" />
+                            </label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Unit price
+                                <input required min="1" type="number" value={data.unit_price} onChange={(event) => setData("unit_price", event.target.value)} className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800" />
+                            </label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Initial payment received
+                                <input required min="1" type="number" value={data.initial_payment} onChange={(event) => setData("initial_payment", event.target.value)} className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800" />
+                            </label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Payment method
+                                <select value={data.payment_method} onChange={(event) => setData("payment_method", event.target.value)} className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800">
+                                    <option value="cash">Cash</option>
+                                    <option value="card">Card</option>
+                                    <option value="transfer">Transfer</option>
+                                </select>
+                            </label>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 md:col-span-2">
+                                Notes
+                                <input value={data.notes} onChange={(event) => setData("notes", event.target.value)} placeholder="Optional notes" className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 dark:border-slate-700 dark:bg-slate-800" />
+                            </label>
+                            <div className="flex items-end justify-end gap-2 md:col-span-2 xl:col-span-1">
+                                <button type="button" onClick={() => setShowCreateForm(false)} className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">Cancel</button>
+                                <button disabled={processing || !activeCashierShift} type="submit" className="h-11 rounded-xl bg-primary-500 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">{processing ? "Saving..." : "Save layaway"}</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
 
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
                     <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">

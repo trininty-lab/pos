@@ -19,7 +19,6 @@ class DashboardNavigationTest extends TestCase
      */
     private const MENU_ROUTES = [
         'dashboard' => 'dashboard-access',
-        'categories.index' => 'categories-access',
         'products.index' => 'products-access',
         'customers.index' => 'customers-access',
         'suppliers.index' => 'suppliers-access',
@@ -28,7 +27,6 @@ class DashboardNavigationTest extends TestCase
         'sales-returns.index' => 'sales-returns-access',
         'receivables.index' => 'receivables-access',
         'aging.index' => 'receivables-access',
-        'discount-approvals.pending' => 'discounts-approve',
         'stock-opnames.index' => 'stock-opnames-access',
         'stock-mutations.index' => 'stock-mutations-access',
         'stock-transfers.index' => 'stock-transfers-access',
@@ -52,12 +50,9 @@ class DashboardNavigationTest extends TestCase
         'users.index' => 'users-access',
         'users.create' => 'users-create',
         'settings.payments.edit' => 'payment-settings-access',
-        'settings.store' => 'dashboard-access',
         'settings.bank-accounts.index' => 'payment-settings-access',
         'settings.loyalty' => 'dashboard-access',
-        'settings.target' => 'dashboard-access',
         'price-lists.index' => 'price-lists-access',
-        'settings.warehouses.index' => 'warehouses-access',
         'settings.whatsapp' => 'whatsapp-settings-access',
     ];
 

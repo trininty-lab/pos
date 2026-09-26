@@ -108,13 +108,6 @@ export default function Menu() {
             title: t("sidebar.sections.masterData"),
             details: [
                 {
-                    title: t("sidebar.items.categories"),
-                    href: route("categories.index"),
-                    active: url === "/dashboard/categories" ? true : false,
-                    icon: <IconFolder size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["categories-access"]),
-                },
-                {
                     title: t("sidebar.items.products"),
                     href: route("products.index"),
                     active: url === "/dashboard/products" ? true : false,
@@ -174,18 +167,6 @@ export default function Menu() {
                     active: url.startsWith("/dashboard/aging"),
                     icon: <IconChartBar size={20} strokeWidth={1.5} />,
                     permissions: hasAnyPermission(["receivables-access"]),
-                },
-            ],
-        },
-        {
-            title: t("sidebar.sections.approval"),
-            details: [
-                {
-                    title: t("sidebar.items.discountApproval"),
-                    href: route("discount-approvals.pending"),
-                    active: url.startsWith("/dashboard/discount-approvals"),
-                    icon: <IconAlertCircle size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["discounts-approve"]),
                 },
             ],
         },
@@ -384,25 +365,11 @@ export default function Menu() {
                     permissions: hasAnyPermission(["payment-settings-access"]),
                 },
                 {
-                    title: t("sidebar.items.storeProfile"),
-                    href: route("settings.store"),
-                    active: url === "/dashboard/settings/store",
-                    icon: <IconBuildingStore size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["dashboard-access"]),
-                },
-                {
                     title: t("sidebar.items.bankAccounts"),
                     href: route("settings.bank-accounts.index"),
                     active: url === "/dashboard/settings/bank-accounts",
                     icon: <IconCreditCard size={20} strokeWidth={1.5} />,
                     permissions: hasAnyPermission(["payment-settings-access"]),
-                },
-                {
-                    title: t("sidebar.items.salesTarget"),
-                    href: route("settings.target"),
-                    active: url === "/dashboard/settings/target",
-                    icon: <IconChartInfographic size={20} strokeWidth={1.5} />,
-                    permissions: hasAnyPermission(["dashboard-access"]),
                 },
                 {
                     title: t("sidebar.items.priceLists"),

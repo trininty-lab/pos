@@ -45,7 +45,6 @@ export default function AddCustomerModal({
         const newErrors = {};
         if (!form.name.trim()) newErrors.name = "Name is required";
         if (!form.no_telp.trim()) newErrors.no_telp = "Phone number is required";
-        if (!form.address.trim()) newErrors.address = "Address is required";
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);

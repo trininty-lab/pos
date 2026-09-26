@@ -75,6 +75,21 @@ class MasterDataApiTest extends TestCase
             ->assertJsonPath('data.name', 'Siti');
     }
 
+    public function test_customer_can_be_created_without_address_or_region_fields(): void
+    {
+        $this->postJson('/api/v1/customers', [
+            'name' => 'Tanpa Alamat',
+            'no_telp' => '081234567890',
+        ])->assertCreated()
+            ->assertJsonPath('data.name', 'Tanpa Alamat')
+            ->assertJsonPath('data.address', '');
+
+        $this->assertDatabaseHas('customers', [
+            'name' => 'Tanpa Alamat',
+            'no_telp' => '081234567890',
+        ]);
+    }
+
     public function test_customers_update_and_delete(): void
     {
         $customer = Customer::create([

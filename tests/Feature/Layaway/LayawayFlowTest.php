@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class LayawayFlowTest extends TestCase
@@ -223,6 +224,17 @@ class LayawayFlowTest extends TestCase
 
         $this->assertTrue(Layaway::where('business_id', $businessA->id)->exists());
         $this->assertTrue(Layaway::where('business_id', $businessB->id)->exists());
+    }
+
+    public function test_cashier_role_seed_includes_layaway_permissions(): void
+    {
+        $this->seed(\Database\Seeders\RoleSeeder::class);
+
+        $cashierRole = Role::findByName('cashier');
+
+        foreach (['layaways-access', 'layaways-create', 'layaways-pay', 'layaways-release', 'layaways-cancel'] as $permission) {
+            $this->assertTrue($cashierRole->hasPermissionTo($permission), "Cashier role should include {$permission}.");
+        }
     }
 
     protected function createCashier(): User

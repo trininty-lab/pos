@@ -20,7 +20,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY composer.json composer.lock ./
-RUN composer install \
+RUN rm -rf vendor \
+    && composer install \
     --no-dev \
     --no-interaction \
     --no-progress \
@@ -29,7 +30,8 @@ RUN composer install \
     --optimize-autoloader
 
 COPY . .
-RUN composer dump-autoload --no-dev --optimize --classmap-authoritative \
+RUN rm -f bootstrap/cache/packages.php bootstrap/cache/services.php \
+    && composer dump-autoload --no-dev --optimize --classmap-authoritative \
     && mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && ln -s /var/www/html/storage/app/public public/storage
 

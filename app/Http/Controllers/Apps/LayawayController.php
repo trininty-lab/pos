@@ -82,6 +82,11 @@ class LayawayController extends Controller
             'layaways' => $layaways,
             'filters' => $filters,
             'summary' => $summary,
+            'customers' => Customer::query()->orderBy('name')->get(['id', 'name', 'no_telp']),
+            'products' => \App\Models\Product::query()
+                ->where('stock', '>', 0)
+                ->orderBy('title')
+                ->get(['id', 'title', 'sku', 'sell_price', 'stock']),
         ]);
     }
 

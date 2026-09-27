@@ -11,7 +11,7 @@ class BusinessSeeder extends Seeder
     public function run(): void
     {
         $owner = User::where('email', env('POS_OWNER_EMAIL', 'fayfaithbitokeld@gmail.com'))->first();
-        $cashier = User::where('email', 'cashier@gmail.com')->first();
+        $cashier = User::where('email', 'chairty@fay.com')->first();
 
         if (! $owner) {
             return;

@@ -31,7 +31,7 @@ class OperationalCoreSeeder extends Seeder
             return;
         }
 
-        $cashier = User::where('email', 'cashier@gmail.com')->first() ?? User::first();
+        $cashier = User::where('email', 'chairty@fay.com')->first() ?? User::first();
         $supervisor = User::where('email', 'cybertrinity6@gmail.com')->first() ?? $cashier;
 
         if (! $cashier || ! $supervisor) {

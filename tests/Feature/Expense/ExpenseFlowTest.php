@@ -8,8 +8,10 @@ use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\User;
 use App\Models\Warehouse;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ExpenseFlowTest extends TestCase
@@ -25,6 +27,17 @@ class ExpenseFlowTest extends TestCase
                 'name' => $permission,
                 'guard_name' => 'web',
             ]);
+        }
+    }
+
+    public function test_cashier_role_seed_includes_expense_permissions(): void
+    {
+        $this->seed(RoleSeeder::class);
+
+        $cashierRole = Role::findByName('cashier');
+
+        foreach (['expenses-view', 'expenses-create', 'expenses-submit'] as $permission) {
+            $this->assertTrue($cashierRole->hasPermissionTo($permission), "Cashier role should include {$permission}.");
         }
     }
 

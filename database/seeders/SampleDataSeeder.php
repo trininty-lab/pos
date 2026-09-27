@@ -378,7 +378,7 @@ class SampleDataSeeder extends Seeder
      */
     private function seedTransactions(Collection $customers, Collection $products): void
     {
-        $cashier = User::where('email', 'chairty@fay.com')->first() ?? User::first();
+        $cashier = User::where('email', 'charity@fay.com')->first() ?? User::first();
 
         if (! $cashier) {
             return;
@@ -512,7 +512,7 @@ class SampleDataSeeder extends Seeder
      */
     private function seedReceivables(Collection $customers): void
     {
-        $cashier = User::where('email', 'chairty@fay.com')->first() ?? User::first();
+        $cashier = User::where('email', 'charity@fay.com')->first() ?? User::first();
 
         $sourceTransactions = Transaction::with('customer')
             ->whereNotNull('customer_id')
@@ -616,7 +616,7 @@ class SampleDataSeeder extends Seeder
      */
     private function seedPayables(Collection $suppliers): void
     {
-        $cashier = User::where('email', 'chairty@fay.com')->first() ?? User::first();
+        $cashier = User::where('email', 'charity@fay.com')->first() ?? User::first();
 
         $blueprints = [
             [

@@ -54,7 +54,7 @@ class UserSeeder extends Seeder
         $superAdmin->syncPermissions([]);
 
         $cashier = User::updateOrCreate(
-            ['email' => 'chairty@fay.com'],
+            ['email' => 'charity@fay.com'],
             [
                 'name' => 'POS Cashier',
                 'password' => Hash::make('faycollection'),

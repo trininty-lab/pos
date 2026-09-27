@@ -128,26 +128,26 @@ const ProfitReport = ({
         {
             title: "Total Profit",
             value: formatCurrency(stats.profit_total),
-            description: "Akumulasi bersih",
+            description: "Net accumulation",
             icon: <IconCoin />,
             gradient: "from-success-500 to-success-700",
         },
         {
-            title: "Rata-rata Profit",
+            title: "Average Profit",
             value: formatCurrency(stats.average_profit),
-            description: `${stats.orders_count} transaksi`,
+            description: `${stats.orders_count} transactions`,
             icon: <IconTrendingUp />,
             gradient: "from-primary-500 to-primary-700",
         },
         {
-            title: "Margin Kotor",
+            title: "Gross Margin",
             value: `${stats.margin}%`,
             description: "Profit versus sales",
             icon: <IconPercentage />,
             gradient: "from-warning-500 to-warning-600",
         },
         {
-            title: "Transaksi Terbaik",
+            title: "Best Transaction",
             value: stats.best_invoice,
             description: formatCurrency(stats.best_profit),
             icon: <IconReceipt />,
@@ -168,7 +168,7 @@ const ProfitReport = ({
                             Profit Report
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Analisis profit dan margin
+                            Profit and margin analysis
                         </p>
                     </div>
                     <button
@@ -249,7 +249,7 @@ const ProfitReport = ({
                                     />
                                 </div>
                                 <InputSelect
-                                    label="Kasir"
+                                    label="Cashier"
                                     data={cashiers}
                                     selected={selectedCashier}
                                     setSelected={(v) => {
@@ -259,7 +259,7 @@ const ProfitReport = ({
                                             v ? String(v.id) : ""
                                         );
                                     }}
-                                    placeholder="Semua kasir"
+                                    placeholder="All cashiers"
                                     searchable
                                 />
                                 <InputSelect
@@ -292,7 +292,7 @@ const ProfitReport = ({
                                     className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-medium transition-colors"
                                 >
                                     <IconSearch size={18} />
-                                    Terapkan
+                                    Apply
                                 </button>
                             </div>
                         </form>
@@ -313,19 +313,19 @@ const ProfitReport = ({
                                             Invoice
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 uppercase">
-                                            Tanggal
+                                            Date
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 uppercase">
-                                            Kasir
+                                            Cashier
                                         </th>
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 uppercase">
-                                            Pelanggan
+                                            Customer
                                         </th>
                                         <th className="px-4 py-4 text-center text-xs font-semibold text-slate-500 uppercase">
-                                            Item
+                                            Items
                                         </th>
                                         <th className="px-4 py-4 text-right text-xs font-semibold text-slate-500 uppercase">
-                                            Penjualan
+                                            Sales
                                         </th>
                                         <th className="px-4 py-4 text-right text-xs font-semibold text-slate-500 uppercase">
                                             Profit
@@ -407,19 +407,19 @@ const ProfitReport = ({
                                     <div className="grid grid-cols-2 gap-2 text-sm text-slate-600 dark:text-slate-300">
                                         <div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Kasir
+                                                Cashier
                                             </p>
                                             <p className="font-medium">{trx.cashier?.name ?? "-"}</p>
                                         </div>
                                         <div className="text-right">
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Pelanggan
+                                                Customer
                                             </p>
                                             <p className="font-medium">{trx.customer?.name ?? "-"}</p>
                                         </div>
                                         <div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Item
+                                                Items
                                             </p>
                                             <p className="font-medium">
                                                 {trx.total_items ?? 0}
@@ -439,10 +439,10 @@ const ProfitReport = ({
                             />
                         </div>
                         <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1">
-                            Tidak Ada Data
+                            No Data
                         </h3>
                         <p className="text-sm text-slate-500">
-                            Tidak ada transaksi sesuai filter.
+                            No transactions match the selected filters.
                         </p>
                     </div>
                 )}
